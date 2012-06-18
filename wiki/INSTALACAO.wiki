@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Como compilar e instalar as plataformas AAMO.
 
 = Usuários de Mac OSX e Linux =
 
