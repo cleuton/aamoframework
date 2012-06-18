@@ -1,5 +1,4 @@
-#summary One-sentence summary of this page.
-
+#summary Download instructions / instruções para baixar
 = For SVN Savvy users =
 
 Simply open "Source" link and configure your repository location with the proper URL. Note that there are two folders inside the "trunk": one for iOS and one for Android.
