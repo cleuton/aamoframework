@@ -1,5 +1,4 @@
-#summary One-sentence summary of this page.
-
+#summary How to build an install AAMO platforms.
 = Mac OSX and Linux users =
 
 If you are a Mac OSX user and want to build the iOS version, there is no problem. C and Objective-C are naturally integrated. There is no need for a framework like NDK. But, even as a Mac OSX user, if you want to build the Android version, you may need the NDK to build the native code part.
