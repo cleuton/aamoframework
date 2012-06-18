@@ -1,0 +1,11 @@
+#summary How to create a new AAMO app
+
+= Introduction =
+
+An AAMO application is composed by an interface file (ui.xml) and some Lua event handlers (*.lua). Write your files and test in the platform you want. To install your app in a platform: 
+
+AamoDroid: create an "app" folder inside "assets" folder and paste your files there.
+AamoiOS: create an "app" group inside your project folder and paste your files there.
+
+
+Please, see the sample application inside both platforms.
