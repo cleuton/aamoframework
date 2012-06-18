@@ -2,6 +2,8 @@
 
 = Mac OSX and Linux users =
 
+If you are a Mac OSX user and want to build the iOS version, there is no problem. C and Objective-C are naturally integrated. There is no need for a framework like NDK. But, even as a Mac OSX user, if you want to build the Android version, you may need the NDK to build the native code part.
+
 Mac OSX and linux users already have a complete POSIX environment, so, they can compile the Lua and LuaJava code using NDK. 
 
 Mac OSX users can build both versions (Android and iOS). Linux users can build only the Android version.
