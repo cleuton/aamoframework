@@ -1,0 +1,19 @@
+#summary One-sentence summary of this page.
+
+= For SVN Savvy users =
+
+Simply open "Source" link and configure your repository location with the proper URL. Note that there are two folders inside the "trunk": one for iOS and one for Android.
+
+
+= Para usuários que conhecem SVN =
+
+Abra o link "Source" e configure a "Repository Location" com a URL apropriada. Note que existem duas pastas dentro de "trunk": uma para iOS e outra para Android.
+
+
+= For non SVN Savvy users =
+
+Go to the "Downloads" link and get the zip files.
+
+= Para usuários que não conhecem SVN = 
+
+Abram o link "Downloads" e baixem os zips.
