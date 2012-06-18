@@ -391,7 +391,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		selfRef.showAlertMessage(msg.toString());
 		
 	}
-
+	// This solution, to read scripts from the Assets folder, came from Michal Kottman's project "Androlua" (https://github.com/mkottman/AndroLua)
 	private static byte[] readAll(InputStream input) throws Exception {
 		ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
 		byte[] buffer = new byte[4096];
