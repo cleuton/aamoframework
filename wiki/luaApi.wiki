@@ -1,0 +1,16 @@
+#summary Lua API.
+
+= Introduction =
+
+Functions available to Lua scripts.
+
+= VERSION = 
+
+AAMO 0.1
+
+= Details =
+
+All functions have a prefix "aamo".
+
+ * *getTextField(<id>)*: Return the current text content of the TextBox element identified by "id" parameter.
+ * *showMessage(<text>)*: Display the "text" content to the user.
