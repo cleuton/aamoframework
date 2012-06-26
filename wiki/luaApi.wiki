@@ -12,5 +12,5 @@ AAMO 0.1
 
 All functions have a prefix "aamo".
 
- * *getTextField(<id>)*: Return the current text content of the TextBox element identified by "id" parameter.
- * *showMessage(<text>)*: Display the "text" content to the user.
+ * *getTextField( *id* )*: Return the current text content of the TextBox element identified by "id" parameter.
+ * *showMessage( *text* )*: Display the "text" content to the user.
