@@ -7,7 +7,7 @@ AAMO deals with "Screens". Each XML file describes a "Screen", which will be dis
 
 = VERSION =
 
-AAMO 0.1
+AAMO 0.1 / *AAMO 0.2*
 
 
 = Details =
