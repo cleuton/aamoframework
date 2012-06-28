@@ -1,0 +1,24 @@
+#summary What is AAMO?
+
+= AAMO =
+
+AAMO means "moon" in the Xavante language (A Brazillian indian nation).
+
+
+= What does AAMO do? =
+
+AAMO is a frammework to develop mobile applications for multiple platforms.
+
+It has a common and simple API to describe the user interface elements (screens and controls), and uses Lua scripts to process events. It is an event-based frammework.
+
+First describe your screen, using a simple and abstract XML file, then create scripts to handle UI events, like: load, click etc.
+
+
+= Why Lua? = 
+
+Lua is a simple yet powerful scripting language, used in many frammeworks and commercial produducts. 
+
+
+= Bottom line? = 
+
+Create mobile apps easier and faster than using native code (Dalvik, Objective C etc), and your apps will be multiplatform!
