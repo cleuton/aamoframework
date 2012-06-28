@@ -1,0 +1,36 @@
+#summary Glossário do AAMO.
+
+= Introdução =
+
+O AAMO emprega alguns conceitos que permitem ao programador se abstrair de qualquer implementação particular.
+
+= Tela (Screen) =
+
+Uma aplicação AAMO é feita de telas. Uma tela é o que o usuário enxerga no dispositivo em algum momento.
+
+Uma tela é composta por Controles e Scripts.
+
+As telas AAMO são definidas em arquivos XML. A primeira tela (id 01) é definida no arquivo "ui.xml", e é obrigatória. Outras telas podem ser definidas em arquivos XML, nomeados de acordo com a regra:
+
+"ui{{{_<id da tela>}}}.xml"
+
+E estes arquivos devem ficar na mesma pasta que o arquivo "ui.xml".
+
+
+= Controle (Control) = 
+
+Um controle é a unidade de interação do usuário, como uma TextBox (caixa de texto), Label (rótulo) ou Button (botão).
+
+Podemos associar os controles às telas dentro do arquivo XML.
+
+O AAMO possui definições para os controles mais comuns, porém permite que você adicione novos controles definindo-os em um arquivo de configuração.
+
+Um controle pode ter alguns scripts associados aos seus eventos comuns.
+
+= Script = 
+
+Um script é um pedaço de código Lua, que fica dentro de um arquivo com extensão ".lua". Eles podem ser associados aos eventos de Tela e de Controle.
+
+Para associar um script a um evento, informamos seu nome (sem extensão) no arquivo XML.
+
+O AAMO suportará scripts de biblioteca (Library scripts) em implementações futuras. Scripts de biblioteca são funções utilitárias, não associadas a eventos, que podem ser invocadas de qualquer código Lua, seja dentro de scripts de evento ou outros scripts de biblioteca.
