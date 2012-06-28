@@ -18,6 +18,10 @@ First describe your screen, using a simple and abstract XML file, then create sc
 
 Lua is a simple yet powerful scripting language, used in many frammeworks and commercial produducts. 
 
+= How does it work? =
+
+You create your UI and Event scripts, then you can embeed them in "Cradle projects" that AAMO provides to you. Currently we have cradles for Android and iOS, but we are developing for other platforms, like Desktop (Java Swing), BlackBerry, and Windows Phone. 
+
 
 = Bottom line? = 
 
