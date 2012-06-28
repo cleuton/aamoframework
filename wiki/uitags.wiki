@@ -30,7 +30,7 @@ AAMO 0.1 / *AAMO 0.2*
  * *percentTop*: Top coordinate, based on physical screen's height percentage.
  * *percentLeft*: Left coordinate, based on physical screen's width percentage.
  * *percentWidth*: Element's width, based on physical screen's width percentage. 
- * *percentHeight*: Element's height, based on physical screen's width percentage. 
+ * *percentHeight*: Element's height, based on physical screen's width percentage. *VERSION 0.2*: if not informed, then it will be high enough to hold a normal text.
  * *onCompleteScript*: Script to be invoked when the TextBox element (type = 1) looses focus.
  * *text*: Element's text content.
  * *checked*: Checkbox state: 0-unchecked, 1-checked.
