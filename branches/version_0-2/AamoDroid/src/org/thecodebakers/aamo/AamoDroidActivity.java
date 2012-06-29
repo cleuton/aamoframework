@@ -41,7 +41,7 @@ import android.widget.ViewFlipper;
 
 public class AamoDroidActivity extends Activity implements OnClickListener {
 	
-	public static final double VERSION = 0.1;
+	public static final double VERSION = 0.2;
 	public static final int MACRO_UI = 1;
 	public static final int  MACRO_ELEMENT = 2;
 	protected List<DynaView> dynaViews;
