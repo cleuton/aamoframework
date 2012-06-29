@@ -70,10 +70,7 @@
         <text>Ok</text>
         <onClickScript>toqueBotao</onClickScript>
     </element>
-        <element>
-        <!--
-         onClickScript: nome do arquivo ".lua" que será invocado quando o usuário tocar (ou clicar) no botão;
-         -->
+    <element>
         <id>5</id>
         <type>3</type>
         <percentTop>60</percentTop>
@@ -83,4 +80,15 @@
         <text>Tela 2</text>
         <onClickScript>tela2</onClickScript>
     </element>
+    <element>
+        <id>6</id>
+        <type>3</type>
+        <percentTop>80</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Terminar</text>
+        <onClickScript>lua::aamo.exitScreen()</onClickScript>
+    </element>
+    
 </ui>

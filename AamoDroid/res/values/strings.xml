@@ -3,5 +3,12 @@
 
     <string name="hello">Hello World, AamoDroidActivity!</string>
     <string name="app_name">AamoDroid</string>
+    <string name="loadlibs">
+        			luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo1\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo2\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo3\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo4\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo5\")\r\n
+    </string>
 
 </resources>
