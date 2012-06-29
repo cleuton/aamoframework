@@ -44,22 +44,26 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	public static final double VERSION = 0.1;
 	public static final int MACRO_UI = 1;
 	public static final int  MACRO_ELEMENT = 2;
-	private List<DynaView> dynaViews;
+	protected List<DynaView> dynaViews;
 	
-	private ScreenData screenData;
+	protected ScreenData screenData;
 
     String currentStringValue;
     String currentElementName;
     int currentMacro;
     DynaView currentElement;
-    private RelativeLayout dvLayout;
-    private ViewFlipper baseLayout;
-    private static AamoDroidActivity selfRef;
+    protected RelativeLayout dvLayout;
+    protected ViewFlipper baseLayout;
+    protected static AamoDroidActivity selfRef;
     
     // Screen and controls stacks
     
-    private Stack<ScreenData> screenStack;
-    private Stack<List<DynaView>> controlsStack;
+    protected Stack<ScreenData> screenStack;
+    protected Stack<List<DynaView>> controlsStack;
+    
+    // Lua
+    
+    protected LuaState L;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,15 +76,22 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
              
         baseLayout = (ViewFlipper) this.findViewById(R.id.vflipper);
         
+        // Setup library
+        
+        AamoLuaLibrary.selfRef = this;
+		
+		// Load xml for the base ui
+        
         loadUI(1);
+        
+        // Format it's subviews
         
         formatSubviews();
         
     }
     
-	private void formatSubviews() {
+	protected void formatSubviews() {
 		
-		baseLayout.removeView(dvLayout);
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         dvLayout = new RelativeLayout(this.getApplicationContext());
         dvLayout.setLayoutParams(rlParams);
@@ -161,7 +172,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 
 	}
 
-	private boolean loadUI(int screenId) {
+	protected boolean loadUI(int screenId) {
 		
 		/***************************************************************
 		 * Falta testar se já existe uma tela com esse id na pilha....
@@ -307,7 +318,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		return resultado;
 	}
     
-	private void showAlertMessage(String msg) {
+	protected void showAlertMessage(String msg) {
 		new AlertDialog.Builder(this).setMessage(msg)
         .setNeutralButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -318,27 +329,40 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 
 	public void onClick(View arg0) {
 		
-		LuaState L = LuaStateFactory.newLuaState();
-		L.openLibs();
-		L.setTop(0);
+		
 		String name = "";
 		for (DynaView dv : dynaViews) {
 			if (arg0.getTag().equals(new Integer(dv.id))) {
 				name = dv.onClickScript;
+				execLua(name);
 				break;
 			}
 		}
-		
+
+	}
+	
+	protected void execLua (String script) {
 		AssetManager am = getAssets();
 		try {
-
-			InputStream is = am.open("app/" + name + ".lua");
-			byte[] bytes = readAll(is);
-			String codigo = "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo1\")\r\n"
-					+ "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo2\")\r\n"
-					+ "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo3\")\r\n"
-					+ "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo4\")\r\n"
-					+ (new String(bytes));
+			if (L == null) {
+				L = LuaStateFactory.newLuaState();
+				L.openLibs();
+				L.setTop(0);
+			}
+			
+			String codigo = this.getResources().getString(R.string.loadlibs);
+			
+			if (script.indexOf("lua::") < 0) {
+				InputStream is = am.open("app/" + script + ".lua");
+				byte[] bytes = readAll(is);
+				codigo += (new String(bytes));
+			}
+			else {
+				codigo += script.substring(5);  // after "lua::"
+				
+			}
+			
+			
 			L.LloadString(codigo);
 			int ok = L.pcall(0, 0, 0);
 			if (ok == 0) {
@@ -348,155 +372,15 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		} catch (Exception e) {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			e.printStackTrace(new PrintStream(os));
-			L.pushString("Cannot load module "+name+":\n"+os.toString());
+			L.pushString("Cannot load module "+script+":\n"+os.toString());
 			
 		}
-		
-
-		
 	}
 	
-	//**** Fun�›es a serem invocadas pelo c—digo Lua
-	public static int modulo1(LuaState L) throws LuaException
-	{
-	  L.newTable();
-	  L.pushValue(-1);
-	  L.setGlobal("aamo");
 
-	  L.pushString("getTextField");
-
-	  L.pushJavaFunction(new JavaFunction(L) {
-
-	    public int execute() throws LuaException
-	    {  
-	      if (L.getTop() > 1)
-	      {
-	    	  LuaObject d = getParam(2);
-	    	  L.pushString(getTextBox(d));
-	      }
-
-	      return 1;
-	    }
-
-
-	  });
-
-	  L.setTable(-3);
-
-	  return 1;
-	}
-
-	private static String getTextBox(LuaObject d) {
-		double nd = d.getNumber();
-		String texto = null;
-		for (DynaView dv : selfRef.dynaViews) {
-			if (dv.id == nd) {
-				texto = ((EditText) dv.view).getText().toString();
-			}
-		}
-		return texto;
-	}
-	
-	public static int modulo2(LuaState L) throws LuaException
-	{
-	  L.newTable();
-	  L.pushValue(-1);
-	  L.getGlobal("aamo");
-
-	  L.pushString("showMessage");
-
-	  L.pushJavaFunction(new JavaFunction(L) {
-
-	    public int execute() throws LuaException
-	    {  
-	      if (L.getTop() > 1)
-	      {
-	    	  LuaObject msg = getParam(2);
-	    	  showMessageBox(msg);
-	      }
-
-	      return 0;
-	    }
-	  });
-	  
-	  L.setTable(-3);
-
-	  return 1;
-	}
-	
-	public static int modulo3(LuaState L) throws LuaException
-	{
-	  L.newTable();
-	  L.pushValue(-1);
-	  L.getGlobal("aamo");
-
-	  L.pushString("loadScreen");
-
-	  L.pushJavaFunction(new JavaFunction(L) {
-
-	    public int execute() throws LuaException
-	    {  
-	      if (L.getTop() > 1)
-	      {
-	    	  LuaObject tela = getParam(2);
-	    	  loadScreen(tela);
-	      }
-
-	      return 0;
-	    }
-	  });
-	  
-	  L.setTable(-3);
-
-	  return 1;
-	}
-	
-	protected static void loadScreen(LuaObject tela) {
-		int ntela = (int) tela.getNumber();
-		selfRef.loadUI(ntela);
-		selfRef.formatSubviews();
-	}
-	
-	protected static void showMessageBox(LuaObject msg) {
-		selfRef.showAlertMessage(msg.toString());
-		
-	}
-	
-	protected static void exitScreen() {
-		if (selfRef.screenStack.size() > 1) {
-			// tem algo na pilha, vamos voltar
-			selfRef.screenData = selfRef.screenStack.pop();
-			selfRef.baseLayout.removeView(selfRef.dvLayout);
-			selfRef.dvLayout = selfRef.screenData.dvLayout;
-			selfRef.baseLayout.setDisplayedChild(selfRef.baseLayout.getChildCount() - 1);
-			selfRef.dynaViews = selfRef.controlsStack.pop();
-		}
-	}
-	
-	public static int modulo4(LuaState L) throws LuaException
-	{
-	  L.newTable();
-	  L.pushValue(-1);
-	  L.getGlobal("aamo");
-
-	  L.pushString("exitScreen");
-
-	  L.pushJavaFunction(new JavaFunction(L) {
-
-	    public int execute() throws LuaException
-	    {  
-	      exitScreen();
-	      return 0;
-	    }
-	  });
-	  
-	  L.setTable(-3);
-
-	  return 1;
-	}
 	
 	// This solution, to read scripts from the Assets folder, came from Michal Kottman's project "Androlua" (https://github.com/mkottman/AndroLua)
-	private static byte[] readAll(InputStream input) throws Exception {
+	protected static byte[] readAll(InputStream input) throws Exception {
 		ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
 		byte[] buffer = new byte[4096];
 		int n = 0;
