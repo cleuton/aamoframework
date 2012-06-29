@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 public class AamoDroidActivity extends Activity implements OnClickListener {
 	
@@ -52,7 +53,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
     int currentMacro;
     DynaView currentElement;
     private RelativeLayout dvLayout;
-    private RelativeLayout baseLayout;
+    private ViewFlipper baseLayout;
     private static AamoDroidActivity selfRef;
     
     // Screen and controls stacks
@@ -69,22 +70,21 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
         screenStack = new Stack<ScreenData>();
         controlsStack = new Stack<List<DynaView>>();
              
-        baseLayout = (RelativeLayout) this.findViewById(R.id.dvlayout);
+        baseLayout = (ViewFlipper) this.findViewById(R.id.vflipper);
         
         loadUI(1);
         
         formatSubviews();
         
     }
-
+    
 	private void formatSubviews() {
 		
+		baseLayout.removeView(dvLayout);
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         dvLayout = new RelativeLayout(this.getApplicationContext());
         dvLayout.setLayoutParams(rlParams);
-        baseLayout.removeAllViewsInLayout();
-        baseLayout.addView(dvLayout);
-		
+        
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int screenHeight = metrics.heightPixels;
@@ -154,6 +154,8 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        
 	    }
 	    
+	    baseLayout.addView(dvLayout);
+        baseLayout.setDisplayedChild(baseLayout.getChildCount() - 1);
 	    screenData.dvLayout = dvLayout;
 	    screenStack.push(screenData);
 
@@ -464,9 +466,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		if (selfRef.screenStack.size() > 1) {
 			// tem algo na pilha, vamos voltar
 			selfRef.screenData = selfRef.screenStack.pop();
+			selfRef.baseLayout.removeView(selfRef.dvLayout);
 			selfRef.dvLayout = selfRef.screenData.dvLayout;
+			selfRef.baseLayout.setDisplayedChild(selfRef.baseLayout.getChildCount() - 1);
 			selfRef.dynaViews = selfRef.controlsStack.pop();
-			selfRef.baseLayout.refreshDrawableState();
 		}
 	}
 	
