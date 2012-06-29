@@ -36,3 +36,11 @@ AAMO 0.1 / *AAMO 0.2*
  * *checked*: Checkbox state: 0-unchecked, 1-checked.
  * *onChangeScript*: Script to be invoked when the Checkbox element (type = 3) looses focus.
  * *onClickScript*: Script to be invoked when the Button element (type = 4) looses focus.
+
+== Event script tags ==
+
+Every event script tag, like "onLoadScript", for example, can contain Lua source code.
+
+You can choose to inform just the name of the Lua file, or write Lua source code directly. To write Lua source code, prefix it with "lua::". For example:
+
+`<onClickScript>lua::aamo.exitScreen()</onClickScript>`
