@@ -7,7 +7,7 @@
      onLoadScript: nome do arquivo ".lua" que será invocado na carga da tela
      onEndScript: nome do arquivo ".lua" que será invocado no final da aplicação
      -->
-    <version>0.1</version>
+    <version>0.2</version>
     <uiid>1</uiid>
     <title>Teste AAMO</title>
     <onLoadScript></onLoadScript>
@@ -69,5 +69,18 @@
         <percentHeight>10</percentHeight>
         <text>Ok</text>
         <onClickScript>toqueBotao</onClickScript>
+    </element>
+        <element>
+        <!--
+         onClickScript: nome do arquivo ".lua" que será invocado quando o usuário tocar (ou clicar) no botão;
+         -->
+        <id>5</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Tela 2</text>
+        <onClickScript>tela2</onClickScript>
     </element>
 </ui>

@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 
 import org.keplerproject.luajava.JavaFunction;
 import org.keplerproject.luajava.LuaException;
@@ -34,6 +35,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class AamoDroidActivity extends Activity implements OnClickListener {
@@ -42,16 +44,21 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	public static final int MACRO_UI = 1;
 	public static final int  MACRO_ELEMENT = 2;
 	private List<DynaView> dynaViews;
-    int uiid;
-    String title;
-    String onLoadScript;
-    String onEndScript;
+	
+	private ScreenData screenData;
+
     String currentStringValue;
     String currentElementName;
     int currentMacro;
     DynaView currentElement;
     private RelativeLayout dvLayout;
+    private RelativeLayout baseLayout;
     private static AamoDroidActivity selfRef;
+    
+    // Screen and controls stacks
+    
+    private Stack<ScreenData> screenStack;
+    private Stack<List<DynaView>> controlsStack;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,14 +66,25 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
         selfRef =this;
         setContentView(R.layout.main);
         
-        dynaViews = new ArrayList<DynaView>();
-        dvLayout = (RelativeLayout) this.findViewById(R.id.dvlayout);
-        loadUI();
+        screenStack = new Stack<ScreenData>();
+        controlsStack = new Stack<List<DynaView>>();
+             
+        baseLayout = (RelativeLayout) this.findViewById(R.id.dvlayout);
+        
+        loadUI(1);
+        
         formatSubviews();
         
     }
 
 	private void formatSubviews() {
+		
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        dvLayout = new RelativeLayout(this.getApplicationContext());
+        dvLayout.setLayoutParams(rlParams);
+        baseLayout.removeAllViewsInLayout();
+        baseLayout.addView(dvLayout);
+		
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int screenHeight = metrics.heightPixels;
@@ -135,14 +153,29 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        }
 	        
 	    }
+	    
+	    screenData.dvLayout = dvLayout;
+	    screenStack.push(screenData);
 
 	}
 
-	private boolean loadUI() {
+	private boolean loadUI(int screenId) {
+		
+		/***************************************************************
+		 * Falta testar se j√° existe uma tela com esse id na pilha....
+		 ***************************************************************/
+		
 		InputStream istr;
 		boolean resultado = true;
 		try {
-			istr = this.getApplicationContext().getAssets().open("app/ui.xml");
+			dynaViews = new ArrayList<DynaView>();
+			screenData = new ScreenData();
+			if (screenId == 1) {
+				istr = this.getApplicationContext().getAssets().open("app/ui.xml");
+			}
+			else {
+				istr = this.getApplicationContext().getAssets().open("app/ui_" + screenId + ".xml");
+			}
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
 			factory.setNamespaceAware(true); 
 			XmlPullParser xpp = factory.newPullParser(); 
@@ -172,10 +205,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	        currentMacro = MACRO_ELEMENT;
 	        	    }
 	        	    else if (currentElementName.equals("ui")){
-	        	        uiid = 1;
-	        	        title = "AAMO v." +VERSION;
-	        	        onLoadScript = null;
-	        	        onEndScript = null;
+	        	        screenData.uiid = 1;
+	        	        screenData.title = "AAMO v." +VERSION;
+	        	        screenData.onLoadScript = null;
+	        	        screenData.onEndScript = null;
 	        	        currentMacro = MACRO_UI;
 	        	    }
 
@@ -192,22 +225,22 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	                    // version
 	        	                    double version = Double.parseDouble(currentStringValue);
 	        	                    if (version > VERSION) {
-	        	                        String mensagem = "WRONG XML VERSION. MUST BE 1.0";
+	        	                        String mensagem = "WRONG XML VERSION. MUST BE 0.2";
 	        	                        showAlertMessage(mensagem);
 	        	                    }
 	        	                }
 	        	            }
 	        	            else if (currentElementName.equals("uiid")) {
-	        	                uiid = Integer.parseInt(currentStringValue.trim());
+	        	            	screenData.uiid = Integer.parseInt(currentStringValue.trim());
 	        	            }
 	        	            else if (currentElementName.equals("title")) {
-	        	                title = currentStringValue.trim();
+	        	            	screenData.title = currentStringValue.trim();
 	        	            }
 	        	            else if (currentElementName.equals("onLoadScript")) {
-	        	                onLoadScript = currentStringValue.trim();
+	        	            	screenData.onLoadScript = currentStringValue.trim();
 	        	            }
 	        	            else if (currentElementName.equals("onEndScript")) {
-	        	                onEndScript = currentStringValue.trim();
+	        	            	screenData.onEndScript = currentStringValue.trim();
 	        	            }
 	        	        }
 	        	        else if (currentMacro == MACRO_ELEMENT) {
@@ -258,6 +291,8 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	          eventType = xpp.next();
 	         }
 			
+	        // Coloca o dynaViews na pilha
+	        controlsStack.push(dynaViews);
 			
 		} catch (IOException e) {
 			Log.d("XML", "IOException");
@@ -294,12 +329,13 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		
 		AssetManager am = getAssets();
 		try {
-			String path = name + ".jet";
 
 			InputStream is = am.open("app/" + name + ".lua");
 			byte[] bytes = readAll(is);
 			String codigo = "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo1\")\r\n"
 					+ "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo2\")\r\n"
+					+ "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo3\")\r\n"
+					+ "luajava.loadLib(\"org.thecodebakers.aamo.AamoDroidActivity\", \"modulo4\")\r\n"
 					+ (new String(bytes));
 			L.LloadString(codigo);
 			int ok = L.pcall(0, 0, 0);
@@ -318,7 +354,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		
 	}
 	
-	//**** Funções a serem invocadas pelo código Lua
+	//**** FunÔøΩ‚Ä∫es a serem invocadas pelo c‚Äîdigo Lua
 	public static int modulo1(LuaState L) throws LuaException
 	{
 	  L.newTable();
@@ -386,11 +422,76 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	  return 1;
 	}
 	
+	public static int modulo3(LuaState L) throws LuaException
+	{
+	  L.newTable();
+	  L.pushValue(-1);
+	  L.getGlobal("aamo");
+
+	  L.pushString("loadScreen");
+
+	  L.pushJavaFunction(new JavaFunction(L) {
+
+	    public int execute() throws LuaException
+	    {  
+	      if (L.getTop() > 1)
+	      {
+	    	  LuaObject tela = getParam(2);
+	    	  loadScreen(tela);
+	      }
+
+	      return 0;
+	    }
+	  });
+	  
+	  L.setTable(-3);
+
+	  return 1;
+	}
+	
+	protected static void loadScreen(LuaObject tela) {
+		int ntela = (int) tela.getNumber();
+		selfRef.loadUI(ntela);
+		selfRef.formatSubviews();
+	}
 	
 	protected static void showMessageBox(LuaObject msg) {
 		selfRef.showAlertMessage(msg.toString());
 		
 	}
+	
+	protected static void exitScreen() {
+		if (selfRef.screenStack.size() > 1) {
+			// tem algo na pilha, vamos voltar
+			selfRef.screenData = selfRef.screenStack.pop();
+			selfRef.dvLayout = selfRef.screenData.dvLayout;
+			selfRef.dynaViews = selfRef.controlsStack.pop();
+			selfRef.baseLayout.refreshDrawableState();
+		}
+	}
+	
+	public static int modulo4(LuaState L) throws LuaException
+	{
+	  L.newTable();
+	  L.pushValue(-1);
+	  L.getGlobal("aamo");
+
+	  L.pushString("exitScreen");
+
+	  L.pushJavaFunction(new JavaFunction(L) {
+
+	    public int execute() throws LuaException
+	    {  
+	      exitScreen();
+	      return 0;
+	    }
+	  });
+	  
+	  L.setTable(-3);
+
+	  return 1;
+	}
+	
 	// This solution, to read scripts from the Assets folder, came from Michal Kottman's project "Androlua" (https://github.com/mkottman/AndroLua)
 	private static byte[] readAll(InputStream input) throws Exception {
 		ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
