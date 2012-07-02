@@ -14,8 +14,12 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getLabelText\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setLabelText\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getCheckBox\")\r\n
+
+    </string>
+<!-- 
+
+					
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBoxOn\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBoxOff\")\r\n
-    </string>
-
+ -->
 </resources>

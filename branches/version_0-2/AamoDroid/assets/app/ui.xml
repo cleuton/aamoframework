@@ -94,11 +94,21 @@
         <id>6</id>
         <type>3</type>
         <percentTop>80</percentTop>
-        <percentLeft>40</percentLeft>
+        <percentLeft>0</percentLeft>
         <percentWidth>30</percentWidth>
         <percentHeight>10</percentHeight>
         <text>Terminar</text>
         <onClickScript>lua::aamo.exitScreen()</onClickScript>
+    </element>
+        <element>
+        <id>8</id>
+        <type>3</type>
+        <percentTop>50</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Get CheckBox</text>
+        <onClickScript>lua::aamo.showMessage(aamo.getCheckBox(3))</onClickScript>
     </element>
     
 </ui>
