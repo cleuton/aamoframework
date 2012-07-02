@@ -6,6 +6,7 @@ import org.keplerproject.luajava.LuaObject;
 import org.keplerproject.luajava.LuaState;
 
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -246,6 +247,35 @@ public class AamoLuaLibrary {
 				((EditText) dv.view).setText(e.getString());
 			}
 		}
+	}
+	
+	public static int m_getCheckBox(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("getCheckBox");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (L.getTop() > 1) {
+		    		LuaObject d = getParam(2);
+			  		double nd = d.getNumber();
+			  		int retorno = 0;
+					for (DynaView dv : selfRef.dynaViews) {
+						if (dv.id == nd) {
+							if (((CheckBox) dv.view).isChecked()) {
+								retorno = 1;
+		  					}
+						}
+					}
+					L.pushNumber(retorno);
+					return 1;
+
+			    }
+			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
 	}
 
 }
