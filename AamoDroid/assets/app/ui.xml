@@ -11,7 +11,7 @@
     <uiid>1</uiid>
     <title>Teste AAMO</title>
     <onLoadScript></onLoadScript>
-    <onEndScript></onEndScript>
+    <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
     <element>
         <!--
          id: id do elemento
@@ -74,11 +74,21 @@
         <id>5</id>
         <type>3</type>
         <percentTop>60</percentTop>
-        <percentLeft>40</percentLeft>
+        <percentLeft>0</percentLeft>
         <percentWidth>30</percentWidth>
         <percentHeight>10</percentHeight>
         <text>Tela 2</text>
         <onClickScript>tela2</onClickScript>
+    </element>
+        <element>
+        <id>7</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>50</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Change Text</text>
+        <onClickScript>lua::aamo.setTextField(1,"OK")</onClickScript>
     </element>
     <element>
         <id>6</id>
