@@ -169,6 +169,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
         baseLayout.setDisplayedChild(baseLayout.getChildCount() - 1);
 	    screenData.dvLayout = dvLayout;
 	    screenStack.push(screenData);
+	    
+	    // Check "onLoadScreen" event:
+	    
+	    if (screenData.onLoadScript != null && screenData.onLoadScript.length() > 0) {
+			execLua(screenData.onLoadScript);
+	    }
 
 	}
 

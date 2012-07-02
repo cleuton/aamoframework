@@ -4,11 +4,18 @@
     <string name="hello">Hello World, AamoDroidActivity!</string>
     <string name="app_name">AamoDroid</string>
     <string name="loadlibs">
-        			luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo1\")\r\n
-					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo2\")\r\n
-					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo3\")\r\n
-					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo4\")\r\n
-					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"modulo5\")\r\n
+        			luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getTextField\")\r\n
+        			luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setTextField\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showMessage\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_loadScreen\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_exitScreen\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getCurrentScreenId\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_log\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getLabelText\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setLabelText\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getCheckBox\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBoxOn\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBoxOff\")\r\n
     </string>
 
 </resources>
