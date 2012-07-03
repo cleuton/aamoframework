@@ -388,6 +388,11 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 			if (ok == 0) {
 				return;
 			}
+			else {
+				String msg = L.toString(-1);
+				Log.d("AAMO::Lua",msg);
+			}
+
 			
 		} catch (Exception e) {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
