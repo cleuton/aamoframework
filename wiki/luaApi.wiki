@@ -12,8 +12,14 @@ AAMO 0.1 / *AAMO 0.2*
 
 All functions have a prefix "aamo".
 
- * *VERSION 0.2: aamo.exitScreen()*: Finish current screen, removing it from the "Screen Stack". If there is a previous screen, it will be displayed. Current script must end. After that, the "OnEndScript" will be invoked. If the current screen is alone in the screen stack, application will end.
- * *VERSION 0.2: aamo.getCurrentScreenId()*: Return the current screen identifier. The first screen is always 1.
+== VERSION 0.1 ==
+
  * *getTextField( *id* )*: Return the current text content of the TextBox element identified by "id" parameter.
- * *VERSION 0.2: aamo.loadScreen(<screen id>)*: Find the screen named "ui{{{_<id>}}}.xml", load it and push it on the top of screen stack. Current script must end. If there is an instance of the screen on the stack, it will be moved to the top. "OnLoadScript" will only be invoked if the screen was not found on the screen stack.
  * *showMessage( *text* )*: Display the "text" content to the user.
+
+== VERSION 0.2 ==
+
+ * *aamo.exitScreen()*: Finish current screen, removing it from the "Screen Stack". If there is a previous screen, it will be displayed. Current script must end. After that, the "OnEndScript" will be invoked. If the current screen is alone in the screen stack, application will end.
+ * *aamo.getCurrentScreenId()*: Return the current screen identifier. The first screen is always 1.
+ * *aamo.loadScreen(<screen id>)*: Find the screen named "ui{{{_<id>}}}.xml", load it and push it on the top of screen stack. Current script must end. If there is an instance of the screen on the stack, it will be moved to the top. "OnLoadScript" will only be invoked if the screen was not found on the screen stack.
+ 
