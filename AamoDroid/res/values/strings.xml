@@ -15,6 +15,10 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setLabelText\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getCheckBox\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBox\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getError\")\r\n
     </string>
-
+	<string name="lua_10">Parâmetro faltando.</string>
+	<string name="lua_11">Arquivo não encontrado.</string>
+	<string name="lua_12">Valor igual a nulo</string>
+	
 </resources>
