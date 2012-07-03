@@ -21,7 +21,7 @@
          percentWidth: largura do elemento, em percentuais da tela;
          percentHeight: altura do elemento, em percentuais da tela;
          onLoadScript: nome do arquivo ".lua" que será invocado na carga da tela
-         onCompleteScript: nome do arquivo ".lua" que será invocado quando o usuário terminar de digitar o campo;
+         
          -->
         <id>1</id>
         <type>1</type>
@@ -29,7 +29,7 @@
         <percentLeft>30</percentLeft>
         <percentWidth>40</percentWidth>
         <percentHeight>10</percentHeight>
-        <onCompleteScript></onCompleteScript>
+        
     </element>
     <element>
         <!--
@@ -55,7 +55,7 @@
         <percentWidth>10</percentWidth>
         <percentHeight>10</percentHeight>
         <checked>1</checked>
-        <onChangeScript></onChangeScript>
+        <onChangeScript>lua::aamo.log("Trocou CHK: " .. aamo.getCheckBox(3))</onChangeScript>
     </element> 
     <element>
         <!--
@@ -64,12 +64,22 @@
         <id>4</id>
         <type>3</type>
         <percentTop>40</percentTop>
-        <percentLeft>40</percentLeft>
+        <percentLeft>0</percentLeft>
         <percentWidth>15</percentWidth>
         <percentHeight>10</percentHeight>
         <text>Ok</text>
         <onClickScript>toqueBotao</onClickScript>
     </element>
+    <element>
+        <id>9</id>
+        <type>3</type>
+        <percentTop>40</percentTop>
+        <percentLeft>50</percentLeft>
+        <percentWidth>20</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>SetChk</text>
+        <onClickScript>lua::aamo.setCheckBox(3,0)</onClickScript>
+    </element>    
     <element>
         <id>5</id>
         <type>3</type>
