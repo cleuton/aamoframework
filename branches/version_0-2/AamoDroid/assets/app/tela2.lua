@@ -2,4 +2,4 @@
 
 aamo.loadScreen(2)
 
-aamo.showMessage(aamo.getError())
+-- aamo.showMessage(aamo.getError())
