@@ -278,4 +278,30 @@ public class AamoLuaLibrary {
 		  return 1;
 	}
 
+	public static int m_setCheckBox(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("setCheckBox");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (L.getTop() > 1) {
+			    	  LuaObject d = getParam(2);
+			    	  LuaObject e = getParam(3);
+			    	  double nd = d.getNumber();
+			    	  for (DynaView dv : selfRef.dynaViews) {
+							if (dv.id == nd) {	
+								((CheckBox) dv.view).setChecked(
+										(e.getNumber() > 0) ? true : false
+										);
+							}
+			    	  }
+			    }
+			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+	
 }

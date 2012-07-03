@@ -33,6 +33,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -157,7 +159,19 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                dv.view = sv;
 	                sv.setTag(dv.id);
 	                sv.setChecked(dv.checked);
-
+	                if (dv.onChangeScript != null && dv.onChangeScript.length() > 0) {
+	                	final String codigo = dv.onChangeScript;
+	                	sv.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+	              
+							public void onCheckedChanged(CompoundButton arg0,
+									boolean arg1) {
+								
+								execLua(codigo);
+							}
+	                		
+	                		
+	                	});
+	                }
 	                break;
 	            }
 	                
