@@ -1,19 +1,13 @@
 package org.thecodebakers.aamo;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Stack;
 
-import org.keplerproject.luajava.JavaFunction;
-import org.keplerproject.luajava.LuaException;
-import org.keplerproject.luajava.LuaObject;
 import org.keplerproject.luajava.LuaState;
 import org.keplerproject.luajava.LuaStateFactory;
 import org.xmlpull.v1.XmlPullParser;
@@ -23,9 +17,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -84,7 +76,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		
 		// Load xml for the base ui
         
-        loadUI(1);
+        try {
+			loadUI(1);
+		} catch (AamoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         // Format it's subviews
         
@@ -192,7 +189,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 
 	}
 
-	protected boolean loadUI(int screenId) {
+	protected boolean loadUI(int screenId) throws AamoException {
 		
 		/***************************************************************
 		 * Falta testar se já existe uma tela com esse id na pilha....
@@ -330,9 +327,11 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		} catch (IOException e) {
 			Log.d("XML", "IOException");
 			resultado = false;
+			throw new AamoException (e);
 		} catch (XmlPullParserException e) {
 			Log.d("XML", e.getMessage());
 			resultado = false;
+			throw new AamoException (e);
 		}
 
 		return resultado;

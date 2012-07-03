@@ -13,6 +13,7 @@ import android.widget.TextView;
 public class AamoLuaLibrary {
 	
 	public static AamoDroidActivity selfRef;
+	protected static int errorCode =0;
 	
 	//**** Fun�›es a serem invocadas pelo c—digo Lua
 	public static int m_getTextField(LuaState L) throws LuaException {
@@ -24,8 +25,13 @@ public class AamoLuaLibrary {
 	    public int execute() throws LuaException {  
 	      if (L.getTop() > 1) {
 	    	  LuaObject d = getParam(2);
-	    	  L.pushString(getTextBox(d));
+	    	 	  L.pushString(getTextBox(d));
 	      }
+	      else 
+	      {
+	    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+	      }
+	      
 	      return 1;
 	    }
 	  });
@@ -55,6 +61,10 @@ public class AamoLuaLibrary {
 	    	  LuaObject msg = getParam(2);
 	    	  showMessageBox(msg);
 	      }
+	      else 
+	      {
+	    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+	      }
 	      return 0;
 	    }
 	  }); 
@@ -71,7 +81,14 @@ public class AamoLuaLibrary {
 	    public int execute() throws LuaException {  
 	      if (L.getTop() > 1) {
 	    	  LuaObject tela = getParam(2);
-	    	  loadScreen(tela);
+	    	  try{
+	    	  	  loadScreen(tela);
+	    	   }catch(AamoException ae){
+	      		  AamoLuaLibrary.errorCode = 11; // arquivo não encontrado
+	      	   } 	   
+	    	  
+	      }else {
+	    	  AamoLuaLibrary.errorCode = 10; 	//parametro faltando
 	      }
 	      return 0;
 	    }
@@ -80,7 +97,7 @@ public class AamoLuaLibrary {
 	  return 1;
 	}
 	
-	protected static void loadScreen(LuaObject tela) {
+	protected static void loadScreen(LuaObject tela)throws AamoException {
 		int ntela = (int) tela.getNumber();
 		selfRef.loadUI(ntela);
 		selfRef.formatSubviews();
@@ -159,6 +176,10 @@ public class AamoLuaLibrary {
 			    	  LuaObject msg = getParam(2);
 			    	  Log.d("AAMO",msg.getString());
 			    }
+		    	else 
+			    {
+			        AamoLuaLibrary.errorCode = 10; //parametro faltando
+			    }
 			    return 0;
 		    }
 		  });
@@ -177,6 +198,10 @@ public class AamoLuaLibrary {
 			    	  LuaObject d = getParam(2);
 			    	  L.pushString(getLabel(d));
 			    }
+		    	else 
+			    {
+			        AamoLuaLibrary.errorCode = 10; //parametro faltando
+			    }
 			    return 1;
 		    }
 		  });
@@ -192,9 +217,11 @@ public class AamoLuaLibrary {
 		  L.pushJavaFunction(new JavaFunction(L) {
 		    public int execute() throws LuaException {  
 		    	if (L.getTop() > 1) {
-			    	  LuaObject d = getParam(2);
-			    	  LuaObject e = getParam(3);
-			    	  setLabel(d,e);
+			       LuaObject d = getParam(2);
+			       LuaObject e = getParam(3);
+			       setLabel(d,e);
+			    }else {
+		    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
 			    }
 			    return 0;
 		    }
@@ -211,9 +238,13 @@ public class AamoLuaLibrary {
 		  L.pushJavaFunction(new JavaFunction(L) {
 		    public int execute() throws LuaException {  
 		    	if (L.getTop() > 1) {
-			    	  LuaObject d = getParam(2);
-			    	  LuaObject e = getParam(3);
-			    	  setTextBox(d,e);
+			    	LuaObject d = getParam(2);
+			    	LuaObject e = getParam(3);
+			    	setTextBox(d,e);
+			    }
+		    	else 
+		    	{
+		    		AamoLuaLibrary.errorCode = 10; //parametro faltando
 			    }
 			    return 0;
 		    }
@@ -271,6 +302,10 @@ public class AamoLuaLibrary {
 					return 1;
 
 			    }
+		    	else 
+		    	{
+			    	AamoLuaLibrary.errorCode = 10; //parametro faltando
+				}
 			    return 0;
 		    }
 		  });
@@ -297,7 +332,26 @@ public class AamoLuaLibrary {
 							}
 			    	  }
 			    }
+		    	else 
+		    	{
+		    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+			    }
 			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+	
+	public static int m_getError(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("getError");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+			    L.pushNumber(AamoLuaLibrary.errorCode);
+			    return 1;
 		    }
 		  });
 		  L.setTable(-3);
