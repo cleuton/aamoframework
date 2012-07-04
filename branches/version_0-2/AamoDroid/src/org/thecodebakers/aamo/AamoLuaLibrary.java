@@ -13,9 +13,29 @@ import android.widget.TextView;
 public class AamoLuaLibrary {
 	
 	public static AamoDroidActivity selfRef;
-	protected static int errorCode =0;
+	protected static int errorCode = 0;
 	
-	//**** Fun�›es a serem invocadas pelo c—digo Lua
+	//errors LUA 
+	protected enum Errors {
+	    LUA_10(10), 	// parametro faltando 
+	    LUA_11(11), 	// Arquivo não encontrado
+	    LUA_12(12), 	// Valor igual a nulo
+	    LUA_13(13),
+	    LUA_14(14), 
+	    LUA_15(15); 
+	    
+	    int errorCode;
+	    
+	    Errors (int error){
+	    	errorCode = error;
+	    }
+	    
+	    int getErrorCode(){
+	    	return errorCode;
+	    }
+	}
+	
+	//**** Funcoes a serem invocadas pelo codigo Lua
 	public static int m_getTextField(LuaState L) throws LuaException {
 	  L.newTable();
 	  L.pushValue(-1);
@@ -25,11 +45,11 @@ public class AamoLuaLibrary {
 	    public int execute() throws LuaException {  
 	      if (L.getTop() > 1) {
 	    	  LuaObject d = getParam(2);
-	    	 	  L.pushString(getTextBox(d));
+	    	  L.pushString(getTextBox(d));
 	      }
 	      else 
 	      {
-	    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+	    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 	      }
 	      
 	      return 1;
@@ -63,7 +83,7 @@ public class AamoLuaLibrary {
 	      }
 	      else 
 	      {
-	    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+	    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 	      }
 	      return 0;
 	    }
@@ -88,7 +108,7 @@ public class AamoLuaLibrary {
 	      	   } 	   
 	    	  
 	      }else {
-	    	  AamoLuaLibrary.errorCode = 10; 	//parametro faltando
+	    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 	      }
 	      return 0;
 	    }
@@ -178,7 +198,7 @@ public class AamoLuaLibrary {
 			    }
 		    	else 
 			    {
-			        AamoLuaLibrary.errorCode = 10; //parametro faltando
+			        AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 			    }
 			    return 0;
 		    }
@@ -196,11 +216,21 @@ public class AamoLuaLibrary {
 		    public int execute() throws LuaException {  
 		    	if (L.getTop() > 1) {
 			    	  LuaObject d = getParam(2);
-			    	  L.pushString(getLabel(d));
+			    	  if (d == null){
+			    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+			    	  }
+			    	  else {
+			    		  String txt = getLabel(d);
+			    		  if (txt == null){
+				    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				    	  }else{
+				    		  L.pushString(getLabel(d));  
+				    	  }
+			    	  }
 			    }
 		    	else 
 			    {
-			        AamoLuaLibrary.errorCode = 10; //parametro faltando
+			        AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 			    }
 			    return 1;
 		    }
@@ -219,9 +249,18 @@ public class AamoLuaLibrary {
 		    	if (L.getTop() > 1) {
 			       LuaObject d = getParam(2);
 			       LuaObject e = getParam(3);
-			       setLabel(d,e);
+			       if (d == null){
+			    	   AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+			       }
+			       else if (e == null) {
+			    	   AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+			       }
+			       else {
+			      	   setLabel(d,e);
+			       }
+			      
 			    }else {
-		    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+		    	   AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 			    }
 			    return 0;
 		    }
@@ -240,11 +279,19 @@ public class AamoLuaLibrary {
 		    	if (L.getTop() > 1) {
 			    	LuaObject d = getParam(2);
 			    	LuaObject e = getParam(3);
-			    	setTextBox(d,e);
+			    	if (d == null){
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+				    }
+				    else if (e == null) {
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				    }
+				    else {
+				       setTextBox(d,e);;
+				    }
 			    }
 		    	else 
 		    	{
-		    		AamoLuaLibrary.errorCode = 10; //parametro faltando
+		    		AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 			    }
 			    return 0;
 		    }
@@ -258,11 +305,19 @@ public class AamoLuaLibrary {
 		String texto = null;
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd) {
-				texto = ((TextView) dv.view).getText().toString();
+				if (dv.type == 2) {
+					// é um label
+					texto = ((TextView) dv.view).getText().toString();
+					break;
+				}
+				else {
+					break;
+				}
 			}
 		}
 		return texto;
 	}
+	
 	private static void setLabel(LuaObject d, LuaObject e) {
 		double nd = d.getNumber();
 		for (DynaView dv : selfRef.dynaViews) {
@@ -289,24 +344,40 @@ public class AamoLuaLibrary {
 		    public int execute() throws LuaException {  
 		    	if (L.getTop() > 1) {
 		    		LuaObject d = getParam(2);
-			  		double nd = d.getNumber();
-			  		int retorno = 0;
-					for (DynaView dv : selfRef.dynaViews) {
-						if (dv.id == nd) {
-							if (((CheckBox) dv.view).isChecked()) {
-								retorno = 1;
-		  					}
-						}
+		    		if (d == null){
+					   AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+					   return 0;
 					}
-					L.pushNumber(retorno);
-					return 1;
-
+		    		else {
+		    			
+			    		double nd = d.getNumber();
+				  		int retorno = 0;
+						for (DynaView dv : selfRef.dynaViews) {
+							if (dv.id == nd) {
+								if (dv.type == 4) {
+									if (((CheckBox) dv.view).isChecked()) {
+										retorno = 1;
+				  					}	
+									break;
+								}
+							}
+						}
+					
+						if (retorno == 0){
+				    	    AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+				    	}
+				    	else {
+				    		L.pushNumber(retorno);
+				    	}
+						return 1;
+		    		}
 			    }
 		    	else 
 		    	{
-			    	AamoLuaLibrary.errorCode = 10; //parametro faltando
+			    	AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+			    	return 0;
 				}
-			    return 0;
+			    
 		    }
 		  });
 		  L.setTable(-3);
@@ -323,18 +394,25 @@ public class AamoLuaLibrary {
 		    	if (L.getTop() > 1) {
 			    	  LuaObject d = getParam(2);
 			    	  LuaObject e = getParam(3);
-			    	  double nd = d.getNumber();
-			    	  for (DynaView dv : selfRef.dynaViews) {
-							if (dv.id == nd) {	
+			    	  
+			    	  if (d == null || e == null){
+					       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+					       return 0;
+					  }
+					  else {
+			    	  
+						  double nd = d.getNumber();
+						  for (DynaView dv : selfRef.dynaViews) {
+							  if (dv.id == nd) {	
 								((CheckBox) dv.view).setChecked(
-										(e.getNumber() > 0) ? true : false
-										);
-							}
+										(e.getNumber() > 0) ? true : false);
+							  }
+						  }	   
 			    	  }
 			    }
 		    	else 
 		    	{
-		    	  AamoLuaLibrary.errorCode = 10; //parametro faltando
+		    	   AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
 			    }
 			    return 0;
 		    }
