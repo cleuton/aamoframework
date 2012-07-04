@@ -64,7 +64,14 @@ public class AamoLuaLibrary {
 		String texto = null;
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd) {
-				texto = ((EditText) dv.view).getText().toString();
+				if (dv.type == 1) { // é um textbox
+					texto = ((EditText) dv.view).getText().toString();
+					break;
+				}
+				else {
+					break;
+				}
+				
 			}
 		}
 		return texto;
