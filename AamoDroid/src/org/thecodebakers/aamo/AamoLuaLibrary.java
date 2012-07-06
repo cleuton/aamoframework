@@ -45,7 +45,19 @@ public class AamoLuaLibrary {
 	    public int execute() throws LuaException {  
 	      if (L.getTop() > 1) {
 	    	  LuaObject d = getParam(2);
-	    	  L.pushString(getTextBox(d));
+	    	  if (d == null){
+	    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+	    	  }
+	    	  else
+	    	  {	  
+	    		  //L.pushString(getTextBox(d));
+	    		  String txt = getTextBox(d);
+	    		  if (txt == null){
+		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+		    	  }else{
+		    		  L.pushString(txt);  
+		    	  }
+	    	  }	  
 	      }
 	      else 
 	      {
@@ -86,7 +98,11 @@ public class AamoLuaLibrary {
 	    public int execute() throws LuaException {  
 	      if (L.getTop() > 1) {
 	    	  LuaObject msg = getParam(2);
-	    	  showMessageBox(msg);
+	    	  if (msg == null){
+	    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+	    	  }else {
+	    		  showMessageBox(msg);  
+	    	  }
 	      }
 	      else 
 	      {
@@ -231,7 +247,7 @@ public class AamoLuaLibrary {
 			    		  if (txt == null){
 				    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
 				    	  }else{
-				    		  L.pushString(getLabel(d));  
+				    		  L.pushString(txt);//getLabel(d)  
 				    	  }
 			    	  }
 			    }
@@ -293,7 +309,7 @@ public class AamoLuaLibrary {
 				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
 				    }
 				    else {
-				       setTextBox(d,e);;
+				       setTextBox(d,e);
 				    }
 			    }
 		    	else 
