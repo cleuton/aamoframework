@@ -47,6 +47,7 @@ public class AamoLuaLibrary {
 	    	  LuaObject d = getParam(2);
 	    	  if (d == null){
 	    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+	    		  return 0;
 	    	  }
 	    	  else
 	    	  {	  
@@ -54,6 +55,7 @@ public class AamoLuaLibrary {
 	    		  String txt = getTextBox(d);
 	    		  if (txt == null){
 		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+		    		  return 0;
 		    	  }else{
 		    		  L.pushString(txt);  
 		    	  }
@@ -99,7 +101,8 @@ public class AamoLuaLibrary {
 	      if (L.getTop() > 1) {
 	    	  LuaObject msg = getParam(2);
 	    	  if (msg == null){
-	    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+	    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+	    		  return 0;
 	    	  }else {
 	    		  showMessageBox(msg);  
 	    	  }
@@ -241,6 +244,7 @@ public class AamoLuaLibrary {
 			    	  LuaObject d = getParam(2);
 			    	  if (d == null){
 			    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+			    		  return 0;
 			    	  }
 			    	  else {
 			    		  String txt = getLabel(d);
@@ -273,10 +277,12 @@ public class AamoLuaLibrary {
 			       LuaObject d = getParam(2);
 			       LuaObject e = getParam(3);
 			       if (d == null){
-			    	   AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+			    	   AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+			    	   return 0;
 			       }
 			       else if (e == null) {
 			    	   AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+			    	   return 0;
 			       }
 			       else {
 			      	   setLabel(d,e);
@@ -303,10 +309,12 @@ public class AamoLuaLibrary {
 			    	LuaObject d = getParam(2);
 			    	LuaObject e = getParam(3);
 			    	if (d == null){
-				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
 				    }
 				    else if (e == null) {
 				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
 				    }
 				    else {
 				       setTextBox(d,e);
@@ -388,6 +396,7 @@ public class AamoLuaLibrary {
 					
 						if (retorno == 0){
 				    	    AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+				    	    return 0;
 				    	}
 				    	else {
 				    		L.pushNumber(retorno);
