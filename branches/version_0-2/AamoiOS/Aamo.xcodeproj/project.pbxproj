@@ -17,7 +17,6 @@
 		A61F9E0F15878FD40024B18B /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A61F9E0D15878FD40024B18B /* MainStoryboard_iPad.storyboard */; };
 		A61F9E1215878FD40024B18B /* AAmoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A61F9E1115878FD40024B18B /* AAmoViewController.m */; };
 		A61F9E1A1587913C0024B18B /* AAmoDynaView.m in Sources */ = {isa = PBXBuildFile; fileRef = A61F9E191587913C0024B18B /* AAmoDynaView.m */; };
-		A61F9E221587C3AE0024B18B /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A61F9E211587C3AE0024B18B /* ui.xml */; };
 		A61F9F13158900750024B18B /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9EDB158900750024B18B /* lapi.c */; };
 		A61F9F14158900750024B18B /* lauxlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9EDD158900750024B18B /* lauxlib.c */; };
 		A61F9F15158900750024B18B /* lbaselib.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9EDF158900750024B18B /* lbaselib.c */; };
@@ -48,7 +47,11 @@
 		A61F9F30158900750024B18B /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0D158900750024B18B /* lvm.c */; };
 		A61F9F31158900750024B18B /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0F158900750024B18B /* lzio.c */; };
 		A61F9F33158900750024B18B /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F12158900750024B18B /* print.c */; };
-		A61F9F35158934B30024B18B /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A61F9F34158934B30024B18B /* toqueBotao.lua */; };
+		A66777B515A4EC770070233D /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B015A4EC770070233D /* sairDaTela.lua */; };
+		A66777B615A4EC770070233D /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B115A4EC770070233D /* tela2.lua */; };
+		A66777B715A4EC770070233D /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B215A4EC770070233D /* toqueBotao.lua */; };
+		A66777B815A4EC770070233D /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B315A4EC770070233D /* ui_2.xml */; };
+		A66777B915A4EC770070233D /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B415A4EC770070233D /* ui.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,7 +71,6 @@
 		A61F9E1115878FD40024B18B /* AAmoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AAmoViewController.m; sourceTree = "<group>"; };
 		A61F9E181587913C0024B18B /* AAmoDynaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoDynaView.h; sourceTree = "<group>"; };
 		A61F9E191587913C0024B18B /* AAmoDynaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoDynaView.m; sourceTree = "<group>"; };
-		A61F9E211587C3AE0024B18B /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 		A61F9EDB158900750024B18B /* lapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lapi.c; sourceTree = "<group>"; };
 		A61F9EDC158900750024B18B /* lapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lapi.h; sourceTree = "<group>"; };
 		A61F9EDD158900750024B18B /* lauxlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lauxlib.c; sourceTree = "<group>"; };
@@ -122,7 +124,11 @@
 		A61F9F0F158900750024B18B /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzio.c; sourceTree = "<group>"; };
 		A61F9F10158900750024B18B /* lzio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzio.h; sourceTree = "<group>"; };
 		A61F9F12158900750024B18B /* print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = print.c; sourceTree = "<group>"; };
-		A61F9F34158934B30024B18B /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
+		A66777B015A4EC770070233D /* sairDaTela.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sairDaTela.lua; sourceTree = "<group>"; };
+		A66777B115A4EC770070233D /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
+		A66777B215A4EC770070233D /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
+		A66777B315A4EC770070233D /* ui_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_2.xml; sourceTree = "<group>"; };
+		A66777B415A4EC770070233D /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,8 +204,11 @@
 		A61F9E1F1587C3900024B18B /* app */ = {
 			isa = PBXGroup;
 			children = (
-				A61F9E211587C3AE0024B18B /* ui.xml */,
-				A61F9F34158934B30024B18B /* toqueBotao.lua */,
+				A66777B015A4EC770070233D /* sairDaTela.lua */,
+				A66777B115A4EC770070233D /* tela2.lua */,
+				A66777B215A4EC770070233D /* toqueBotao.lua */,
+				A66777B315A4EC770070233D /* ui_2.xml */,
+				A66777B415A4EC770070233D /* ui.xml */,
 			);
 			name = app;
 			sourceTree = "<group>";
@@ -318,8 +327,11 @@
 				A61F9E0315878FD40024B18B /* InfoPlist.strings in Resources */,
 				A61F9E0C15878FD40024B18B /* MainStoryboard_iPhone.storyboard in Resources */,
 				A61F9E0F15878FD40024B18B /* MainStoryboard_iPad.storyboard in Resources */,
-				A61F9E221587C3AE0024B18B /* ui.xml in Resources */,
-				A61F9F35158934B30024B18B /* toqueBotao.lua in Resources */,
+				A66777B515A4EC770070233D /* sairDaTela.lua in Resources */,
+				A66777B615A4EC770070233D /* tela2.lua in Resources */,
+				A66777B715A4EC770070233D /* toqueBotao.lua in Resources */,
+				A66777B815A4EC770070233D /* ui_2.xml in Resources */,
+				A66777B915A4EC770070233D /* ui.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
