@@ -7,6 +7,7 @@
 
 #import "AAmoViewController.h"
 #import "AAmoDynaView.h"
+#import "AAmoScreenData.h"
 
 #define VERSION 0.1
 #define MACRO_UI 1
@@ -16,16 +17,17 @@
 {
     @private
     NSMutableArray * dynaViews;
-    int uiid;
-    NSString * title;
-    NSString * onLoadScript;
-    NSString * onEndScript;
+    
+    AAmoScreenData * screenData;
+    
     NSMutableString * currentStringValue;
     NSString * currentElementName;
     int currentMacro;
     AAmoDynaView * currentElement;
     NSMutableArray * viewStack;
     NSMutableArray * controlsStack;
+    NSMutableArray * screenDataStack;
+    int globalErrorCode;
     
 }
 @end
@@ -50,6 +52,8 @@ static AAmoViewController * ponteiro;
     dynaViews = [[NSMutableArray alloc] init];
     viewStack = [[NSMutableArray alloc] init];
     controlsStack = [[NSMutableArray alloc] init];
+    screenDataStack = [[NSMutableArray alloc] init];
+    screenData = [[AAmoScreenData alloc] init];
     [self loadUi:1];
     [self formatSubviews];
     [self.view addSubview:((UIView *)[viewStack lastObject])];
@@ -57,19 +61,52 @@ static AAmoViewController * ponteiro;
 
 - (void) execLua: (NSString *) script
 {
+ 
+    
+    
+    //****** FRANCISCO TROQUE ISSO!!!!! **********************************
+    
+    globalErrorCode = 0;
+    
+    /*
+        Você é que terá que setar e resetar o globalErrorCode. Ele só está aqui por causa
+        da função aamo.getErrorCode() !!!!!!!
+     
+     */
+    //*****************************************
+    
+    
+    
+    
     NSString *luaFilePath = [[NSBundle mainBundle] pathForResource:script ofType:@"lua"];
-    int err = luaL_loadfile(L, [luaFilePath cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    //lua_getglobal(L,"aamoProcess");
+    int lenComando = [script length];
+    NSRange encontrou = [script rangeOfString:@"lua::"];
+    int err = 0;
+    if (encontrou.location == NSNotFound) {
+        err = luaL_loadfile(L, [luaFilePath cStringUsingEncoding:[NSString defaultCStringEncoding]]); 
+    }
+    else {
+        // Immediate Lua command
+        char str [lenComando + 1];
+        [[script substringFromIndex:5] getCString:str maxLength:lenComando encoding:[NSString defaultCStringEncoding]];
+        luaL_loadstring(L, (const char *) str);
+    }
     err = lua_pcall(L, 0, 0, 0);
+    if (err != 0) {
+        const char *msg = lua_tostring(L, -1);
+        NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+        NSLog(@"AAMO ERROR: %@",textoMsg);
+
+    }
 }
 
 // Lua Callbacks! Parte da API AAMO:
 
 static int showMessage(lua_State *L){
     const char *msg = lua_tostring(L, -1);
-    size_t l = lua_strlen(L, -1); 
     NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
     [ponteiro sendAlert:textoMsg];
+    return 0;
 }
 
 static int getTextField(lua_State *L){
@@ -94,11 +131,74 @@ static int exitScreen(lua_State *L) {
     return 0;
 }
 
+static int showLog(lua_State *L) {
+    const char *msg = lua_tostring(L, -1);
+    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    NSLog(@"%@",textoMsg);
+    return 0;
+}
+
+static int getCheckBox(lua_State *L){
+    
+    double d = lua_tonumber(L, 1);  /* get argument */
+    int valor = [ponteiro getCheckBox:d];
+    lua_pushnumber(L, valor);
+    return 1;  /* number of results */
+}
+
+static int setCheckBox(lua_State *L) {
+    double d = lua_tonumber(L, 1); // CheckBox id
+    double e = lua_tonumber(L, 2); // CheckBox id
+    [ponteiro setCheckBoxValue:d value:e];
+    return 0;
+}
+
+static int getCurrentScreenId(lua_State *L) {
+    lua_pushnumber(L, [ponteiro getCurrentScreenId]);
+    return 1;
+}
+
+static int getLabelText(lua_State *L) {
+    double d = lua_tonumber(L, 1);  /* get argument */
+    const char * texto = [ponteiro getLabelContent:d];
+    lua_pushstring(L, texto);
+    return 1;  /* number of results */
+}
+
+static int setLabelText(lua_State *L) {
+    double d = lua_tonumber(L, 1); // id
+    const char *msg = lua_tostring(L, -1); // text
+    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    [ponteiro setLabelContent:d text:textoMsg];
+    return 0;
+}
+
+static int setTextField(lua_State *L) {
+    double d = lua_tonumber(L, 1); // id
+    const char *msg = lua_tostring(L, -1); // text
+    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    [ponteiro setTextContent:d text:textoMsg];
+    return 0;
+}
+
+static int getErrorCode(lua_State *L) {
+    lua_pushnumber(L, [ponteiro getGlobalErrorCode]);
+    return 1;
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
     {"loadScreen", loadScreen},
-    {"exitScreen", exitScreen},    
+    {"exitScreen", exitScreen}, 
+    {"log", showLog},
+    {"getCheckBox", getCheckBox},
+    {"setCheckBox", setCheckBox},
+    {"getCurrentScreenId", getCurrentScreenId},
+    {"getLabelText", getLabelText},
+    {"setLabelText", setLabelText},
+    {"setTextField", setTextField},
+    {"getError", getErrorCode},
     {NULL, NULL}
 };
 
@@ -120,18 +220,111 @@ int luaopen_mylib (lua_State *L){
      AAMO iOS Behaves different from AAMO Android in this aspect. it never quits the app, 
      even if it is the last screen on the stack.
      
+     As a side effect, "onEndScript" never gets executed in ui.xml (first screen). Only when the view gets unloaded.
+     
      O Guia de UI da Apple recomenda evitar sair da app programaticamente. 
      O AAMO iOS se comporta diferente do AAMO Android neste aspecto. Ele nunca volta à tela 
      inicial do dispositivo, mesmo que esteja na primeira tela da app.
+     
      */
     
     if ([viewStack count] > 1) {
         [self hideViews];
         [viewStack removeLastObject];
         [controlsStack removeLastObject];
+        
+        // Check if the screen has an "onEndScript"
+        
+        if (screenData.onEndScript != nil && [screenData.onEndScript length] > 0) {
+            [self execLua: screenData.onEndScript];
+        }
+        [screenDataStack removeLastObject];
         [self showViews];
     }
 }
+
+- (int) getCheckBox:(double)idc
+{
+    int valor = 0;
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == idc) {
+            if (dv.type == 4) {
+                if ([((UISwitch *)dv.view) isOn]) {
+                    valor = 1;
+                }
+            }
+        }
+    }
+    return valor;
+}
+
+- (void) setCheckBoxValue:(double) d value:(double) e
+{
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == d) {
+            if (dv.type == 4) {
+                [((UISwitch *)dv.view) setOn:(e == 1)];
+            }
+        }
+    } 
+}
+
+- (int) getCurrentScreenId
+{
+    return screenData.uiid;
+}
+
+- (const char *) getLabelContent: (double) number
+{
+    AAmoDynaView *dv = nil;
+    
+    for(id el in dynaViews) {
+        dv = el;
+        if (dv.type == 2) {
+            if (dv.id == number) {
+                UILabel *theTextField = (UILabel *) dv.view;
+                return [theTextField.text cStringUsingEncoding:[NSString defaultCStringEncoding]];
+            }
+        }
+    }
+}
+
+- (void) setLabelContent: (double) number text: (NSString *) content
+{
+    AAmoDynaView *dv = nil;
+    
+    for(id el in dynaViews) {
+        dv = el;
+        if (dv.type == 2) {
+            if (dv.id == number) {
+                UILabel *theTextField = (UILabel *) dv.view;
+                theTextField.text = content;
+            }
+        }
+    }
+}
+
+- (void) setTextContent:(double)number text:(NSString *)content
+{
+    AAmoDynaView *dv = nil;
+    
+    for(id el in dynaViews) {
+        dv = el;
+        if (dv.type == 1) {
+            if (dv.id == number) {
+                UITextField *theTextField = (UITextField *) dv.view;
+                theTextField.text = content;
+            }
+        }
+    }
+}
+
+- (int) getGlobalErrorCode
+{
+    return globalErrorCode;
+}
+
+//*******************************************************************************************
 
 - (void) hideViews
 {
@@ -212,12 +405,20 @@ int luaopen_mylib (lua_State *L){
     }
 
     [viewStack addObject:mView];
+    [screenDataStack addObject:screenData];
+    // Check "onLoadScreen" event:
+    
+    if (screenData.onLoadScript != nil && [screenData.onLoadScript length] > 0) {
+        [self execLua: screenData.onLoadScript];
+    }
+
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -231,6 +432,7 @@ int luaopen_mylib (lua_State *L){
 - (void) loadUi: (double) screenId
 {
     dynaViews = [[NSMutableArray alloc] init];
+    screenData = [[AAmoScreenData alloc] init];
     NSString * appPath = nil;
     if (screenId == 1) {
         appPath = [[NSBundle mainBundle] pathForResource:@"ui" ofType:@"xml"];
@@ -272,10 +474,10 @@ int luaopen_mylib (lua_State *L){
         currentMacro = MACRO_ELEMENT;
     }
     else if ([elementName isEqualToString: @"ui"]){
-        uiid = 1;
-        title = [NSString stringWithFormat:@"AAMO v. %i",VERSION];
-        onLoadScript = nil;
-        onEndScript = nil;
+        screenData.uiid = 1;
+        screenData.title = [NSString stringWithFormat:@"AAMO v. %i",VERSION];
+        screenData.onLoadScript = nil;
+        screenData.onEndScript = nil;
         currentMacro = MACRO_UI;
     }
 }
@@ -308,16 +510,16 @@ int luaopen_mylib (lua_State *L){
             }
         }
         else if ([currentElementName isEqualToString: @"uiid"]) {
-            uiid = [[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] intValue];
+            screenData.uiid = [[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] intValue];
         }
         else if ([currentElementName isEqualToString: @"title"]) {
-            title = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            screenData.title = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
         else if ([currentElementName isEqualToString: @"onLoadScript"]) {
-            onLoadScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            screenData.onLoadScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
         else if ([currentElementName isEqualToString: @"onEndScript"]) {
-            onEndScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            screenData.onEndScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
     }
     else if (currentMacro == MACRO_ELEMENT) {
@@ -375,7 +577,6 @@ int luaopen_mylib (lua_State *L){
 
 - (IBAction)dismissKeyboard:(id)sender {
     
-    // *********************************************** TEM QUE PESQUISAR SUBVIEWS DA SUBVIW
     NSArray *subviews = [self.view subviews];
     for (id objects in subviews) {
         for (id controle in [objects subviews]) {
