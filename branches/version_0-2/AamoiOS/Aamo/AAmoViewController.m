@@ -239,6 +239,7 @@ int luaopen_mylib (lua_State *L){
             [self execLua: screenData.onEndScript];
         }
         [screenDataStack removeLastObject];
+        screenData = screenDataStack.lastObject;
         [self showViews];
     }
 }
@@ -252,6 +253,7 @@ int luaopen_mylib (lua_State *L){
                 if ([((UISwitch *)dv.view) isOn]) {
                     valor = 1;
                 }
+                break;
             }
         }
     }
@@ -299,6 +301,7 @@ int luaopen_mylib (lua_State *L){
             if (dv.id == number) {
                 UILabel *theTextField = (UILabel *) dv.view;
                 theTextField.text = content;
+                break;
             }
         }
     }
@@ -314,6 +317,7 @@ int luaopen_mylib (lua_State *L){
             if (dv.id == number) {
                 UITextField *theTextField = (UITextField *) dv.view;
                 theTextField.text = content;
+                break;
             }
         }
     }
@@ -394,6 +398,7 @@ int luaopen_mylib (lua_State *L){
                 UISwitch * sv = [[UISwitch alloc] initWithFrame:CGRectMake(left, top, width, height)];
                 dv.view = sv;
                 sv.tag = dv.id;
+                [sv addTarget:self action:@selector(checkBoxChanged:) forControlEvents:UIControlEventValueChanged];
                 [mView addSubview:sv];
                 [sv setOn:dv.checked];
                 break;
@@ -412,6 +417,20 @@ int luaopen_mylib (lua_State *L){
         [self execLua: screenData.onLoadScript];
     }
 
+}
+
+- (void) checkBoxChanged:(UISwitch *)sender
+{
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == sender.tag) {
+            if (dv.type == 4) {
+                if (dv.onChangeScript != nil && [dv.onChangeScript length] > 0) {
+                    [self execLua:dv.onChangeScript];
+                    break;
+                }
+            }
+        }
+    }
 }
 
 - (void)viewDidUnload
@@ -593,16 +612,18 @@ int luaopen_mylib (lua_State *L){
 - (const char *) getTextFieldContent: (double) number
 {
     AAmoDynaView *dv = nil;
-
+    const char * saida = nil;
     for(id el in dynaViews) {
         dv = el;
         if (dv.type == 1) {
             if (dv.id == number) {
                 UITextField *theTextField = (UITextField *) dv.view;
-                return [theTextField.text cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                saida = [theTextField.text cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                break;
             }
         }
     }
+    return saida;
 }
 
 -(void) sendAlert:(NSString *) msg
