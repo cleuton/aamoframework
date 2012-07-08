@@ -47,6 +47,7 @@
 		A61F9F30158900750024B18B /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0D158900750024B18B /* lvm.c */; };
 		A61F9F31158900750024B18B /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0F158900750024B18B /* lzio.c */; };
 		A61F9F33158900750024B18B /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F12158900750024B18B /* print.c */; };
+		A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */ = {isa = PBXBuildFile; fileRef = A6655C8615AA08EC00E16689 /* AAmoScreenData.m */; };
 		A66777B515A4EC770070233D /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B015A4EC770070233D /* sairDaTela.lua */; };
 		A66777B615A4EC770070233D /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B115A4EC770070233D /* tela2.lua */; };
 		A66777B715A4EC770070233D /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B215A4EC770070233D /* toqueBotao.lua */; };
@@ -124,6 +125,8 @@
 		A61F9F0F158900750024B18B /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzio.c; sourceTree = "<group>"; };
 		A61F9F10158900750024B18B /* lzio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzio.h; sourceTree = "<group>"; };
 		A61F9F12158900750024B18B /* print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = print.c; sourceTree = "<group>"; };
+		A6655C8515AA08EC00E16689 /* AAmoScreenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoScreenData.h; sourceTree = "<group>"; };
+		A6655C8615AA08EC00E16689 /* AAmoScreenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoScreenData.m; sourceTree = "<group>"; };
 		A66777B015A4EC770070233D /* sairDaTela.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sairDaTela.lua; sourceTree = "<group>"; };
 		A66777B115A4EC770070233D /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
 		A66777B215A4EC770070233D /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 				A61F9DFF15878FD40024B18B /* Supporting Files */,
 				A61F9E181587913C0024B18B /* AAmoDynaView.h */,
 				A61F9E191587913C0024B18B /* AAmoDynaView.m */,
+				A6655C8515AA08EC00E16689 /* AAmoScreenData.h */,
+				A6655C8615AA08EC00E16689 /* AAmoScreenData.m */,
 			);
 			path = Aamo;
 			sourceTree = "<group>";
@@ -376,6 +381,7 @@
 				A61F9F30158900750024B18B /* lvm.c in Sources */,
 				A61F9F31158900750024B18B /* lzio.c in Sources */,
 				A61F9F33158900750024B18B /* print.c in Sources */,
+				A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
