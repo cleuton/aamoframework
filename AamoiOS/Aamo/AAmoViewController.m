@@ -150,7 +150,8 @@ int luaopen_mylib (lua_State *L){
     AAmoDynaView *dv = nil;
     CGSize screenSize = self.view.bounds.size;
     CGRect  viewRect = CGRectMake(0, 0, screenSize.width, screenSize.height);
-    UIView * mView = [[UIView alloc] initWithFrame:viewRect];
+    UIControl * mView = [[UIControl alloc] initWithFrame:viewRect];
+    [mView addTarget:self action:@selector(dismissKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     for(id el in dynaViews) {
         dv = el;
         float height = (dv.percentHeight / 100) * screenSize.height;
@@ -375,15 +376,16 @@ int luaopen_mylib (lua_State *L){
 - (IBAction)dismissKeyboard:(id)sender {
     
     // *********************************************** TEM QUE PESQUISAR SUBVIEWS DA SUBVIW
-    
     NSArray *subviews = [self.view subviews];
     for (id objects in subviews) {
-        if ([objects isKindOfClass:[UITextField class]]) {
-            UITextField *theTextField = objects;
-            if ([objects isFirstResponder]) {
-                [theTextField resignFirstResponder];
-            }
-        } 
+        for (id controle in [objects subviews]) {
+            if ([controle isKindOfClass:[UITextField class]]) {
+                UITextField *theTextField = controle;
+                if ([controle isFirstResponder]) {
+                    [theTextField resignFirstResponder];
+                }
+            }            
+        }
     }
 }
 
