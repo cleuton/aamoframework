@@ -24,6 +24,8 @@
     NSString * currentElementName;
     int currentMacro;
     AAmoDynaView * currentElement;
+    NSMutableArray * viewStack;
+    NSMutableArray * controlsStack;
     
 }
 @end
@@ -45,10 +47,12 @@ static AAmoViewController * ponteiro;
     
     lua_settop(L, 0);
     
-    
     dynaViews = [[NSMutableArray alloc] init];
-    [self loadUi];
+    viewStack = [[NSMutableArray alloc] init];
+    controlsStack = [[NSMutableArray alloc] init];
+    [self loadUi:1];
     [self formatSubviews];
+    [self.view addSubview:((UIView *)[viewStack lastObject])];
 }
 
 - (void) execLua: (NSString *) script
@@ -76,9 +80,25 @@ static int getTextField(lua_State *L){
     return 1;  /* number of results */
 }
 
+static int loadScreen(lua_State *L) {
+    double d = lua_tonumber(L, 1);
+    [ponteiro loadUi: d];
+    [ponteiro hideViews];
+    [ponteiro formatSubviews];
+    [ponteiro showViews];
+    return 0;
+}
+
+static int exitScreen(lua_State *L) {
+    [ponteiro exitScreenProc];
+    return 0;
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
+    {"loadScreen", loadScreen},
+    {"exitScreen", exitScreen},    
     {NULL, NULL}
 };
 
@@ -93,10 +113,44 @@ int luaopen_mylib (lua_State *L){
 
 //***********************************
 
+- (void) exitScreenProc
+{
+    /*
+     Apple User interface Guidelines recommends to avoid quitting programmatically.
+     AAMO iOS Behaves different from AAMO Android in this aspect. it never quits the app, 
+     even if it is the last screen on the stack.
+     
+     O Guia de UI da Apple recomenda evitar sair da app programaticamente. 
+     O AAMO iOS se comporta diferente do AAMO Android neste aspecto. Ele nunca volta à tela 
+     inicial do dispositivo, mesmo que esteja na primeira tela da app.
+     */
+    
+    if ([viewStack count] > 1) {
+        [self hideViews];
+        [viewStack removeLastObject];
+        [controlsStack removeLastObject];
+        [self showViews];
+    }
+}
+
+- (void) hideViews
+{
+    UIView * lastView = (UIView *) [viewStack lastObject];
+    [lastView removeFromSuperview];
+}
+
+- (void) showViews
+{
+    dynaViews = ((NSMutableArray *)[controlsStack lastObject]);
+    [self.view addSubview:((UIView *) [viewStack lastObject])];
+}
+
 - (void) formatSubviews
 {
     AAmoDynaView *dv = nil;
     CGSize screenSize = self.view.bounds.size;
+    CGRect  viewRect = CGRectMake(0, 0, screenSize.width, screenSize.height);
+    UIView * mView = [[UIView alloc] initWithFrame:viewRect];
     for(id el in dynaViews) {
         dv = el;
         float height = (dv.percentHeight / 100) * screenSize.height;
@@ -111,7 +165,7 @@ int luaopen_mylib (lua_State *L){
                 tv.borderStyle = UITextBorderStyleRoundedRect;
                 dv.view = tv;
                 tv.tag = dv.id; 
-                [self.view addSubview:tv];
+                [mView addSubview:tv];
                 break;
             }
             case 2: {
@@ -120,7 +174,7 @@ int luaopen_mylib (lua_State *L){
                                 initWithFrame:CGRectMake(left, top, width, height)];
                 dv.view = lv;
                 lv.tag = dv.id;
-                [self.view addSubview:lv];
+                [mView addSubview:lv];
                 if (dv.text != nil) {
                     lv.text = dv.text;
                     
@@ -133,7 +187,7 @@ int luaopen_mylib (lua_State *L){
                 bv.frame = CGRectMake(left, top, width, height);
                 dv.view = bv;
                 bv.tag = dv.id;
-                [self.view addSubview:bv];
+                [mView addSubview:bv];
                 [bv addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchDown];
                 if (dv.text != nil) {
                     [bv setTitle:dv.text 
@@ -146,14 +200,17 @@ int luaopen_mylib (lua_State *L){
                 UISwitch * sv = [[UISwitch alloc] initWithFrame:CGRectMake(left, top, width, height)];
                 dv.view = sv;
                 sv.tag = dv.id;
-                [self.view addSubview:sv];
+                [mView addSubview:sv];
                 [sv setOn:dv.checked];
                 break;
             }
                 
         }
+
         
     }
+
+    [viewStack addObject:mView];
 }
 
 - (void)viewDidUnload
@@ -167,15 +224,30 @@ int luaopen_mylib (lua_State *L){
     return interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
-- (void) loadUi
+
+
+
+- (void) loadUi: (double) screenId
 {
-    NSString* appPath = [[NSBundle mainBundle] pathForResource:@"ui" ofType:@"xml"];
+    dynaViews = [[NSMutableArray alloc] init];
+    NSString * appPath = nil;
+    if (screenId == 1) {
+        appPath = [[NSBundle mainBundle] pathForResource:@"ui" ofType:@"xml"];
+    }
+    else {
+        int nScreen = screenId;
+        appPath = [[NSBundle mainBundle] pathForResource:
+                   [NSString stringWithFormat:@"ui_%d", nScreen]
+                                                  ofType:@"xml"];
+    }
+
     BOOL success;
     NSURL *xmlURL = [NSURL fileURLWithPath:appPath];
     NSXMLParser *uiParser = [[NSXMLParser alloc] initWithContentsOfURL:xmlURL];
     [uiParser setDelegate:self];
     [uiParser setShouldResolveExternalEntities:YES];
     success = [uiParser parse];
+    [controlsStack addObject:dynaViews];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict 
@@ -301,6 +373,9 @@ int luaopen_mylib (lua_State *L){
 }
 
 - (IBAction)dismissKeyboard:(id)sender {
+    
+    // *********************************************** TEM QUE PESQUISAR SUBVIEWS DA SUBVIW
+    
     NSArray *subviews = [self.view subviews];
     for (id objects in subviews) {
         if ([objects isKindOfClass:[UITextField class]]) {

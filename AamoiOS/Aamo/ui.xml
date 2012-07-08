@@ -7,11 +7,11 @@
      onLoadScript: nome do arquivo ".lua" que será invocado na carga da tela
      onEndScript: nome do arquivo ".lua" que será invocado no final da aplicação
      -->
-    <version>0.1</version>
+    <version>0.2</version>
     <uiid>1</uiid>
     <title>Teste AAMO</title>
     <onLoadScript></onLoadScript>
-    <onEndScript></onEndScript>
+    <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
     <element>
         <!--
          id: id do elemento
@@ -21,7 +21,7 @@
          percentWidth: largura do elemento, em percentuais da tela;
          percentHeight: altura do elemento, em percentuais da tela;
          onLoadScript: nome do arquivo ".lua" que será invocado na carga da tela
-         onCompleteScript: nome do arquivo ".lua" que será invocado quando o usuário terminar de digitar o campo;
+         
          -->
         <id>1</id>
         <type>1</type>
@@ -29,7 +29,7 @@
         <percentLeft>30</percentLeft>
         <percentWidth>40</percentWidth>
         <percentHeight>10</percentHeight>
-        <onCompleteScript></onCompleteScript>
+        
     </element>
     <element>
         <!--
@@ -55,7 +55,7 @@
         <percentWidth>10</percentWidth>
         <percentHeight>10</percentHeight>
         <checked>1</checked>
-        <onChangeScript></onChangeScript>
+        <onChangeScript>lua::aamo.log("Trocou CHK: " .. aamo.getCheckBox(3))</onChangeScript>
     </element> 
     <element>
         <!--
@@ -64,10 +64,61 @@
         <id>4</id>
         <type>3</type>
         <percentTop>40</percentTop>
-        <percentLeft>40</percentLeft>
+        <percentLeft>0</percentLeft>
         <percentWidth>15</percentWidth>
         <percentHeight>10</percentHeight>
         <text>Ok</text>
         <onClickScript>toqueBotao</onClickScript>
     </element>
+    <element>
+        <id>9</id>
+        <type>3</type>
+        <percentTop>40</percentTop>
+        <percentLeft>50</percentLeft>
+        <percentWidth>20</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>SetChk</text>
+        <onClickScript>lua::aamo.setCheckBox(3,0)</onClickScript>
+    </element>    
+    <element>
+        <id>5</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Tela 2</text>
+        <onClickScript>tela2</onClickScript>
+    </element>
+        <element>
+        <id>7</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>50</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Change Text</text>
+        <onClickScript>lua::aamo.setTextField(1,"OK")</onClickScript>
+    </element>
+    <element>
+        <id>6</id>
+        <type>3</type>
+        <percentTop>80</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Terminar</text>
+        <onClickScript>lua::aamo.exitScreen()</onClickScript>
+    </element>
+        <element>
+        <id>8</id>
+        <type>3</type>
+        <percentTop>50</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Get CheckBox</text>
+        <onClickScript>lua::aamo.showMessage(aamo.getCheckBox(3))</onClickScript>
+    </element>
+    
 </ui>

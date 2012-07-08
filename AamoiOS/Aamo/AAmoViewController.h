@@ -14,6 +14,11 @@
     lua_State *L;
 }
 - (const char *) getTextFieldContent: (double) number;
+- (void) loadUi: (double) screenId;
+- (void) formatSubviews;
+- (void) hideViews;
+- (void) showViews;
+- (void) exitScreenProc;
 -(void) sendAlert:(NSString *) msg;
 - (IBAction)dismissKeyboard:(id)sender;
 @end
