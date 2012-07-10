@@ -9,13 +9,13 @@
 #import "AAmoDynaView.h"
 #import "AAmoScreenData.h"
 
-#define VERSION 0.1
+#define VERSION 0.2
 #define MACRO_UI 1
 #define MACRO_ELEMENT 2
 
 @interface AAmoViewController ()
 {
-    @private
+@private
     NSMutableArray * dynaViews;
     
     AAmoScreenData * screenData;
@@ -28,11 +28,20 @@
     NSMutableArray * controlsStack;
     NSMutableArray * screenDataStack;
     int globalErrorCode;
+    	// Valor igual a nulo ou zero
     
 }
 @end
 
 static AAmoViewController * ponteiro;
+//errors
+const int errorCode_10 = 10;
+const int errorCode_11 = 11;
+const int errorCode_12 = 12;
+
+static int globalErrorCode;
+
+
 
 @implementation AAmoViewController
 
@@ -57,26 +66,14 @@ static AAmoViewController * ponteiro;
     [self loadUi:1];
     [self formatSubviews];
     [self.view addSubview:((UIView *)[viewStack lastObject])];
+    
+    //errors
+    //enum Errors errorCode;
+    globalErrorCode = 0;
 }
 
 - (void) execLua: (NSString *) script
 {
- 
-    
-    
-    //****** FRANCISCO TROQUE ISSO!!!!! **********************************
-    
-    globalErrorCode = 0;
-    
-    /*
-        Você é que terá que setar e resetar o globalErrorCode. Ele só está aqui por causa
-        da função aamo.getErrorCode() !!!!!!!
-     
-     */
-    //*****************************************
-    
-    
-    
     
     NSString *luaFilePath = [[NSBundle mainBundle] pathForResource:script ofType:@"lua"];
     int lenComando = [script length];
@@ -96,33 +93,66 @@ static AAmoViewController * ponteiro;
         const char *msg = lua_tostring(L, -1);
         NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
         NSLog(@"AAMO ERROR: %@",textoMsg);
-
+        
     }
 }
 
 // Lua Callbacks! Parte da API AAMO:
 
 static int showMessage(lua_State *L){
-    const char *msg = lua_tostring(L, -1);
-    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+	const char *msg = lua_tostring(L, -1);
+	NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
     [ponteiro sendAlert:textoMsg];
+	
     return 0;
 }
 
 static int getTextField(lua_State *L){
-
-    double d = lua_tonumber(L, 1);  /* get argument */
-    const char * texto = [ponteiro getTextFieldContent:d];
-    lua_pushstring(L, texto);
-    return 1;  /* number of results */
+	
+	if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1);  /* get argument */
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+        }
+        else {
+            const char * texto = [ponteiro getTextFieldContent:d];
+            if (texto == nil){
+                globalErrorCode = errorCode_12 ; 
+                return 0;
+            }else{
+                lua_pushstring(L, texto);  
+                return 1;  /* number of results */
+            }
+        }   
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}	
 }
 
 static int loadScreen(lua_State *L) {
-    double d = lua_tonumber(L, 1);
-    [ponteiro loadUi: d];
-    [ponteiro hideViews];
-    [ponteiro formatSubviews];
-    [ponteiro showViews];
+	
+	if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1);
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+        }
+        else {
+            [ponteiro loadUi: d];
+            if (globalErrorCode == 0){
+               [ponteiro hideViews];
+               [ponteiro formatSubviews];
+               [ponteiro showViews];
+            }
+            
+        }	
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+	}	    
+    
     return 0;
 }
 
@@ -132,25 +162,73 @@ static int exitScreen(lua_State *L) {
 }
 
 static int showLog(lua_State *L) {
-    const char *msg = lua_tostring(L, -1);
-    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-    NSLog(@"%@",textoMsg);
-    return 0;
+	if (lua_gettop (L)>0){
+	    const char *msg = lua_tostring(L, -1);
+	    if (msg == nil){
+            globalErrorCode = errorCode_12 ; 
+		}
+        else {
+    		NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+		    NSLog(@"%@",textoMsg);
+        }    
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+	}
+    
+	return 0;			
 }
 
 static int getCheckBox(lua_State *L){
-    
-    double d = lua_tonumber(L, 1);  /* get argument */
-    int valor = [ponteiro getCheckBox:d];
-    lua_pushnumber(L, valor);
-    return 1;  /* number of results */
+    int top = lua_gettop (L);
+    if (top>0){
+        double d = lua_tonumber(L, 1);  /* get argument */
+        if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+        }
+        else
+        {
+            int valor = [ponteiro getCheckBox:d];
+	    	if (valor == 0){
+                globalErrorCode = errorCode_12 ; 
+                return 0;	
+	    	}
+	    	else{
+		    	lua_pushnumber(L, valor);
+	    		return 1;  /* number of results */
+    		}
+        }
+    }
+    else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;	
+	}
 }
 
 static int setCheckBox(lua_State *L) {
-    double d = lua_tonumber(L, 1); // CheckBox id
-    double e = lua_tonumber(L, 2); // CheckBox id
-    [ponteiro setCheckBoxValue:d value:e];
-    return 0;
+	
+	if (lua_gettop (L)>0){
+    	
+    	double d = lua_tonumber(L, 1); // CheckBox id
+    	if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+    	
+    	double e = lua_tonumber(L, 2); // CheckBox id
+    	if (e == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+        
+    	[ponteiro setCheckBoxValue:d value:e];
+    	return 0;
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;	
+	}		
 }
 
 static int getCurrentScreenId(lua_State *L) {
@@ -159,31 +237,82 @@ static int getCurrentScreenId(lua_State *L) {
 }
 
 static int getLabelText(lua_State *L) {
-    double d = lua_tonumber(L, 1);  /* get argument */
-    const char * texto = [ponteiro getLabelContent:d];
-    lua_pushstring(L, texto);
-    return 1;  /* number of results */
+	if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1);  /* get argument */
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+    	
+    	const char * texto = [ponteiro getLabelContent:d];
+	    if (texto == nil){
+            globalErrorCode = errorCode_12 ; 
+		   	return 0;
+        }
+        else {
+            lua_pushstring(L, texto);
+    		return 1;  /* number of results */
+        }		
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;	
+	}	 	
 }
 
 static int setLabelText(lua_State *L) {
-    double d = lua_tonumber(L, 1); // id
-    const char *msg = lua_tostring(L, -1); // text
-    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-    [ponteiro setLabelContent:d text:textoMsg];
-    return 0;
+	if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1); // id
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+    	
+    	const char *msg = lua_tostring(L, -1); // text
+        if (msg == nil){
+            globalErrorCode = errorCode_12 ; 
+		   	return 0;
+        }
+        else {
+		    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    		[ponteiro setLabelContent:d text:textoMsg];
+	    	return 0;
+        }	
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}
 }
 
 static int setTextField(lua_State *L) {
-    double d = lua_tonumber(L, 1); // id
-    const char *msg = lua_tostring(L, -1); // text
-    NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-    [ponteiro setTextContent:d text:textoMsg];
-    return 0;
+	if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1); // id
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+    	
+    	const char *msg = lua_tostring(L, -1); // text
+	    if (msg == nil){
+            globalErrorCode = errorCode_12 ; 
+        }
+        else {
+	    	NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    		[ponteiro setTextContent:d text:textoMsg];
+        }	
+        return 0;
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}    
 }
 
 static int getErrorCode(lua_State *L) {
-    lua_pushnumber(L, [ponteiro getGlobalErrorCode]);
-    return 1;
+	
+   	lua_pushnumber(L, globalErrorCode);
+   	return 1;
 }
 
 static const struct luaL_Reg aamo_f [] = {
@@ -359,7 +488,7 @@ int luaopen_mylib (lua_State *L){
             case 1: {
                 // Textbox
                 UITextField * tv = [[UITextField alloc] 
-                        initWithFrame:CGRectMake(left, top, width, height)];
+                                    initWithFrame:CGRectMake(left, top, width, height)];
                 tv.borderStyle = UITextBorderStyleRoundedRect;
                 dv.view = tv;
                 tv.tag = dv.id; 
@@ -389,7 +518,7 @@ int luaopen_mylib (lua_State *L){
                 [bv addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchDown];
                 if (dv.text != nil) {
                     [bv setTitle:dv.text 
-                             forState:(UIControlState)UIControlStateNormal];
+                        forState:(UIControlState)UIControlStateNormal];
                 }
                 break;
             }
@@ -405,10 +534,10 @@ int luaopen_mylib (lua_State *L){
             }
                 
         }
-
+        
         
     }
-
+    
     [viewStack addObject:mView];
     [screenDataStack addObject:screenData];
     // Check "onLoadScreen" event:
@@ -416,7 +545,7 @@ int luaopen_mylib (lua_State *L){
     if (screenData.onLoadScript != nil && [screenData.onLoadScript length] > 0) {
         [self execLua: screenData.onLoadScript];
     }
-
+    
 }
 
 - (void) checkBoxChanged:(UISwitch *)sender
@@ -437,15 +566,13 @@ int luaopen_mylib (lua_State *L){
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return interfaceOrientation == UIInterfaceOrientationPortrait;
 }
-
-
 
 
 - (void) loadUi: (double) screenId
@@ -455,6 +582,7 @@ int luaopen_mylib (lua_State *L){
     NSString * appPath = nil;
     if (screenId == 1) {
         appPath = [[NSBundle mainBundle] pathForResource:@"ui" ofType:@"xml"];
+        
     }
     else {
         int nScreen = screenId;
@@ -462,14 +590,24 @@ int luaopen_mylib (lua_State *L){
                    [NSString stringWithFormat:@"ui_%d", nScreen]
                                                   ofType:@"xml"];
     }
-
-    BOOL success;
-    NSURL *xmlURL = [NSURL fileURLWithPath:appPath];
-    NSXMLParser *uiParser = [[NSXMLParser alloc] initWithContentsOfURL:xmlURL];
-    [uiParser setDelegate:self];
-    [uiParser setShouldResolveExternalEntities:YES];
-    success = [uiParser parse];
-    [controlsStack addObject:dynaViews];
+    //se ocorreu erro na leitura do arquivo
+    if (appPath == nil){
+        globalErrorCode = errorCode_11 ; 
+        return;
+    }
+    else {
+    
+        BOOL success;
+        NSURL *xmlURL = [NSURL fileURLWithPath:appPath];
+        NSXMLParser *uiParser = [[NSXMLParser alloc] initWithContentsOfURL:xmlURL];
+        [uiParser setDelegate:self];
+        [uiParser setShouldResolveExternalEntities:YES];
+        success = [uiParser parse];
+        [controlsStack addObject:dynaViews];
+        
+        globalErrorCode = 0 ; 
+    }
+    
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict 
@@ -567,7 +705,7 @@ int luaopen_mylib (lua_State *L){
         }
         else if ([currentElementName isEqualToString: @"text"]) {
             currentElement.text = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-           
+            
         }
         else if ([currentElementName isEqualToString: @"onCompleteScript"]) {
             currentElement.onCompleteScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -578,19 +716,19 @@ int luaopen_mylib (lua_State *L){
         else if ([currentElementName isEqualToString: @"onChangeScript"]) {
             currentElement.onChangeScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
-
+        
     }
-
+    
     currentStringValue = nil;
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError 
 {
     NSString * mensagem = [NSString stringWithFormat:@"%@ line: %i Column: %i", 
-    [[parser parserError] localizedDescription], [parser lineNumber],
-    [parser columnNumber]];
+                           [[parser parserError] localizedDescription], [parser lineNumber],
+                           [parser columnNumber]];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ui.xml" 
-                message:mensagem delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                                    message:mensagem delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [alert show];
 }
 
@@ -644,8 +782,8 @@ int luaopen_mylib (lua_State *L){
             }
         }
     }
-
-
+    
+    
 }
 
 @end
