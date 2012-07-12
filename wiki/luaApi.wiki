@@ -34,6 +34,6 @@ All VERSION 0.1 funcions are still valid.
 
  
 === AAMO ERROR CODES ===
- *Error 10*: Missing parameter (parâmetro faltando);
- *Error 11*: File not found (arquivo não encontrado).
- *Error 12*: Null value (valor igual a nulo).
+ * *Error 10*: Missing parameter (parâmetro faltando);
+ * *Error 11*: File not found (arquivo não encontrado).
+ * *Error 12*: Null value (valor igual a nulo).
