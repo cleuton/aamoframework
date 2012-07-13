@@ -45,7 +45,7 @@ public class DBParser {
 		try {
 		
 			db = new Database();
-			xml = ctx.getApplicationContext().getAssets().open("app/bd/bd.xml");
+			xml = ctx.getApplicationContext().getAssets().open("bd/bd.xml");
 			
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
 			factory.setNamespaceAware(true); 
