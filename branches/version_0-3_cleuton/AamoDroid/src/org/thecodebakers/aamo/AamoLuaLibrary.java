@@ -18,7 +18,7 @@ public class AamoLuaLibrary {
 	//errors LUA 
 	protected enum Errors {
 	    LUA_10(10), 	// parametro faltando 
-	    LUA_11(11), 	// Arquivo não encontrado
+	    LUA_11(11), 	// Arquivo nÃ£o encontrado
 	    LUA_12(12), 	// Valor igual a nulo
 	    LUA_13(13),
 	    LUA_14(14), 
@@ -78,7 +78,7 @@ public class AamoLuaLibrary {
 		String texto = null;
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd) {
-				if (dv.type == 1) { // é um textbox
+				if (dv.type == 1) { // Ã© um textbox
 					texto = ((EditText) dv.view).getText().toString();
 					break;
 				}
@@ -130,7 +130,7 @@ public class AamoLuaLibrary {
 	    	  try{
 	    	  	  loadScreen(tela);
 	    	   }catch(AamoException ae){
-	      		  AamoLuaLibrary.errorCode = 11; // arquivo não encontrado
+	      		  AamoLuaLibrary.errorCode = 11; // arquivo nÃ£o encontrado
 	      	   } 	   
 	    	  
 	      }else {
@@ -337,7 +337,7 @@ public class AamoLuaLibrary {
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd) {
 				if (dv.type == 2) {
-					// é um label
+					// Ã© um label
 					texto = ((TextView) dv.view).getText().toString();
 					break;
 				}
@@ -466,6 +466,53 @@ public class AamoLuaLibrary {
 		  });
 		  L.setTable(-3);
 		  return 1;
+	}
+	
+	public static int m_showScreen(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("showScreen");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		      if (L.getTop() > 1) {
+		    	  LuaObject tela = getParam(2);
+		    	  try{
+		    		  // Verificar se a tela já existe na pilha
+		    		  int pos = -1;
+		    		  for (ScreenData sd : selfRef.screenStack) {
+		    			  if (sd.uiid == tela.getNumber()) {
+		    				  pos = selfRef.screenStack.indexOf(sd);
+		    				  break;
+		    			  }
+		    		  }
+		    		  if (pos < 0) {
+		    			  // A tela não existe na pilha
+		    			  loadScreen(tela);
+		    		  }
+		    		  else {
+		    			  ScreenData sd = null;
+		    			  do {
+		    				sd = selfRef.screenData;
+		    				if (sd.uiid == tela.getNumber()) {
+		    					break;
+		    				}
+		    				AamoLuaLibrary.exitScreen();
+		    			  } while (sd.uiid != tela.getNumber());
+		    		  }
+		    	   }catch(AamoException ae){
+		      		  AamoLuaLibrary.errorCode = 11; // arquivo nÃ£o encontrado
+		      	   } 	   
+		    	  
+		      }else {
+		    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+		      }
+		      return 0;
+		    }
+		  });
+		  L.setTable(-3);
+
+		return 1;
 	}
 	
 }
