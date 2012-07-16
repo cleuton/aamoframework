@@ -10,7 +10,7 @@
     <version>0.2</version>
     <uiid>1</uiid>
     <title>Teste AAMO</title>
-    <onLoadScript>lua::aamo.log("LOAD SCRIPT TELA 1")</onLoadScript>
+    <onLoadScript></onLoadScript>
     <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
     <element>
         <!--
@@ -78,7 +78,7 @@
         <percentWidth>20</percentWidth>
         <percentHeight>10</percentHeight>
         <text>SetChk</text>
-        <onClickScript>lua::aamo.setCheckBox(3,1)</onClickScript>
+        <onClickScript>lua::aamo.setCheckBox(3,0)</onClickScript>
     </element>    
     <element>
         <id>5</id>

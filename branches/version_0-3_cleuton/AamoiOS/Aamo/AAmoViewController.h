@@ -27,5 +27,6 @@
 - (int) getCheckBox: (double) idc;
 - (void) setCheckBoxValue:(double) d value:(double) e;
 - (int) getCurrentScreenId;
+- (BOOL) showScreen: (double) screenNumber;
 - (IBAction)dismissKeyboard:(id)sender;
 @end

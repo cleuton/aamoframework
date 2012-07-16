@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <version>0.2</version>
+    <uiid>3</uiid>
+    <title>Tela 3</title>
+    <onLoadScript>lua::aamo.log("ON LOAD TELA 3")</onLoadScript>
+    <onEndScript>lua::aamo.log("END SCRIPT TELA 3")</onEndScript>
+    
+    <element>
+        <id>1</id>
+        <type>2</type>
+        <percentTop>10</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>40</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Esta é a terceira tela</text>
+    </element>
+
+    <element>
+        <id>2</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Voltar</text>
+        <onClickScript>sairDaTela</onClickScript>
+    </element>
+    
+        <element>
+        <id>3</id>
+        <type>3</type>
+        <percentTop>80</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>20</percentWidth>
+        <percentHeight>20</percentHeight>
+        <text>Quarta</text>
+        <onClickScript>lua::aamo.loadScreen(4)</onClickScript>
+    </element>
+    
+</ui>
