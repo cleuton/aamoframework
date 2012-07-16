@@ -47,12 +47,14 @@
 		A61F9F30158900750024B18B /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0D158900750024B18B /* lvm.c */; };
 		A61F9F31158900750024B18B /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0F158900750024B18B /* lzio.c */; };
 		A61F9F33158900750024B18B /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F12158900750024B18B /* print.c */; };
+		A630692115B4C2DC00E3F8A3 /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A630691A15B4C2DC00E3F8A3 /* sairDaTela.lua */; };
+		A630692215B4C2DC00E3F8A3 /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A630691B15B4C2DC00E3F8A3 /* tela2.lua */; };
+		A630692315B4C2DC00E3F8A3 /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A630691C15B4C2DC00E3F8A3 /* toqueBotao.lua */; };
+		A630692415B4C2DC00E3F8A3 /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A630691D15B4C2DC00E3F8A3 /* ui_2.xml */; };
+		A630692515B4C2DC00E3F8A3 /* ui_3.xml in Resources */ = {isa = PBXBuildFile; fileRef = A630691E15B4C2DC00E3F8A3 /* ui_3.xml */; };
+		A630692615B4C2DC00E3F8A3 /* ui_4.xml in Resources */ = {isa = PBXBuildFile; fileRef = A630691F15B4C2DC00E3F8A3 /* ui_4.xml */; };
+		A630692715B4C2DC00E3F8A3 /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A630692015B4C2DC00E3F8A3 /* ui.xml */; };
 		A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */ = {isa = PBXBuildFile; fileRef = A6655C8615AA08EC00E16689 /* AAmoScreenData.m */; };
-		A66777B515A4EC770070233D /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B015A4EC770070233D /* sairDaTela.lua */; };
-		A66777B615A4EC770070233D /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B115A4EC770070233D /* tela2.lua */; };
-		A66777B715A4EC770070233D /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B215A4EC770070233D /* toqueBotao.lua */; };
-		A66777B815A4EC770070233D /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B315A4EC770070233D /* ui_2.xml */; };
-		A66777B915A4EC770070233D /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B415A4EC770070233D /* ui.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,13 +127,15 @@
 		A61F9F0F158900750024B18B /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzio.c; sourceTree = "<group>"; };
 		A61F9F10158900750024B18B /* lzio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzio.h; sourceTree = "<group>"; };
 		A61F9F12158900750024B18B /* print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = print.c; sourceTree = "<group>"; };
+		A630691A15B4C2DC00E3F8A3 /* sairDaTela.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sairDaTela.lua; sourceTree = "<group>"; };
+		A630691B15B4C2DC00E3F8A3 /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
+		A630691C15B4C2DC00E3F8A3 /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
+		A630691D15B4C2DC00E3F8A3 /* ui_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_2.xml; sourceTree = "<group>"; };
+		A630691E15B4C2DC00E3F8A3 /* ui_3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_3.xml; sourceTree = "<group>"; };
+		A630691F15B4C2DC00E3F8A3 /* ui_4.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_4.xml; sourceTree = "<group>"; };
+		A630692015B4C2DC00E3F8A3 /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 		A6655C8515AA08EC00E16689 /* AAmoScreenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoScreenData.h; sourceTree = "<group>"; };
 		A6655C8615AA08EC00E16689 /* AAmoScreenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoScreenData.m; sourceTree = "<group>"; };
-		A66777B015A4EC770070233D /* sairDaTela.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sairDaTela.lua; sourceTree = "<group>"; };
-		A66777B115A4EC770070233D /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
-		A66777B215A4EC770070233D /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
-		A66777B315A4EC770070233D /* ui_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_2.xml; sourceTree = "<group>"; };
-		A66777B415A4EC770070233D /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,11 +213,13 @@
 		A61F9E1F1587C3900024B18B /* app */ = {
 			isa = PBXGroup;
 			children = (
-				A66777B015A4EC770070233D /* sairDaTela.lua */,
-				A66777B115A4EC770070233D /* tela2.lua */,
-				A66777B215A4EC770070233D /* toqueBotao.lua */,
-				A66777B315A4EC770070233D /* ui_2.xml */,
-				A66777B415A4EC770070233D /* ui.xml */,
+				A630691A15B4C2DC00E3F8A3 /* sairDaTela.lua */,
+				A630691B15B4C2DC00E3F8A3 /* tela2.lua */,
+				A630691C15B4C2DC00E3F8A3 /* toqueBotao.lua */,
+				A630691D15B4C2DC00E3F8A3 /* ui_2.xml */,
+				A630691E15B4C2DC00E3F8A3 /* ui_3.xml */,
+				A630691F15B4C2DC00E3F8A3 /* ui_4.xml */,
+				A630692015B4C2DC00E3F8A3 /* ui.xml */,
 			);
 			name = app;
 			sourceTree = "<group>";
@@ -332,11 +338,13 @@
 				A61F9E0315878FD40024B18B /* InfoPlist.strings in Resources */,
 				A61F9E0C15878FD40024B18B /* MainStoryboard_iPhone.storyboard in Resources */,
 				A61F9E0F15878FD40024B18B /* MainStoryboard_iPad.storyboard in Resources */,
-				A66777B515A4EC770070233D /* sairDaTela.lua in Resources */,
-				A66777B615A4EC770070233D /* tela2.lua in Resources */,
-				A66777B715A4EC770070233D /* toqueBotao.lua in Resources */,
-				A66777B815A4EC770070233D /* ui_2.xml in Resources */,
-				A66777B915A4EC770070233D /* ui.xml in Resources */,
+				A630692115B4C2DC00E3F8A3 /* sairDaTela.lua in Resources */,
+				A630692215B4C2DC00E3F8A3 /* tela2.lua in Resources */,
+				A630692315B4C2DC00E3F8A3 /* toqueBotao.lua in Resources */,
+				A630692415B4C2DC00E3F8A3 /* ui_2.xml in Resources */,
+				A630692515B4C2DC00E3F8A3 /* ui_3.xml in Resources */,
+				A630692615B4C2DC00E3F8A3 /* ui_4.xml in Resources */,
+				A630692715B4C2DC00E3F8A3 /* ui.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

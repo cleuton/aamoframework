@@ -3,7 +3,7 @@
     <version>0.2</version>
     <uiid>2</uiid>
     <title>Tela 2</title>
-    <onLoadScript>lua::aamo.log("ON LOAD TELA 2")</onLoadScript>
+    <onLoadScript>lua::aamo.log("ON LOAD * TELA 2")</onLoadScript>
     <onEndScript>lua::aamo.log("END SCRIPT TELA 2")</onEndScript>
     
     <element>
@@ -34,8 +34,8 @@
         <percentLeft>40</percentLeft>
         <percentWidth>30</percentWidth>
         <percentHeight>10</percentHeight>
-        <text>Change Label</text>
-        <onClickScript>lua::aamo.setLabelText(1,"UHU")</onClickScript>
+        <text>Tela 3</text>
+        <onClickScript>lua::aamo.loadScreen(3)</onClickScript>
     </element>
     
     <element>

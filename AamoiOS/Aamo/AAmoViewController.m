@@ -315,6 +315,29 @@ static int getErrorCode(lua_State *L) {
    	return 1;
 }
 
+static int showScreen(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1);
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+        }
+        else {
+            if (![ponteiro showScreen:d]) {
+                [ponteiro loadUi: d];
+                if (globalErrorCode == 0){
+                    [ponteiro hideViews];
+                    [ponteiro formatSubviews];
+                    [ponteiro showViews];
+                }
+            }
+        }	
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+	}	    
+    return 0;
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -328,6 +351,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"setLabelText", setLabelText},
     {"setTextField", setTextField},
     {"getError", getErrorCode},
+    {"showScreen", showScreen},
     {NULL, NULL}
 };
 
@@ -341,6 +365,28 @@ int luaopen_mylib (lua_State *L){
 
 
 //***********************************
+
+- (BOOL) showScreen: (double) screenNumber
+{
+    BOOL existe = false;
+    for (AAmoScreenData *sd in screenDataStack) {
+        if (sd.uiid == screenNumber) {
+            existe = YES;
+            break;
+        }
+    }
+    if (existe) {
+        AAmoScreenData *sd = nil;
+        do {
+            sd = screenData;
+            if (sd.uiid == screenNumber) {
+                break;
+            }
+            [self exitScreenProc];
+        } while (sd.uiid != screenNumber);
+    }
+    return existe;
+}
 
 - (void) exitScreenProc
 {
