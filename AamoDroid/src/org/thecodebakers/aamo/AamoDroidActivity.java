@@ -101,10 +101,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		int screenWidth = metrics.widthPixels;
 	    for(DynaView dv : dynaViews) {
 	    	
-	        float height = (dv.percentHeight / 100) * screenHeight;
-	        float width = (dv.percentWidth / 100) * screenWidth;
-	        float top = (dv.percentTop / 100) * screenHeight;
-	        float left = (dv.percentLeft / 100) * screenWidth;
+	        int height = (int) Math.round((dv.percentHeight / 100.00f) * (float)screenHeight);
+	        int width =  (int) Math.round((dv.percentWidth / 100.00f) * (float)screenWidth);
+	        int top = (int) Math.round((dv.percentTop / 100.00f) * (float)screenHeight);
+	        int left = (int) Math.round((dv.percentLeft / 100.00f) * (float)screenWidth);
 	        
 	        switch (dv.type) {
 	            case 1: 
