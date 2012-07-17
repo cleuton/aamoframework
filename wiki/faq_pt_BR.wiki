@@ -4,7 +4,6 @@
 
 Temos recebido muitas perguntas de pessoas interessadas no AAMO, logo, criamos um FAQ para tentarmos esclarecer as mais comuns.
 
-
 == Por que criar um Framework? ==
 
  * *Por que criar um framework? Não seria melhor usar os que já existem?* : _Porque pensamos que podemos contribuir com algo diferente do que já está aí, além disto desenvolvemos e divulgamos tecnologia, que são objetivos do nosso portal The Code Bakers_
@@ -24,3 +23,23 @@ Temos recebido muitas perguntas de pessoas interessadas no AAMO, logo, criamos u
 == Sobre IDE ==
 
  * *Vai ter uma IDE? Um plugin?* : _Sim. Teremos um ambiente de programação, o *AAMO Editor*. Com ele, você vai editar os arquivos de Tela e também os scripts Lua. Ele vai evoluir junto com o AAMO e, futuramente, permitirá desenvolver, compilar, depurar e testar aplicações diretamente no Desktop, antes de exportar para o dispositivo móvel._
+ * *Vocês pretendem criar plugins para eclipse, Xcode ou Netbeans?* : _Inicialmente, não. Pretendemos disponibilizar o *AAMO Editor*. Não está descartada a ideia de criar plugins para outras IDEs, porém, consideramos que o valor do AAMO está na sua simplicidade, e o AAMO Editor promove este valor. Usar uma IDE verbosa, de uso genérico, como as mencionadas na pergunta, vai ofuscar um pouco deste valor. _
+
+== Quando fica pronto? ==
+
+ * *Quando vai ficar pronto? Já posso usar?* : _O AAMO é um projeto em desenvolvimento. Existe um Roadmap (que vamos publicar em breve), com a previsão de versões. Mas muita coisa está ficando pronta e você já pode utilizar. Se quiser, pode até se juntar ao time de desenvolvimento. _ 
+
+ * *Por que anunciaram, se não está pronto?* : _Um software Open Source depende de colaboração. Anunciamos a prova de conceito e estamos melhorando, seguindo metodologia ágil, a cada novo "Sprint". A ideia é atrair colaboradores. _ 
+
+== Vai ser sempre gratuito? ==
+
+ * *Vai ser sempre gratuito e Open Source?*: _Sempre terá uma versão gratuita e open source. Pode ser que, futuramente, outros produtos sejam desenvolvidos utilizando a plataforma AAMO, e pode ser que estes não sejam gratuitos, mas é nossa intenção manter a versão básica sempre Open Source._
+
+== Posso desenvolver games com ele? ==
+
+ * *Posso desenvolver games com ele?* : _Nós (The Code Bakers) estamos desenvolvendo um framework de games em separado. Este framework utiliza Lua, Box2D e TMX para criar games 2D. Estamos pensando em juntar os dois projetos, dando ao AAMO a possibilidade de criar Jogos também._
+
+== Qual é a licença de uso dele?  ==
+
+
+ 
