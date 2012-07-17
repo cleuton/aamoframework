@@ -41,5 +41,7 @@ Temos recebido muitas perguntas de pessoas interessadas no AAMO, logo, criamos u
 
 == Qual é a licença de uso dele?  ==
 
+ * *Qual é a licença de uso?* : _No framework AAMO há um arquivo de licença explicando tudo. Basicamente, ele utiliza a licença Apache versão 2.0._
+ * *Eu preciso abrir meu código-fonte?* : _Não. De forma alguma. Se desenvolver com o AAMO, só precisa manter o arquivo de licença original._
 
  
