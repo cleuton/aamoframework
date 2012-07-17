@@ -8,3 +8,8 @@ Temos recebido muitas perguntas de pessoas interessadas no AAMO, logo, criamos u
 == Por que criar um Framework? ==
 
  * *Por que criar um framework? Não seria melhor usar os que já existem?* : _Porque pensamos que podemos contribuir com algo diferente do que já está aí, além disto desenvolvemos e divulgamos tecnologia, que são objetivos do nosso portal The Code Bakers_
+ * *Qual é a vantagem de usar o AAMO?* : _Com ele, você constrói a aplicação uma só vez, podendo exportar para várias plataformas. Você economizará tempo e dinheiro._
+
+== Sobre a funcionalidade e serventia do AAMO ==
+
+ * *Eu posso usar qualquer tipo de componente com o AAMO?* : _Nós pensamos em criar um framework para a maioria das aplicações comuns. Logo, o AAMO dará suporte aos componentes e recursos mais comuns dos aparelhos. Pense em uma solução para 80% dos problemas, mas não 100%._
