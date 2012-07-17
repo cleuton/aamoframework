@@ -1,0 +1,10 @@
+#summary Perguntas mais frequentes sobre o AAMO.
+
+= Introdução =
+
+Temos recebido muitas perguntas de pessoas interessadas no AAMO, logo, criamos um FAQ para tentarmos esclarecer as mais comuns.
+
+
+== Por que criar um Framework? ==
+
+ * *Por que criar um framework? Não seria melhor usar os que já existem?* : _Porque pensamos que podemos contribuir com algo diferente do que já está aí, além disto desenvolvemos e divulgamos tecnologia, que são objetivos do nosso portal The Code Bakers_
