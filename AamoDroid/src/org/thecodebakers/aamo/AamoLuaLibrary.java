@@ -13,7 +13,7 @@ import android.widget.TextView;
 public class AamoLuaLibrary {
 	
 	public static AamoDroidActivity selfRef;
-	protected static int errorCode = 0;
+	public static int errorCode = 0;
 	
 	//errors LUA 
 	protected enum Errors {
@@ -22,7 +22,8 @@ public class AamoLuaLibrary {
 	    LUA_12(12), 	// Valor igual a nulo
 	    LUA_13(13),
 	    LUA_14(14), 
-	    LUA_15(15); 
+	    LUA_15(15),
+	    LUA_100(100); 
 	    
 	    int errorCode;
 	    
@@ -513,6 +514,43 @@ public class AamoLuaLibrary {
 		  L.setTable(-3);
 
 		return 1;
+
+	}
+	
+	public static int m_getLocalizedText(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("getLocalizedText");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		      if (L.getTop() > 1) {
+		    	  LuaObject d = getParam(2);
+		    	  if (d == null) {
+		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+		    		  return 0;
+		    	  }
+		    	  else {	  
+		    		  String txt = selfRef.checkL10N("l10n::" + d.getString());
+		    		  if (txt == null) {
+			    		  AamoLuaLibrary.errorCode = Errors.LUA_100.getErrorCode();
+			    		  return 0;
+			    	  }
+		    		  else {
+			    		  L.pushString(txt);  
+			    	  }
+		    	  }	  
+		      }
+		      else {
+		    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+		    	  return 0;
+		      }
+		      
+		      return 1;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
 	}
 	
 }

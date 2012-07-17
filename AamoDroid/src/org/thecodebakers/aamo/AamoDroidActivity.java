@@ -1,11 +1,17 @@
 package org.thecodebakers.aamo;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.Stack;
 
 import org.keplerproject.luajava.LuaState;
@@ -35,9 +41,11 @@ import android.widget.ViewFlipper;
 
 public class AamoDroidActivity extends Activity implements OnClickListener {
 	
-	public static final double VERSION = 0.2;
+	public static final double VERSION = 0.3;
 	public static final int MACRO_UI = 1;
 	public static final int  MACRO_ELEMENT = 2;
+	public static final String AAMOL10N = "aamol10n";
+	public static final String AAMOL10N_MARKER = "l10n::";
 	protected List<DynaView> dynaViews;
 	
 	protected ScreenData screenData;
@@ -58,6 +66,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
     // Lua
     
     protected LuaState L;
+    
+    // L10N
+    
+    public ResourceBundle res;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +91,6 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
         try {
 			loadUI(1);
 		} catch (AamoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
@@ -116,6 +127,9 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	            	dvLayout.addView(tv, params);
 	                dv.view = tv;
 	                tv.setTag(new Integer(dv.id)); 
+	                if (dv.text != null) {
+	                	tv.setText(checkL10N(dv.text));
+	                }
 	                break;
 	            
 	            case 2: {
@@ -128,7 +142,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                dv.view = lv;
 	                lv.setTag(dv.id);
 	                if (dv.text != null) {
-	                    lv.setText(dv.text);
+	                    lv.setText(checkL10N(dv.text));
 	                }
 	                break;
 	            }
@@ -142,7 +156,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                dv.view = bv;
 	                bv.setTag(dv.id);
 	                bv.setOnClickListener( this);
-	                bv.setText(dv.text);
+	                bv.setText(checkL10N(dv.text));
 
 	                break;
 	            }
@@ -401,6 +415,35 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		}
 	}
 	
+	public ResourceBundle getBundle() {
+		ResourceBundle res = null;
+		String userLanguage = Locale.getDefault().getLanguage();
+		String userCountry  = (Locale.getDefault().getCountry() == null) ? "" : "_" + Locale.getDefault().getCountry();
+		AssetManager am = getAssets();
+		String preferredName = AAMOL10N + "_" + userLanguage + userCountry + ".properties";
+		int index = 0;
+		String names[] = {
+			preferredName,
+			AAMOL10N + "_" + userLanguage + ".properties",
+			AAMOL10N + ".properties"
+		};
+		boolean loading = true;
+		do {
+			try {
+				InputStream is = am.open("app/" + names[index]);
+				res = new PropertyResourceBundle(is);
+				loading = false;
+			} catch (Exception e) {
+				index++;
+				if (index > 2) {
+					AamoLuaLibrary.errorCode = 100;
+					loading = false;
+				}
+			}
+			
+		} while (loading);
+		return res;
+	}
 
 	
 	// This solution, to read scripts from the Assets folder, came from Michal Kottman's project "Androlua" (https://github.com/mkottman/AndroLua)
@@ -414,4 +457,27 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		return output.toByteArray();
 	}
 
+	public String checkL10N(String texto) {
+		String saida = texto;
+		int pos = -1;
+		if ((pos = texto.indexOf(AAMOL10N_MARKER)) >= 0) {
+			saida = getL10N(texto.substring(pos + AAMOL10N_MARKER.length()));
+		}
+		return saida;
+	}
+
+	public String getL10N(String substring) {
+		String result = null;
+		if (res == null) {
+			res = getBundle();
+		}
+		try {
+			result = res.getString(substring);	
+		}
+		catch (MissingResourceException mre) {
+			result = "??????";
+		}
+		
+		return res.getString(substring);
+	}
 }

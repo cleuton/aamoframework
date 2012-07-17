@@ -17,9 +17,11 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBox\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getError\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showScreen\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getLocalizedText\")\r\n
     </string>
 	<string name="lua_10">Parâmetro faltando.</string>
 	<string name="lua_11">Arquivo não encontrado.</string>
 	<string name="lua_12">Valor igual a nulo</string>
+	<string name="lua_100">Arquivo de localização não encontrado</string>
 	
 </resources>
