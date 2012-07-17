@@ -27,7 +27,7 @@
         <onClickScript>sairDaTela</onClickScript>
     </element>
     
-        <element>
+    <element>
         <id>3</id>
         <type>3</type>
         <percentTop>80</percentTop>
@@ -36,6 +36,17 @@
         <percentHeight>20</percentHeight>
         <text>tela 2</text>
         <onClickScript>lua::aamo.showScreen(2)</onClickScript>
+    </element>
+    
+    <element>
+        <id>4</id>
+        <type>3</type>
+        <percentTop>80</percentTop>
+        <percentLeft>30</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>20</percentHeight>
+        <text>MSG L10N</text>
+        <onClickScript>lua::aamo.showMessage(aamo.getLocalizedText("locmsg"))</onClickScript>
     </element>
     
 </ui>
