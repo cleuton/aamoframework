@@ -29,6 +29,7 @@
     NSMutableArray * screenDataStack;
     int globalErrorCode;
     	// Valor igual a nulo ou zero
+    AAmoResourceBundle * res;
     
 }
 @end
@@ -51,7 +52,7 @@ static int globalErrorCode;
 	// Do any additional setup after loading the view, typically from a nib.
     
     ponteiro = self;
-    
+    [self loadBundle];
     // initialize Lua and our load our lua file
     L = luaL_newstate(); // create a new state structure for the interpreter
     luaL_openlibs(L); // load all the basic libraries into the interpreter
@@ -365,6 +366,13 @@ int luaopen_mylib (lua_State *L){
 
 
 //***********************************
+
+- (void) loadBundle
+{
+    if (res == nil) {
+        res = [[AAmoResourceBundle alloc] init];
+    }
+}
 
 - (BOOL) showScreen: (double) screenNumber
 {

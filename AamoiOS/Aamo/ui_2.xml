@@ -3,7 +3,7 @@
     <version>0.2</version>
     <uiid>2</uiid>
     <title>Tela 2</title>
-    <onLoadScript>lua::aamo.log("ON LOAD * TELA 2")</onLoadScript>
+    <onLoadScript>lua::aamo.log("ON LOAD TELA 2")</onLoadScript>
     <onEndScript>lua::aamo.log("END SCRIPT TELA 2")</onEndScript>
     
     <element>
