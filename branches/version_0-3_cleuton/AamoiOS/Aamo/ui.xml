@@ -26,7 +26,7 @@
         <id>1</id>
         <type>1</type>
         <percentTop>10</percentTop>
-        <percentLeft>30</percentLeft>
+        <percentLeft>40</percentLeft>
         <percentWidth>40</percentWidth>
         <percentHeight>10</percentHeight>
         
@@ -39,9 +39,9 @@
         <type>2</type>
         <percentTop>10</percentTop>
         <percentLeft>0</percentLeft>
-        <percentWidth>20</percentWidth>
+        <percentWidth>30</percentWidth>
         <percentHeight>10</percentHeight>
-        <text>Nome</text>
+        <text>l10n::teste</text>
     </element>
     <element>
         <!--

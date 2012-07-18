@@ -9,6 +9,7 @@
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
+#import "AAmoResourceBundle.h"
 
 @interface AAmoViewController : UIViewController {
     lua_State *L;
@@ -29,4 +30,5 @@
 - (int) getCurrentScreenId;
 - (BOOL) showScreen: (double) screenNumber;
 - (IBAction)dismissKeyboard:(id)sender;
+- (void) loadBundle;
 @end
