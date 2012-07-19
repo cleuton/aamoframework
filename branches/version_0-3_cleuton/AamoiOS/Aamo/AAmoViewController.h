@@ -31,4 +31,5 @@
 - (BOOL) showScreen: (double) screenNumber;
 - (IBAction)dismissKeyboard:(id)sender;
 - (void) loadBundle;
+- (NSString *) checkL10N: (NSString *) key;
 @end

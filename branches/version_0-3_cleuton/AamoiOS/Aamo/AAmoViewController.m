@@ -12,6 +12,7 @@
 #define VERSION 0.2
 #define MACRO_UI 1
 #define MACRO_ELEMENT 2
+#define L10N_PREFIX @"l10n::"
 
 @interface AAmoViewController ()
 {
@@ -39,6 +40,7 @@ static AAmoViewController * ponteiro;
 const int errorCode_10 = 10;
 const int errorCode_11 = 11;
 const int errorCode_12 = 12;
+const int errorCode_100 = 100;
 
 static int globalErrorCode;
 
@@ -52,7 +54,7 @@ static int globalErrorCode;
 	// Do any additional setup after loading the view, typically from a nib.
     
     ponteiro = self;
-    [self loadBundle];
+    
     // initialize Lua and our load our lua file
     L = luaL_newstate(); // create a new state structure for the interpreter
     luaL_openlibs(L); // load all the basic libraries into the interpreter
@@ -339,6 +341,25 @@ static int showScreen(lua_State *L) {
     return 0;
 }
 
+static int getLocalizedText(lua_State *L) {
+    
+    if (lua_gettop (L)>0){
+	    const char *msg = lua_tostring(L, -1);
+	    if (msg == nil){
+            globalErrorCode = errorCode_12 ; 
+        }
+        else {
+            NSString * key = [NSString stringWithFormat:@"%@%@", L10N_PREFIX, 
+            [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]]];
+            const char * texto = [[ponteiro checkL10N: key] cStringUsingEncoding:[NSString defaultCStringEncoding]];
+            lua_pushstring(L, texto);
+    		return 1;
+        }
+    }
+	
+    return 0;
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -353,10 +374,11 @@ static const struct luaL_Reg aamo_f [] = {
     {"setTextField", setTextField},
     {"getError", getErrorCode},
     {"showScreen", showScreen},
+    {"getLocalizedText",getLocalizedText},
     {NULL, NULL}
 };
 
-int luaopen_mylib (lua_State *L){
+int luaopen_mylib (lua_State *L) {
     
     luaL_register(L, "aamo", aamo_f);
     
@@ -546,6 +568,10 @@ int luaopen_mylib (lua_State *L){
                 tv.borderStyle = UITextBorderStyleRoundedRect;
                 dv.view = tv;
                 tv.tag = dv.id; 
+                if (dv.text != nil) {
+                    tv.text = [self checkL10N: dv.text];
+                    
+                }
                 [mView addSubview:tv];
                 break;
             }
@@ -557,8 +583,7 @@ int luaopen_mylib (lua_State *L){
                 lv.tag = dv.id;
                 [mView addSubview:lv];
                 if (dv.text != nil) {
-                    lv.text = dv.text;
-                    
+                    lv.text = [self checkL10N: dv.text];                    
                 }
                 break;
             }
@@ -571,7 +596,7 @@ int luaopen_mylib (lua_State *L){
                 [mView addSubview:bv];
                 [bv addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchDown];
                 if (dv.text != nil) {
-                    [bv setTitle:dv.text 
+                    [bv setTitle:[self checkL10N: dv.text] 
                         forState:(UIControlState)UIControlStateNormal];
                 }
                 break;
@@ -838,6 +863,31 @@ int luaopen_mylib (lua_State *L){
     }
     
     
+}
+
+- (NSString *) checkL10N: (NSString *) key
+{
+    NSString * result = key;
+    
+    if ([key length] > [L10N_PREFIX length]) {
+        NSLog(@"Substring: %@", [key substringToIndex:([L10N_PREFIX length])]);
+        if ([[key substringToIndex:([L10N_PREFIX length])] isEqualToString:L10N_PREFIX]) {
+            NSString *newKey = [key substringFromIndex:([L10N_PREFIX length])];
+            NSLog(@"New Key: %@", newKey);
+            if (res == nil) {
+                [self loadBundle];
+                
+            }
+            if (res == nil) {
+                globalErrorCode = errorCode_100;
+            }
+            else {
+                result = [res getString:newKey]; 
+            } 
+        }
+    }
+    
+    return result;
 }
 
 @end
