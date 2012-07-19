@@ -9,7 +9,7 @@
 #import "AAmoDynaView.h"
 #import "AAmoScreenData.h"
 
-#define VERSION 0.2
+#define VERSION 0.3
 #define MACRO_UI 1
 #define MACRO_ELEMENT 2
 #define L10N_PREFIX @"l10n::"
