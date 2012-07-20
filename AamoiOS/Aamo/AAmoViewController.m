@@ -52,7 +52,11 @@ static int globalErrorCode;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(applicationWillTerminateNotification:)
+                                                 name:UIApplicationWillTerminateNotification
+                                               object:[UIApplication sharedApplication]];
+
     ponteiro = self;
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
     
@@ -75,6 +79,18 @@ static int globalErrorCode;
     //errors
     //enum Errors errorCode;
     globalErrorCode = 0;
+}
+
+- (void)applicationWillTerminateNotification:(NSNotification *)notification {
+    NSLog(@" VAI SAIR ");
+    [[NSNotificationCenter defaultCenter] removeObserver:self 
+                                                    name:UIApplicationWillTerminateNotification 
+                                                  object:[UIApplication sharedApplication]];
+}
+
+- (void)viewWillUnload
+{
+    
 }
 
 - (void) execLua: (NSString *) script
@@ -872,10 +888,10 @@ int luaopen_mylib (lua_State *L) {
     NSString * result = key;
     
     if ([key length] > [L10N_PREFIX length]) {
-        NSLog(@"Substring: %@", [key substringToIndex:([L10N_PREFIX length])]);
+        
         if ([[key substringToIndex:([L10N_PREFIX length])] isEqualToString:L10N_PREFIX]) {
             NSString *newKey = [key substringFromIndex:([L10N_PREFIX length])];
-            NSLog(@"New Key: %@", newKey);
+            
             if (res == nil) {
                 [self loadBundle];
                 
