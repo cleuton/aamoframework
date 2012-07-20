@@ -484,18 +484,34 @@ public class AamoLuaLibrary {
 		    public int execute() throws LuaException {  
 		      if (L.getTop() > 1) {
 		    	  LuaObject d = getParam(2); // sql
-		    	  LuaObject e = getParam(3); // args
+		    	  //LuaObject e = getParam(3); // args
 		    	  if (d == null) {
 		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
 		    		  return 0;
 		    	  }
 		    	  else {
-		    		  
 		    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
 		    		  List <String> args = new ArrayList <String>();
-		    		  int id = (int) e.getNumber();
-		    		  args.add(Integer.toString(id));
-		    		   
+		    		  
+		    		  for (int i=3; i <= L.getTop(); i++) {
+		  				  LuaObject param  = getParam(i);
+		  				  
+			    		  if (param.isNumber()) 
+			    		  {	  
+			    			  String pk = Double.toString(param.getNumber());
+				    		  int idConverted = 0;
+			    			  if (pk == null || pk.equals("0.0")){
+				    			  args.add(null);
+				    		  }
+				    		  else {
+				    			  idConverted = (int) param.getNumber();
+				    			  args.add(Integer.toString(idConverted));
+				    		  }
+			    		  }else {
+			    			  args.add(param.getString());
+			    		  }
+		  			  }
+		    		  
 		    		  Cursor cursor = adapter.query(d.getString(), args); //selfRef.getCursor(d.getString());
 		    		  String  registro = "";
 		    		  cursor.moveToFirst();
@@ -530,12 +546,7 @@ public class AamoLuaLibrary {
 		  L.pushJavaFunction(new JavaFunction(L) {
 		    public int execute() throws LuaException {  
 		      if (L.getTop() > 1) {
-		    	  //id , nome, endereco, email
 		    	  LuaObject d     = getParam(2); // sql
-		    	  LuaObject nome  = getParam(3); // args nome
-		    	  LuaObject end   = getParam(4); // args endereco
-		    	  LuaObject email = getParam(5); // args email
-		    	  LuaObject id    = getParam(6); // args id
 		    	  
 		    	  if (d == null) {
 		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
@@ -545,20 +556,25 @@ public class AamoLuaLibrary {
 		    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
 		    		  List <String> args = new ArrayList<String>();
 		    		  
+		    		  for (int i=3; i <= L.getTop(); i++) {
+		  				  LuaObject param  = getParam(i);
+		  				  
+			    		  if (param.isNumber()) 
+			    		  {	  
+			    			  String pk = Double.toString(param.getNumber());
+				    		  int idConverted = 0;
+			    			  if (pk == null || pk.equals("0.0")){
+				    			  args.add(null);
+				    		  }
+				    		  else {
+				    			  idConverted = (int) param.getNumber();
+				    			  args.add(Integer.toString(idConverted));
+				    		  }
+			    		  }else {
+			    			  args.add(param.getString());
+			    		  }
+		  			  }
 		    		  
-		    		  String pk = Double.toString(id.getNumber());
-		    		  int idConverted = 0;
-		    		  if (pk == null || pk.equals("0.0")){
-		    			  args.add(null);
-		    		  }
-		    		  else {
-		    			  idConverted = (int) id.getNumber();
-		    		  }
-		    		  
-		    		  args.add(nome.getString());
-		    		  args.add(end.getString());
-		    		  args.add(email.getString());
-		    		  args.add(Integer.toString(idConverted));
 		    		  //call update comand
 		    		  adapter.execSQL(d.getString(), args); 
 		    		  String  registro = "Command executed successfully.";
@@ -577,62 +593,4 @@ public class AamoLuaLibrary {
 		  L.setTable(-3);
 		  return 1;
 	}
-	
-	public static int m_execDelete(LuaState L) throws LuaException {
-		  
-		  L.newTable();
-		  L.pushValue(-1);
-		  L.getGlobal("aamo");
-		  L.pushString("execDelete");
-		  L.pushJavaFunction(new JavaFunction(L) {
-		    public int execute() throws LuaException {  
-		      if (L.getTop() > 1) {
-		    	  //id , nome, endereco, email
-		    	  LuaObject d     = getParam(2); // sql
-		    	  LuaObject nome  = getParam(3); // args nome
-		    	  LuaObject end   = getParam(4); // args endereco
-		    	  LuaObject email = getParam(5); // args email
-		    	  LuaObject id    = getParam(6); // args id
-		    	  
-		    	  if (d == null) {
-		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
-		    		  return 0;
-		    	  }
-		    	  else {
-		    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
-		    		  List <String> args = new ArrayList<String>();
-		    		  
-		    		  
-		    		  String pk = Double.toString(id.getNumber());
-		    		  int idConverted = 0;
-		    		  if (pk == null || pk.equals("0.0")){
-		    			  args.add(null);
-		    		  }
-		    		  else {
-		    			  idConverted = (int) id.getNumber();
-		    		  }
-		    		  
-		    		  args.add(nome.getString());
-		    		  args.add(end.getString());
-		    		  args.add(email.getString());
-		    		  args.add(Integer.toString(idConverted));
-		    		  //call update comand
-		    		  adapter.execSQL(d.getString(), args); 
-		    		  String  registro = "Command executed successfully.";
-		    		  
-		    	      L.pushString(registro);
-		    		  
-		    		  return 1;
-		    	  }	  
-		      }
-		      else {
-		    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
-		    	  return 0;
-		      }
-		    }
-		  });
-		  L.setTable(-3);
-		  return 1;
-	}
-	
 }
