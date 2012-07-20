@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import org.keplerproject.luajava.LuaState;
 import org.keplerproject.luajava.LuaStateFactory;
+import org.thecodebakers.aamo.sqlite.DBHelper;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -18,6 +19,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -413,5 +416,24 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		}
 		return output.toByteArray();
 	}
+	/*
+	public String getCursor(String string) {
+		String  registro = "";
+		DBHelper dbh = new DBHelper(this.getApplicationContext());
+		SQLiteDatabase db = dbh.getReadableDatabase();
+		String[] columns = new String[]{"id", "nome", "endereco", "email"};  
+        Cursor cursor = db.query("contato", columns,null, null, null, null, null);
+        cursor.moveToFirst();
+        registro = registro + cursor.getInt(0);
+        registro = registro + ":" + cursor.getString(1);
+        registro = registro + ":" + cursor.getString(2);
+        registro = registro + ":" + cursor.getString(3);
+        cursor.close();
+        Log.d("Aamo BD", registro);
+        
+        return registro;
+	}
+	*/
+	
 
 }
