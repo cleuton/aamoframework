@@ -10,21 +10,20 @@
         		<primarykey/>
         		<name>ID</name>
         		<type>integer</type>
+        		<notnull/>
         	</column>
         	<column>
         		<name>nome</name>
-        		<type>string</type>
-        		<size>50</size>
+        		<type>text</type>
+        		<notnull/>
         	</column>
         	<column>
         		<name>endereco</name>
-        		<type>string</type>
-        		<size>50</size>
+        		<type>text</type>
         	</column>
         	<column>
         		<name>email</name>
-        		<type>string</type>
-        		<size>50</size>
+        		<type>text</type>
         	</column>
         </columns>
     </table>
