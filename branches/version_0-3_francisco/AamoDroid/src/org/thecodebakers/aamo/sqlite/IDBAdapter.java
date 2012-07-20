@@ -1,53 +1,42 @@
 package org.thecodebakers.aamo.sqlite;
 
+import java.util.List;
+
+import android.database.Cursor;
 import android.database.SQLException;
 
 /**
- * Interface para uso do DAO de alto nível.
+ * DAO Interface.
  * 
- * @author Cleuton Sampaio e Francisco Rogrigues - thecodebakers@gmail.com
+ * @author thecodebakers@gmail.com
  *
  */
 public interface IDBAdapter {
-
-	/**
-	 * insere um registro na base de dados 
-	 * @param uuid  - id de controle do registro
-	 * @param lob	- dados para carregar o campo blob
-	 * @return		- long com o retorno da operação. Se -1 ocorreu algum erro.
-	 * @throws SQLException
-	 */
-	public abstract long insert(String uuid, byte[] lob) throws SQLException;
-	/**
-	 * atualiza um registro na base
-//	 * @param uid - id de controle do registro
-	 * @param lob - dados para carregar o campo blob
-	 * @return    - int com o retorno da operação. 
-	 * @throws SQLException
-	 */
-	public abstract int update(String uid, byte[] lob) throws SQLException;
-     /**
-      * Exclui um registro na base
-      * @param Se -1 ocorreu algum erro.
-      * @return  - int com o retorno da operação. 
-      * @throws SQLException
-      */
-	public abstract int delete(String uid)throws SQLException;
 	
-	/**lista todos os registros
+	/**
+	 * execute a query
+	 *  
+	 * @param sql - sql command
+	 * @param params - parameters query
 	 * 
-	 * @return
+	 * @return cursor
 	 */
-	
-	
-	public int getDatabaseVersion();
-	//public List<Agregador> listSource () throws SQLiteException ;
+	public abstract Cursor query(String sql, List<String> params);
+		
 	
 	/**
-	 * Atualiza a nova lista no banco, após deletar todos os registros existentes.
-	 * @param lista Nova lista de elementos.
-	 * @param newKey Nova chave.
-	 * @return True ok.
+	 * Execute a SQL statement  
+	 * 
+	 * @param sql  - sql command
+	 * @param params - parameters query
 	 */
-	//public boolean updateNewList(List<Elemento> lista, String newKey);
+	public void execSQL (String sql, List<String> params);
+	
+	/**
+	 * Database version
+	 * 
+	 * @return int 
+	 */
+	public int getDatabaseVersion();
+	
 }

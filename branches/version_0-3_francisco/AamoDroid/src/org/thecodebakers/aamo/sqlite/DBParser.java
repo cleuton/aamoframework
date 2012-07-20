@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.thecodebakers.aamo.AamoException;
+import org.thecodebakers.aamo.sqlite.model.Column;
+import org.thecodebakers.aamo.sqlite.model.Database;
+import org.thecodebakers.aamo.sqlite.model.Table;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -20,7 +23,8 @@ public class DBParser {
 	private String currentElementName;
 	private int currentMacro;
 	
-	Table tableElement;
+	private Table tableElement;
+	private Column column;
 	private Database db;
 	
 	public static final int  MACRO_BD = 1;		//aamo-bd
@@ -29,18 +33,15 @@ public class DBParser {
 	public static final int  MACRO_COLUMN = 4;  //column	
 	
 	private List<Table> tables = new ArrayList<Table>();
+	private List<Column> columns;
 	
 	public DBParser (Context ctx){
-		
 		 this.ctx = ctx;
-		 
 	}
 	
-	public boolean readXMLDatabase() throws AamoException {
-		
+	public Database readXMLDatabase() throws AamoException {
 		
 		InputStream xml;
-		boolean resultado = true;
 		
 		try {
 		
@@ -59,27 +60,22 @@ public class DBParser {
 	        		 continue;
 	        	} 
 	        	else if(eventType == XmlPullParser.START_TAG) {
-	        	    currentElementName = xpp.getName();
+	        	    
+	        		currentElementName = xpp.getName();
+	        	    
 	        	    if (currentElementName.equals("aamo-bd")){
-	        	        db.setName(null);
 	        	        db.setTablesList(null);
-	        	    	db.setVersion(0);
-	        	    	currentMacro = MACRO_BD;
 	        	    }
 	        	    else if (currentElementName.equals("table")) {
 	        	    	tableElement = new Table();
-	        	    	tableElement.setColumn(null);
-	        	    	tableElement.setPrimaryKey(false);
-	        	    	tableElement.setSize(0);
-	        	    	tableElement.setType(null);
 	        	    	currentMacro = MACRO_ELEMENT;
 	        	    }
 	        	    else if (currentElementName.equals("columns")){
-	        	       
+	        	    	columns = new ArrayList<Column>();
 	        	    	currentMacro = MACRO_COLUMNS;
 	        	    }
 	        	    else if (currentElementName.equals("column")){
-	        	        
+	        	    	column = new Column();
 	        	    	currentMacro = MACRO_COLUMN;
 	        	    }
 
@@ -113,23 +109,29 @@ public class DBParser {
 	        	            }
 	        	            
 	        	     }
+	        	     else if (currentMacro == MACRO_COLUMNS) {  
+	        	    	 Log.d("XML", "columns...");
+	        	     }
 	        	     else if (currentMacro == MACRO_COLUMN) {  
 	        	            
-	        	            if (currentElementName.equals("primarykey")) {
-	        	                tableElement.setPrimaryKey(true);
-	        	            }
-	        	            else if (currentElementName.equals("name")) {
-	        	                tableElement.setName(currentStringValue.trim());
-	        	            }
-	        	            else if (currentElementName.equals("type")) {
-	        	                tableElement.setType(currentStringValue.trim());
-	        	            }
-	        	            else if (currentElementName.equals("size")) {
-	        	            	tableElement.setSize(Integer.parseInt(currentStringValue.trim()));
-	        	            }
-	        	           
+	        	    	   if (currentElementName.equals("primarykey")) {
+	        	          	  column.setPrimaryKey(true);
+	        	           }
+	        	           else if (currentElementName.equals("name")) {
+	        	          	  column.setName(currentStringValue.trim());
+	        	           }
+	        	           else if (currentElementName.equals("type")) {
+	        	          	  column.setType(currentStringValue.trim());
+	        	           }
+	        	           else if (currentElementName.equals("notnull")) {
+	        	          	  column.setNotNull(true);
+	        	           }
+	        	    	   columns.add(column);
 	        	    }     
+	        	    
+	        	    tableElement.setColumnsList(columns);
 	        		currentStringValue = null;
+	        		
 	           } 
 	           else if(eventType == XmlPullParser.TEXT) {
 	        		currentStringValue = xpp.getText().trim();
@@ -143,24 +145,16 @@ public class DBParser {
 			
 		} catch (IOException e) {
 			Log.d("XML", "IOException");
-			resultado = false;
 			throw new AamoException (e);
 		} catch (XmlPullParserException e) {
 			Log.d("XML", e.getMessage());
-			resultado = false;
 			throw new AamoException (e);
 		}
-
-		return resultado;
+		
+		db.setTablesList(tables);
+		return db;
 	}
 	
-	private String readColumns (XmlPullParser parser) throws XmlPullParserException, IOException{
-		String result = "";
-		if (parser.next() == XmlPullParser.TEXT) {
-		    result = parser.getText();
-		    parser.nextTag();
-		}
-		return result;
-	}
+	
 	
 }
