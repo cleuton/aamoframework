@@ -115,12 +115,25 @@
 <id>9</id>
 <checked>0</checked>
 <onChangeScript/>
-<onClickScript/>
+<onClickScript>lua::aamo.showMessage(aamo.execSQL("delete FROM contato where id=?", 3))</onClickScript>
 <percentHeight>10.0</percentHeight>
 <percentLeft>33.0</percentLeft>
 <percentTop>57.0</percentTop>
 <percentWidth>22.0</percentWidth>
 <text>Excluir</text>
 <type>3</type>
+</element>
+
+
+ <element>
+        <id>10</id>
+        <type>3</type>
+        <percentTop>70</percentTop>
+        <percentLeft>30</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>15</percentHeight>
+        <text>Buscar Contato</text>
+        <onClickScript>lua::aamo.showMessage(aamo.query("select * from contato where id = ?", 3))</onClickScript>
+        
 </element>
 </ui>
