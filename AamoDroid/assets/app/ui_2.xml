@@ -48,5 +48,25 @@
         <text>Show Label</text>
         <onClickScript>lua::aamo.showMessage(aamo.getLabelText(1))</onClickScript>
     </element>
+    <element>
+        <id>5</id>
+        <type>3</type>
+        <percentTop>30</percentTop>
+        <percentLeft>30</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>20</percentHeight>
+        <text>Consulta contato</text>
+        <onClickScript>acessodb</onClickScript>
+    </element>
     
+    <element>
+        <id>6</id>
+        <type>3</type>
+        <percentTop>10</percentTop>
+        <percentLeft>30</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>20</percentHeight>
+        <text>Atualiza contato</text>
+        <onClickScript>lua::aamo.showMessage(aamo.execSQL("update contato set nome=? where id=?", "Beto",1))</onClickScript>
+    </element>
 </ui>
