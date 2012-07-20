@@ -133,7 +133,6 @@
         <percentWidth>30</percentWidth>
         <percentHeight>15</percentHeight>
         <text>Buscar Contato</text>
-        <onClickScript>lua::aamo.showMessage(aamo.query("select * from contato where id = ?", 3))</onClickScript>
-        
+        <onClickScript>acessodb</onClickScript>
 </element>
 </ui>
