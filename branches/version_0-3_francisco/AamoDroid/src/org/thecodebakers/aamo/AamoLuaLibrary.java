@@ -520,8 +520,10 @@ public class AamoLuaLibrary {
 		    	      registro = registro + ":" + cursor.getString(2);
 		    	      registro = registro + ":" + cursor.getString(3);
 		    	      
-		    	      L.pushString(registro);
+		    	      //L.pushString(registro);
 		    		  
+		    	      L.pushObjectValue(cursor);
+		    	      
 		    		  return 1;
 		    	  }	  
 		      }
