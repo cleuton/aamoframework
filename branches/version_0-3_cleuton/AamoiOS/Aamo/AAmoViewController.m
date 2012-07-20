@@ -54,6 +54,7 @@ static int globalErrorCode;
 	// Do any additional setup after loading the view, typically from a nib.
     
     ponteiro = self;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
     
     // initialize Lua and our load our lua file
     L = luaL_newstate(); // create a new state structure for the interpreter
@@ -67,6 +68,7 @@ static int globalErrorCode;
     screenDataStack = [[NSMutableArray alloc] init];
     screenData = [[AAmoScreenData alloc] init];
     [self loadUi:1];
+
     [self formatSubviews];
     [self.view addSubview:((UIView *)[viewStack lastObject])];
     
@@ -683,7 +685,7 @@ int luaopen_mylib (lua_State *L) {
         [uiParser setShouldResolveExternalEntities:YES];
         success = [uiParser parse];
         [controlsStack addObject:dynaViews];
-        
+
         globalErrorCode = 0 ; 
     }
     
