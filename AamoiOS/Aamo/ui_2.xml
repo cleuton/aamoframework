@@ -5,7 +5,8 @@
     <title/>
     <onLoadScript>lua::aamo.log("ON LOAD TELA 2")</onLoadScript>
     <onEndScript>lua::aamo.log("END SCRIPT TELA 2")</onEndScript>
-    
+    <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 2")</onLeaveScript>
+    <onBackScript>lua::aamo.log("BACK SCRIPT TELA 2")</onBackScript>
     <element>
         <id>1</id>
         <type>2</type>

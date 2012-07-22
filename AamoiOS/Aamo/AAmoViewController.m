@@ -47,17 +47,21 @@ static int globalErrorCode;
 
 
 @implementation AAmoViewController
+@synthesize execOnLeaveOnBack;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(applicationWillTerminateNotification:)
-                                                 name:UIApplicationWillTerminateNotification
-                                               object:[UIApplication sharedApplication]];
-
+// ******* DEIXAR PARA O PRÓXIMO SPRINT:    
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self 
+//                                             selector:@selector(applicationWillTerminateNotification:)
+//                                                 name:UIApplicationWillTerminateNotification
+//                                               object:[UIApplication sharedApplication]];
+//
     ponteiro = self;
+    self.execOnLeaveOnBack = YES;
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
     
     // initialize Lua and our load our lua file
@@ -81,12 +85,6 @@ static int globalErrorCode;
     globalErrorCode = 0;
 }
 
-- (void)applicationWillTerminateNotification:(NSNotification *)notification {
-    NSLog(@" VAI SAIR ");
-    [[NSNotificationCenter defaultCenter] removeObserver:self 
-                                                    name:UIApplicationWillTerminateNotification 
-                                                  object:[UIApplication sharedApplication]];
-}
 
 - (void)viewWillUnload
 {
@@ -161,8 +159,10 @@ static int loadScreen(lua_State *L) {
             globalErrorCode = errorCode_12 ; 
         }
         else {
+            [ponteiro execOnLeave];
             [ponteiro loadUi: d];
             if (globalErrorCode == 0){
+                
                [ponteiro hideViews];
                [ponteiro formatSubviews];
                [ponteiro showViews];
@@ -343,6 +343,8 @@ static int showScreen(lua_State *L) {
             globalErrorCode = errorCode_12 ; 
         }
         else {
+            [ponteiro execOnLeave];
+            ponteiro.execOnLeaveOnBack = NO;
             if (![ponteiro showScreen:d]) {
                 [ponteiro loadUi: d];
                 if (globalErrorCode == 0){
@@ -351,6 +353,7 @@ static int showScreen(lua_State *L) {
                     [ponteiro showViews];
                 }
             }
+            ponteiro.execOnLeaveOnBack = YES;
         }	
 	}
 	else {
@@ -433,6 +436,11 @@ int luaopen_mylib (lua_State *L) {
             [self exitScreenProc];
         } while (sd.uiid != screenNumber);
     }
+    // Always Check if the screen has an "onBackScript"
+    
+    if (screenData.onBackScript != nil && [screenData.onBackScript length] > 0) {
+        [self execLua: screenData.onBackScript];
+    }
     return existe;
 }
 
@@ -455,7 +463,7 @@ int luaopen_mylib (lua_State *L) {
         [self hideViews];
         [viewStack removeLastObject];
         [controlsStack removeLastObject];
-        
+                
         // Check if the screen has an "onEndScript"
         
         if (screenData.onEndScript != nil && [screenData.onEndScript length] > 0) {
@@ -463,6 +471,14 @@ int luaopen_mylib (lua_State *L) {
         }
         [screenDataStack removeLastObject];
         screenData = screenDataStack.lastObject;
+        
+        // Check if the screen has an "onBackScript"
+        
+        if (self.execOnLeaveOnBack && 
+            screenData.onBackScript != nil && [screenData.onBackScript length] > 0) {
+            [self execLua: screenData.onBackScript];
+        }
+        
         [self showViews];
     }
 }
@@ -553,8 +569,19 @@ int luaopen_mylib (lua_State *L) {
 
 //*******************************************************************************************
 
+- (void) execOnLeave
+{
+    if (self.execOnLeaveOnBack &&  
+        screenData.onLeaveScript != nil && [screenData.onLeaveScript length] > 0) {
+        [self execLua: screenData.onLeaveScript];
+    }    
+}
+
 - (void) hideViews
 {
+    // Check if the screen has an "onBackScript"
+    
+
     UIView * lastView = (UIView *) [viewStack lastObject];
     [lastView removeFromSuperview];
 }
@@ -775,6 +802,13 @@ int luaopen_mylib (lua_State *L) {
         else if ([currentElementName isEqualToString: @"onEndScript"]) {
             screenData.onEndScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
+        else if ([currentElementName isEqualToString: @"onLeaveScript"]) {
+            screenData.onLeaveScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+        else if ([currentElementName isEqualToString: @"onBackScript"]) {
+            screenData.onBackScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+
     }
     else if (currentMacro == MACRO_ELEMENT) {
         

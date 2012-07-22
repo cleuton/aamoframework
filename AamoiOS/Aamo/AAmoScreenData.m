@@ -13,4 +13,6 @@
 @synthesize title;
 @synthesize onEndScript;
 @synthesize onLoadScript;
+@synthesize onBackScript;
+@synthesize onLeaveScript;
 @end

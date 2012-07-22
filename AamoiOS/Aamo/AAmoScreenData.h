@@ -14,4 +14,6 @@
 @property (strong, nonatomic) NSString * title;
 @property (strong, nonatomic) NSString * onLoadScript;
 @property (strong, nonatomic) NSString * onEndScript;
+@property (strong, nonatomic) NSString * onLeaveScript;
+@property (strong, nonatomic) NSString * onBackScript;
 @end

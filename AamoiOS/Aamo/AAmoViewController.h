@@ -14,6 +14,7 @@
 @interface AAmoViewController : UIViewController {
     lua_State *L;
 }
+@property BOOL execOnLeaveOnBack;
 - (const char *) getTextFieldContent: (double) number;
 - (const char *) getLabelContent: (double) number;
 - (void) setLabelContent: (double) number text: (NSString *) content;
@@ -21,6 +22,7 @@
 - (int) getGlobalErrorCode;
 - (void) loadUi: (double) screenId;
 - (void) formatSubviews;
+- (void) execOnLeave;
 - (void) hideViews;
 - (void) showViews;
 - (void) exitScreenProc;
