@@ -146,6 +146,7 @@ public class AamoLuaLibrary {
 	
 	protected static void loadScreen(LuaObject tela)throws AamoException {
 		int ntela = (int) tela.getNumber();
+		selfRef.execOnLeave();
 		selfRef.loadUI(ntela);
 		selfRef.formatSubviews();
 	}
@@ -172,14 +173,14 @@ public class AamoLuaLibrary {
 			selfRef.dvLayout = selfRef.screenData.dvLayout;
 			selfRef.dynaViews = selfRef.controlsStack.pop();  // remove current controls
 			selfRef.dynaViews = selfRef.controlsStack.peek(); // get the previous controls without removing them
+			// Check if the screen has an "onBackScript"
+	        
+	        if (selfRef.execOnLeaveOnBack  && 
+	        		selfRef.screenData.onBackScript != null && selfRef.screenData.onBackScript.length() > 0) {
+	            selfRef.execLua(selfRef.screenData.onBackScript);
+	        }
 		}
-		else {
-			// It is the last screen
-			if (selfRef.screenData.onEndScript != null && selfRef.screenData.onEndScript.length() > 0) {
-				selfRef.execLua(selfRef.screenData.onEndScript);
-			}
-			selfRef.finish();
-		}
+
 	}
 	
 	public static int m_exitScreen(LuaState L) throws LuaException {
@@ -479,6 +480,8 @@ public class AamoLuaLibrary {
 		      if (L.getTop() > 1) {
 		    	  LuaObject tela = getParam(2);
 		    	  try{
+		    		  selfRef.execOnLeave();
+		    		  selfRef.execOnLeaveOnBack = false;
 		    		  // Verificar se a tela já existe na pilha
 		    		  int pos = -1;
 		    		  for (ScreenData sd : selfRef.screenStack) {
@@ -500,10 +503,15 @@ public class AamoLuaLibrary {
 		    				}
 		    				AamoLuaLibrary.exitScreen();
 		    			  } while (sd.uiid != tela.getNumber());
+		    			  if (sd.onBackScript != null && sd.onBackScript.length() > 0) {
+		    				  selfRef.execLua(sd.onBackScript);
+		    			  }
 		    		  }
 		    	   }catch(AamoException ae){
 		      		  AamoLuaLibrary.errorCode = 11; // arquivo nÃ£o encontrado
-		      	   } 	   
+		      	   } finally {	   
+		      		 selfRef.execOnLeaveOnBack = true;
+		      	   }
 		    	  
 		      }else {
 		    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();

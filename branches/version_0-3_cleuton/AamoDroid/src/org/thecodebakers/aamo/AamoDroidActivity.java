@@ -72,6 +72,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
     // L10N
     
     public ResourceBundle res;
+    
+    // Exec scripts
+    
+    public boolean execOnLeaveOnBack = true;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -290,6 +294,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	            else if (currentElementName.equals("onEndScript")) {
 	        	            	screenData.onEndScript = currentStringValue.trim();
 	        	            }
+	        	            else if (currentElementName.equals("onLeaveScript")) {
+	        	            	screenData.onLeaveScript = currentStringValue.trim();
+	        	            }
+	        	            else if (currentElementName.equals("onBackScript")) {
+	        	            	screenData.onBackScript = currentStringValue.trim();
+	        	            }
 	        	        }
 	        	        else if (currentMacro == MACRO_ELEMENT) {
 	        	            
@@ -483,5 +493,15 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		}
 		
 		return res.getString(substring);
+	}
+
+	public void execOnLeave() {
+		// Check if the screen has an "onLeaveScript"
+        
+        if (selfRef.execOnLeaveOnBack  && 
+        		selfRef.screenData.onLeaveScript != null && selfRef.screenData.onLeaveScript.length() > 0) {
+            selfRef.execLua(selfRef.screenData.onLeaveScript);
+        }
+		
 	}
 }
