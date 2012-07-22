@@ -61,7 +61,7 @@
     int x = 0;
     do {
         NSString * nome = [arrNames objectAtIndex:(x++)];
-        NSLog(@"%@", nome);
+        
         path =  [[NSBundle mainBundle] pathForResource: nome
                                                       ofType:@"properties"];
         if (x == 3) {
