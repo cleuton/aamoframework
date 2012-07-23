@@ -76,6 +76,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
     // Exec scripts
     
     public boolean execOnLeaveOnBack = true;
+    
+    // Global params
+    
+    public List<GlobalParameter> globalParameters = new ArrayList<GlobalParameter>();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {

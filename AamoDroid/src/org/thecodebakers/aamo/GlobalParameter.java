@@ -17,5 +17,18 @@ public class GlobalParameter {
 	public void setObject(LuaObject object) {
 		this.object = object;
 	}
+	@Override
+	public boolean equals(Object o) {
+		GlobalParameter gp = (GlobalParameter) o;
+		return this.getName().equals(gp.getName());
+	}
+	@Override
+	public int hashCode() {
+		return this.getName().hashCode();
+	}
+	@Override
+	public String toString() {
+		return "[" + this.getName() + "]";
+	}
 	
 }

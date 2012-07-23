@@ -3,7 +3,7 @@
     <version>0.2</version>
     <uiid>3</uiid>
     <title>Tela 3</title>
-    <onLoadScript>lua::aamo.log("ON LOAD TELA 4")</onLoadScript>
+    <onLoadScript>lua::aamo.log("ON LOAD TELA 4: " .. aamo.getGlobalParameter("p1"))</onLoadScript>
     <onEndScript>lua::aamo.log("END SCRIPT TELA 4")</onEndScript>
     <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 4")</onLeaveScript>
     <onBackScript>lua::aamo.log("BACK SCRIPT TELA 4")</onBackScript>
