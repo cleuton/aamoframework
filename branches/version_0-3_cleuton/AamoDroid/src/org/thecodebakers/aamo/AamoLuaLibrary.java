@@ -578,13 +578,57 @@ public class AamoLuaLibrary {
 					  }
 					  else {
 			    	  
-						  double nd = d.getNumber();
-						  for (DynaView dv : selfRef.dynaViews) {
-							  if (dv.id == nd) {	
-								((CheckBox) dv.view).setChecked(
-										(e.getNumber() > 0) ? true : false);
-							  }
-						  }	   
+						  String nomeParametro = d.getString();
+						  GlobalParameter gp = new GlobalParameter();
+						  gp.setName(nomeParametro);
+						  if (selfRef.globalParameters.contains(gp)) {
+							  gp = selfRef.globalParameters.get(selfRef.globalParameters.indexOf(gp));
+						  }
+						  else {
+							  
+							  selfRef.globalParameters.add(gp);
+						  }
+						  gp.setObject(e);
+			    	  }
+			    }
+		    	else 
+		    	{
+		    	   AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+			    }
+			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+	
+	public static int m_getGlobalParameter(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("getGlobalParameter");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (L.getTop() > 1) {
+			    	  LuaObject d = getParam(2);
+			    	  
+			    	  if (d == null){
+					       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+					       return 0;
+					  }
+					  else {
+			    	  
+						  String nomeParametro = d.getString();
+						  GlobalParameter gp = new GlobalParameter();
+						  gp.setName(nomeParametro);
+						  if (selfRef.globalParameters.contains(gp)) {
+							  gp = selfRef.globalParameters.get(selfRef.globalParameters.indexOf(gp));
+							  L.pushObjectValue(gp.getObject());
+						  }
+						  else {
+							  L.pushNil();
+						  }
+						  return 1;
 			    	  }
 			    }
 		    	else 

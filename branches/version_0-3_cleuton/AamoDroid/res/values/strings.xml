@@ -18,6 +18,8 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getError\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showScreen\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getLocalizedText\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setGlobalParameter\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getGlobalParameter\")\r\n
     </string>
 	<string name="lua_10">Parâmetro faltando.</string>
 	<string name="lua_11">Arquivo não encontrado.</string>
