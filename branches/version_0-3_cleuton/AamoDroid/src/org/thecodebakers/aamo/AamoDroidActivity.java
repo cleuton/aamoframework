@@ -14,6 +14,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
+import org.keplerproject.luajava.LuaObject;
 import org.keplerproject.luajava.LuaState;
 import org.keplerproject.luajava.LuaStateFactory;
 import org.xmlpull.v1.XmlPullParser;
@@ -31,15 +32,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+import static org.thecodebakers.aamo.DynaView.*;
 
 public class AamoDroidActivity extends Activity implements OnClickListener {
 	
@@ -48,6 +55,8 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	public static final int  MACRO_ELEMENT = 2;
 	public static final String AAMOL10N = "aamol10n";
 	public static final String AAMOL10N_MARKER = "l10n::";
+	public static final String GLOBAL_LISTBOX_INDEX = "aamo::selectedIndex";
+	public static final String GLOBAL_LISTBOX_TEXT = "aamo::selectedText";
 	protected List<DynaView> dynaViews;
 	
 	protected ScreenData screenData;
@@ -80,6 +89,11 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
     // Global params
     
     public List<GlobalParameter> globalParameters = new ArrayList<GlobalParameter>();
+    
+    // Constants
+    
+    
+    
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,7 +144,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        int left = (int) Math.round((dv.percentLeft / 100.00f) * (float)screenWidth);
 	        
 	        switch (dv.type) {
-	            case 1: 
+	            case TEXTBOX: 
 	                // Textbox
 	            	EditText tv = new EditText(getApplicationContext());
 	            	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)width, (int)height);
@@ -144,7 +158,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                }
 	                break;
 	            
-	            case 2: {
+	            case LABEL: {
 	                // Label
 	            	TextView lv = new TextView(getApplicationContext());
 	            	RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams((int)width, (int)height);
@@ -158,7 +172,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                }
 	                break;
 	            }
-	            case 3: {
+	            case BUTTON: {
 	                // Button
 	            	Button bv = new Button(getApplicationContext());
 	            	RelativeLayout.LayoutParams params3 = new RelativeLayout.LayoutParams((int)width, (int)height);
@@ -172,7 +186,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 
 	                break;
 	            }
-	            case 4: {
+	            case CHECKBOX: {
 	                // Checkbox
 	            	CheckBox sv = new CheckBox(getApplicationContext());
 	            	RelativeLayout.LayoutParams params4 = new RelativeLayout.LayoutParams((int)width, (int)height);
@@ -196,6 +210,53 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                	});
 	                }
 	                break;
+	            }
+	            case LISTBOX: {
+	            	ListView lv = new ListView(getApplicationContext());
+	            	RelativeLayout.LayoutParams params4 = new RelativeLayout.LayoutParams((int)width, (int)height);
+	            	params4.leftMargin = (int) left;
+	            	params4.topMargin = (int) top;
+	            	dvLayout.addView(lv, params4);
+	                dv.view = lv;
+	                lv.setTag(dv.id);
+	                dv.listElements = new ArrayList<String>();
+	                ListAdapter adapter=new ArrayAdapter<String>(this,
+	                		android.R.layout.simple_list_item_1,
+	                	    dv.listElements);
+	                lv.setAdapter(adapter);
+	                if (dv.onElementSelected != null && dv.onElementSelected.length() > 0) {
+	                	final String codigo = dv.onElementSelected;
+	                	lv.setOnItemClickListener(new OnItemClickListener() {
+
+							public void onItemClick(AdapterView<?> parent,
+									View view, int position, long rowId) {
+								// Colocar selected element em Global Parameters
+								GlobalParameter gp = new GlobalParameter();
+								gp.setName(GLOBAL_LISTBOX_INDEX);
+								if (globalParameters.contains(gp)) {
+									gp = globalParameters.get(globalParameters.indexOf(gp));
+									gp.setJavaObject(new Integer(position));
+								}
+								else {
+									gp.setJavaObject(new Integer(position));
+									globalParameters.add(gp);
+								}
+								gp = new GlobalParameter();
+								gp.setName(GLOBAL_LISTBOX_TEXT);
+								if (globalParameters.contains(gp)) {
+									gp = globalParameters.get(globalParameters.indexOf(gp));
+									gp.setJavaObject(parent.getItemAtPosition(position));
+								}
+								else {
+									gp.setJavaObject(parent.getItemAtPosition(position));
+									globalParameters.add(gp);
+								}
+								execLua(codigo);
+								
+							}	                		
+	                	});
+	                }
+	            	break;
 	            }
 	                
 	        }
@@ -248,7 +309,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	        currentElement = new DynaView();
 	        	        dynaViews.add(currentElement);
 	        	        currentElement.id = 0;
-	        	        currentElement.type = 0;
+	        	        currentElement.type = CONTROL_TYPE.NONE;
 	        	        currentElement.percentTop = 0;
 	        	        currentElement.percentLeft = 0;
 	        	        currentElement.percentHeight = 0;
@@ -311,7 +372,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	                currentElement.id = Integer.parseInt(currentStringValue.trim());
 	        	            }
 	        	            else if (currentElementName.equals("type")) {
-	        	                currentElement.type = Integer.parseInt(currentStringValue.trim());
+	        	                currentElement.type = CONTROL_TYPE.values()[Integer.parseInt(currentStringValue.trim())];
 	        	            }
 	        	            else if (currentElementName.equals("percentTop")) {
 	        	                currentElement.percentTop = Float.parseFloat(currentStringValue.trim());
@@ -341,6 +402,9 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	            }
 	        	            else if (currentElementName.equals("onChangeScript")) {
 	        	                currentElement.onChangeScript = currentStringValue.trim();
+	        	            }
+	        	            else if (currentElementName.equals("onElementSelected")) {
+	        	                currentElement.onElementSelected = currentStringValue.trim();
 	        	            }
 
 	        	        }
