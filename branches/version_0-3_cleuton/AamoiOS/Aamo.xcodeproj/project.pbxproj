@@ -59,6 +59,7 @@
 		A63416B915B6202000845252 /* ui_4.xml in Resources */ = {isa = PBXBuildFile; fileRef = A63416AF15B6202000845252 /* ui_4.xml */; };
 		A63416BA15B6202000845252 /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A63416B015B6202000845252 /* ui.xml */; };
 		A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */ = {isa = PBXBuildFile; fileRef = A6655C8615AA08EC00E16689 /* AAmoScreenData.m */; };
+		A67AB11315BE05C7004CDAC9 /* AAmoGlobalParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,6 +146,8 @@
 		A63416B015B6202000845252 /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 		A6655C8515AA08EC00E16689 /* AAmoScreenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoScreenData.h; sourceTree = "<group>"; };
 		A6655C8615AA08EC00E16689 /* AAmoScreenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoScreenData.m; sourceTree = "<group>"; };
+		A67AB11115BE05C7004CDAC9 /* AAmoGlobalParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoGlobalParameter.h; sourceTree = "<group>"; };
+		A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoGlobalParameter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +209,8 @@
 				A6655C8615AA08EC00E16689 /* AAmoScreenData.m */,
 				A63416A315B61B0A00845252 /* AAmoResourceBundle.h */,
 				A63416A415B61B0A00845252 /* AAmoResourceBundle.m */,
+				A67AB11115BE05C7004CDAC9 /* AAmoGlobalParameter.h */,
+				A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */,
 			);
 			path = Aamo;
 			sourceTree = "<group>";
@@ -408,6 +413,7 @@
 				A61F9F33158900750024B18B /* print.c in Sources */,
 				A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */,
 				A63416A515B61B0A00845252 /* AAmoResourceBundle.m in Sources */,
+				A67AB11315BE05C7004CDAC9 /* AAmoGlobalParameter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
