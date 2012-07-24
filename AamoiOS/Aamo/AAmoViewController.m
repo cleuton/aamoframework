@@ -8,6 +8,7 @@
 #import "AAmoViewController.h"
 #import "AAmoDynaView.h"
 #import "AAmoScreenData.h"
+#import "AAmoGlobalParameter.h"
 
 #define VERSION 0.3
 #define MACRO_UI 1
@@ -48,6 +49,7 @@ static int globalErrorCode;
 
 @implementation AAmoViewController
 @synthesize execOnLeaveOnBack;
+@synthesize globalParameters;
 
 - (void)viewDidLoad
 {
@@ -381,6 +383,59 @@ static int getLocalizedText(lua_State *L) {
     return 0;
 }
 
+static int setGlobalParameter(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    const char *name = lua_tostring(L, -1);
+	    if (name == nil){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+    	int objectType = lua_type(L, -1);
+        // LUA_TNUMBER, LUA_TBOOLEAN, LUA_TSTRING
+        switch (objectType) {
+            case LUA_TNUMBER: {
+                double num = lua_tonumber(L, -1);
+                NSNumber * numero = [NSNumber numberWithDouble:num];
+                AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+                gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
+                gp.object = numero;
+                [ponteiro.globalParameters addObject:gp];
+                return 0;
+                break;
+            }
+            case LUA_TBOOLEAN: {
+                int num = lua_toboolean(L, -1);
+                NSNumber * numero = [NSNumber numberWithInt:num];
+                AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+                gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
+                gp.object = numero;
+                [ponteiro.globalParameters addObject:gp];
+                return 0;
+                break;
+            }
+            case LUA_TSTRING: {
+                const char *texto = lua_tostring(L, -1);
+                NSString * textoString = [NSString stringWithCString:texto encoding:[NSString defaultCStringEncoding]];
+                AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+                gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
+                gp.object = textoString;
+                [ponteiro.globalParameters addObject:gp];
+                return 0;
+                break;
+            }
+            default: {
+                ************************  RETORNAR UM CODIGO DE ERRO 
+            }
+
+        }
+        return 0;
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}    
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -396,6 +451,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"getError", getErrorCode},
     {"showScreen", showScreen},
     {"getLocalizedText",getLocalizedText},
+    {"setGlobalParameter", setGlobalParameter},
     {NULL, NULL}
 };
 
