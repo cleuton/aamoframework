@@ -11,10 +11,12 @@
 @implementation AAmoGlobalParameter
 @synthesize name;
 @synthesize object;
+@synthesize type;
 
-- (BOOL)isEqual:(id)object
+- (BOOL)isEqual:(id)outro
 {
-    AAmoGlobalParameter * obj = (AAmoGlobalParameter *) object;
+    AAmoGlobalParameter * obj = (AAmoGlobalParameter *) outro;
+    NSLog(@"Este: %@ Outro: %@", self.name,obj.name);
     return [self.name isEqualToString:obj.name];
 }
 

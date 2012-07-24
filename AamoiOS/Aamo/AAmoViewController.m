@@ -63,6 +63,7 @@ static int globalErrorCode;
 //                                               object:[UIApplication sharedApplication]];
 //
     ponteiro = self;
+    globalParameters = [[NSMutableArray alloc] init];
     self.execOnLeaveOnBack = YES;
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
     
@@ -385,20 +386,30 @@ static int getLocalizedText(lua_State *L) {
 
 static int setGlobalParameter(lua_State *L) {
     if (lua_gettop (L)>0){
-	    const char *name = lua_tostring(L, -1);
+	    const char *name = lua_tostring(L, 1);
 	    if (name == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
     	}
     	int objectType = lua_type(L, -1);
         // LUA_TNUMBER, LUA_TBOOLEAN, LUA_TSTRING
+        AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+        gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
+        if ([ponteiro.globalParameters containsObject:gp]) {
+            int indice = [ponteiro.globalParameters indexOfObject:gp];
+            gp = [ponteiro.globalParameters objectAtIndex:indice];
+        }
+        else {
+            [ponteiro.globalParameters addObject:gp];
+            
+            NSLog(@"%d", [ponteiro.globalParameters count]);
+        }
         switch (objectType) {
             case LUA_TNUMBER: {
                 double num = lua_tonumber(L, -1);
                 NSNumber * numero = [NSNumber numberWithDouble:num];
-                AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
-                gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
                 gp.object = numero;
+                gp.type = 2;
                 [ponteiro.globalParameters addObject:gp];
                 return 0;
                 break;
@@ -406,9 +417,8 @@ static int setGlobalParameter(lua_State *L) {
             case LUA_TBOOLEAN: {
                 int num = lua_toboolean(L, -1);
                 NSNumber * numero = [NSNumber numberWithInt:num];
-                AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
-                gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
                 gp.object = numero;
+                gp.type = 3;
                 [ponteiro.globalParameters addObject:gp];
                 return 0;
                 break;
@@ -416,17 +426,15 @@ static int setGlobalParameter(lua_State *L) {
             case LUA_TSTRING: {
                 const char *texto = lua_tostring(L, -1);
                 NSString * textoString = [NSString stringWithCString:texto encoding:[NSString defaultCStringEncoding]];
-                AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
-                gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
                 gp.object = textoString;
+                gp.type = 1;
                 [ponteiro.globalParameters addObject:gp];
+                
+                NSLog(@"name: %@ obj: %@",gp.name, gp.object);
+                
                 return 0;
                 break;
             }
-            default: {
-                ************************  RETORNAR UM CODIGO DE ERRO 
-            }
-
         }
         return 0;
 	}
@@ -434,6 +442,60 @@ static int setGlobalParameter(lua_State *L) {
 		globalErrorCode = errorCode_10 ; 
 		return 0;
 	}    
+}
+
+static int getGlobalParameter(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    const char *name = lua_tostring(L, -1);
+	    if (name == nil){
+            globalErrorCode = errorCode_12 ; 
+        }
+        else {
+            NSString * key =  
+                              [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
+            NSLog(@"%@", key);
+            AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+            gp.name = [NSString stringWithCString:name encoding:[NSString defaultCStringEncoding]];
+            NSLog(@"%d", [ponteiro.globalParameters count]);
+            if ([ponteiro.globalParameters containsObject:gp]) {
+                int indice = [ponteiro.globalParameters indexOfObject:gp];
+                gp = [ponteiro.globalParameters objectAtIndex:indice];
+                switch (gp.type) {
+                    case 1: {
+                        // String
+                        NSString * saida =  gp.object;
+                        const char * texto = [saida cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                        lua_pushstring(L, texto);
+                        break;
+                    }
+                    case 2: {
+                        // Number
+                        double numero = [((NSNumber *)gp.object) doubleValue];
+                        lua_pushnumber(L, numero);
+                        break;
+                    }
+                    case 3: {
+                        // BOOL
+                        int resultado = [((NSNumber *) gp.object) intValue];
+                        lua_pushboolean(L, resultado);
+                        break;
+                    }
+                    default: {
+                        lua_pushnil(L);
+                        break;
+                    }
+                }
+            }
+            else {
+                lua_pushnil(L);            
+            }
+            
+    		return 1;
+        }
+    }
+	
+    return 0;
+
 }
 
 static const struct luaL_Reg aamo_f [] = {
@@ -452,6 +514,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"showScreen", showScreen},
     {"getLocalizedText",getLocalizedText},
     {"setGlobalParameter", setGlobalParameter},
+    {"getGlobalParameter", getGlobalParameter},
     {NULL, NULL}
 };
 
