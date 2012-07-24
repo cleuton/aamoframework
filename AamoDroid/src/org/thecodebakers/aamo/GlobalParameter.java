@@ -5,6 +5,7 @@ import org.keplerproject.luajava.LuaObject;
 public class GlobalParameter {
 	private String name;
 	private LuaObject object;
+	private Object javaObject;
 	public String getName() {
 		return name;
 	}
@@ -16,6 +17,13 @@ public class GlobalParameter {
 	}
 	public void setObject(LuaObject object) {
 		this.object = object;
+	}
+	
+	public Object getJavaObject() {
+		return javaObject;
+	}
+	public void setJavaObject(Object javaObject) {
+		this.javaObject = javaObject;
 	}
 	@Override
 	public boolean equals(Object o) {

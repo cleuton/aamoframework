@@ -1,12 +1,15 @@
 package org.thecodebakers.aamo;
 
+import java.util.List;
+
 import android.view.View;
 
 public class DynaView {
+	public enum CONTROL_TYPE {NONE, TEXTBOX, LABEL, BUTTON, CHECKBOX, LISTBOX};
 	public static int NOT_INITIALIZED = -1; 
 	public int screenId = NOT_INITIALIZED;
 	public int id = NOT_INITIALIZED;
-	public int type = NOT_INITIALIZED;
+	public CONTROL_TYPE type = CONTROL_TYPE.NONE;
     /*
      1 - Textbox
      2 - Label
@@ -22,5 +25,7 @@ public class DynaView {
 	public String onCompleteScript;
 	public String onChangeScript;
 	public String onClickScript;
+	public String onElementSelected;
+	public List<String> listElements;
 	public View view;
 }

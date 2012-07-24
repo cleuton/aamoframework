@@ -4,10 +4,14 @@ import org.keplerproject.luajava.JavaFunction;
 import org.keplerproject.luajava.LuaException;
 import org.keplerproject.luajava.LuaObject;
 import org.keplerproject.luajava.LuaState;
+import org.thecodebakers.aamo.DynaView.CONTROL_TYPE;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class AamoLuaLibrary {
@@ -79,7 +83,7 @@ public class AamoLuaLibrary {
 		String texto = null;
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd) {
-				if (dv.type == 1) { // Ã© um textbox
+				if (dv.type == CONTROL_TYPE.TEXTBOX) { // Ã© um textbox
 					texto = ((EditText) dv.view).getText().toString();
 					break;
 				}
@@ -338,7 +342,7 @@ public class AamoLuaLibrary {
 		String texto = null;
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd) {
-				if (dv.type == 2) {
+				if (dv.type == CONTROL_TYPE.LABEL) {
 					// Ã© um label
 					texto = ((TextView) dv.view).getText().toString();
 					break;
@@ -387,7 +391,7 @@ public class AamoLuaLibrary {
 				  		int retorno = 0;
 						for (DynaView dv : selfRef.dynaViews) {
 							if (dv.id == nd) {
-								if (dv.type == 4) {
+								if (dv.type == CONTROL_TYPE.CHECKBOX) {
 									if (((CheckBox) dv.view).isChecked()) {
 										retorno = 1;
 				  					}	
@@ -623,7 +627,21 @@ public class AamoLuaLibrary {
 						  gp.setName(nomeParametro);
 						  if (selfRef.globalParameters.contains(gp)) {
 							  gp = selfRef.globalParameters.get(selfRef.globalParameters.indexOf(gp));
-							  L.pushObjectValue(gp.getObject());
+							  if (gp.getObject() == null) {
+								  // É um objeto java
+								  if (gp.getJavaObject() instanceof java.lang.Integer) {
+									  int numero = ((Integer) gp.getJavaObject()).intValue();
+									  L.pushNumber(numero);
+								  }
+								  else {
+									  String texto = (String) gp.getJavaObject();
+									  L.pushString(texto);
+								  }
+							  }
+							  else {
+								  L.pushObjectValue(gp.getObject());
+							  }
+							  
 						  }
 						  else {
 							  L.pushNil();
@@ -641,5 +659,84 @@ public class AamoLuaLibrary {
 		  L.setTable(-3);
 		  return 1;
 	}
+	
+	public static int m_addListBoxOption(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("addListBoxOption");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (L.getTop() > 1) {
+			    	LuaObject d = getParam(2);
+			    	LuaObject e = getParam(3);
+			    	if (d == null){
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
+				    }
+				    else if (e == null) {
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
+				    }
+				    else {
+				       setListBox(d,e);
+				    }
+			    }
+		    	else 
+		    	{
+		    		AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+			    }
+			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+
+	protected static void setListBox(LuaObject d, LuaObject e) {
+		double nd = d.getNumber();
+		for (DynaView dv : selfRef.dynaViews) {
+			if (dv.id == nd && dv.type == CONTROL_TYPE.LISTBOX) {
+				dv.listElements.add(e.getString());
+			}
+		}
+	}
+	
+	public static int m_clearListBox(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("clearListBox");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (L.getTop() > 1) {
+			    	LuaObject d = getParam(2);
+			    	if (d == null){
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
+				    }
+
+				    else {
+				    	for (DynaView dv : selfRef.dynaViews) {
+							if (dv.id == d.getNumber() && dv.type == CONTROL_TYPE.LISTBOX) {
+								dv.listElements.clear();
+								ListView lv = (ListView) dv.view;
+								ArrayAdapter<String> adapter = (ArrayAdapter<String>) lv.getAdapter();
+								adapter.notifyDataSetChanged();
+							}
+						}
+				    }
+			    }
+		    	else 
+		    	{
+		    		AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+			    }
+			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+
 	
 }
