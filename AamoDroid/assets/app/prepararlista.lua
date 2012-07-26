@@ -1,5 +1,5 @@
 aamo.log(aamo.getGlobalParameter("p1"))
-aamo.addListBoxOption(1,"Praia")
+aamo.addListBoxOption(1,"l10n::loclista")
 aamo.addListBoxOption(1,"Montanha")
 aamo.addListBoxOption(1,"Cinema")
 aamo.addListBoxOption(1,"Teatro")
