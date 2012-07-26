@@ -18,7 +18,8 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getError\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_query\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_execSQL\")\r\n
-					
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_next\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_close\")\r\n
     </string>
 	<string name="lua_10">Parâmetro faltando.</string>
 	<string name="lua_11">Arquivo não encontrado.</string>
