@@ -697,7 +697,8 @@ public class AamoLuaLibrary {
 		double nd = d.getNumber();
 		for (DynaView dv : selfRef.dynaViews) {
 			if (dv.id == nd && dv.type == CONTROL_TYPE.LISTBOX) {
-				dv.listElements.add(e.getString());
+				String txt = selfRef.checkL10N(e.getString());
+				dv.listElements.add(txt);
 			}
 		}
 	}
