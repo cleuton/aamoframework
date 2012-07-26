@@ -45,6 +45,8 @@ public class DBAdapter implements IDBAdapter {
 		
 	}
 	
+	
+	
 	private String[] formatParams(List<String> params){
 		String[] args = null;
 		if (params != null){
