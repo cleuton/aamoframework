@@ -11,11 +11,12 @@
 #include "lauxlib.h"
 #import "AAmoResourceBundle.h"
 
-@interface AAmoViewController : UIViewController {
+@interface AAmoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
     lua_State *L;
 }
 @property BOOL execOnLeaveOnBack;
 @property (strong, nonatomic) NSMutableArray * globalParameters;
+@property (strong, nonatomic) NSMutableArray * tableViewData;
 - (const char *) getTextFieldContent: (double) number;
 - (const char *) getLabelContent: (double) number;
 - (void) setLabelContent: (double) number text: (NSString *) content;
@@ -35,4 +36,9 @@
 - (IBAction)dismissKeyboard:(id)sender;
 - (void) loadBundle;
 - (NSString *) checkL10N: (NSString *) key;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
+- (UITableViewCell *)tableView:(UITableView *)tableView 
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView 
+    didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 @end

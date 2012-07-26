@@ -25,5 +25,6 @@
 @property (strong, nonatomic) NSString * onCompleteScript;
 @property (strong, nonatomic) NSString * onChangeScript;
 @property (strong, nonatomic) NSString * onClickScript;
+@property (strong, nonatomic) NSString * onElementSelected;
 @property (weak, nonatomic) UIView * view;
 @end
