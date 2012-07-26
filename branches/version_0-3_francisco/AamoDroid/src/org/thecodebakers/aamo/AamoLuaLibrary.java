@@ -19,6 +19,7 @@ public class AamoLuaLibrary {
 	
 	public static AamoDroidActivity selfRef;
 	protected static int errorCode = 0;
+	private static Cursor cursorMaster;
 	
 	//errors LUA 
 	protected enum Errors {
@@ -39,6 +40,12 @@ public class AamoLuaLibrary {
 	    	return errorCode;
 	    }
 	}
+	
+	private static final int SQLITE_TYPE_BLOB = 4; 
+	private static final int SQLITE_TYPE_FLOAT = 2;	
+	private static final int SQLITE_TYPE_INTEGER = 1;
+	private static final int SQLITE_TYPE_NULL = 0;	
+	private static final int SQLITE_TYPE_STRING = 3;
 	
 	//**** Funcoes a serem invocadas pelo codigo Lua
 	public static int m_getTextField(LuaState L) throws LuaException {
@@ -512,20 +519,22 @@ public class AamoLuaLibrary {
 			    		  }
 		  			  }
 		    		  
-		    		  Cursor cursor = adapter.query(d.getString(), args); //selfRef.getCursor(d.getString());
-		    		  String  registro = "";
+		    		  Cursor cursor = adapter.query(d.getString(), args); 
 		    		  cursor.moveToFirst();
-		    	      registro = registro + cursor.getInt(0);
-		    	      registro = registro + ":" + cursor.getString(1);
-		    	      registro = registro + ":" + cursor.getString(2);
-		    	      registro = registro + ":" + cursor.getString(3);
-		    	      
-		    	      //L.pushString(registro);
-		    		  
-		    	      L.pushObjectValue(cursor);
-		    	      
-		    		  return 1;
+		    		  cursorMaster = cursor;
+		    		    
+		    		  if(!cursor.isAfterLast()){  
+		    			    L.newTable();
+		    			    for(int j=0; j<cursor.getColumnCount(); j++) {
+			    	        	L.pushNumber(j);
+		    	                L.pushString(cursor.getString(j));
+			    			    L.setTable(-3);
+		    	            }
+			    	   }  
+			    	   
+		    		   return 1;
 		    	  }	  
+		    	  
 		      }
 		      else {
 		    	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
@@ -538,6 +547,81 @@ public class AamoLuaLibrary {
 		  L.setTable(-3);
 		  return 1;
 	}
+	
+	
+	
+	public static int m_next(LuaState L) throws LuaException
+	{
+		     
+		    L.newTable();
+			L.pushValue(-1);
+			L.getGlobal("aamo");
+			L.pushString("next");
+			L.pushJavaFunction(new JavaFunction(L) {
+			   public int execute() throws LuaException {  
+			    	if(cursorMaster.moveToNext()){  
+			    		L.newTable();
+			    		for(int j=0; j < cursorMaster.getColumnCount(); j++) 
+					    {
+					        L.pushNumber(j);
+					        L.pushString(cursorMaster.getString(j));
+					        L.setTable(-3);
+					    }   
+				    }
+		        
+				    return 1;
+			    }
+		   });
+			
+		   L.setTable(-3);
+		   return 1;
+	}
+	/**
+	 * Fecha o cursor correspondente ao nome.
+	 * @param L
+	 * @return
+	 * @throws LuaException
+	 */
+	public static int m_close(LuaState L) throws LuaException
+	{
+		    
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("close");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (cursorMaster != null 
+		    		&& !cursorMaster.isClosed()) {
+		    		
+			    	cursorMaster.close();
+	    	    }
+			    return 1;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+	
+	public static int m_eof(LuaState L) throws LuaException
+	{
+		    
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("eof");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if(cursorMaster.isAfterLast()){
+		    		L.pushBoolean(true);
+	    	    }
+			    return 1;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	 }
+	
 	
 	public static int m_execSQL(LuaState L) throws LuaException {
 				  
