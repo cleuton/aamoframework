@@ -7,7 +7,7 @@ O que falta fazer:
  2 - Copiar os arquivos de "app" do projeto Android, que contém ListBox
  3 - O evento de seleção já está pronto...
 
-
+ 4 - O Texto da ListBox pode ser L10N! No Android também!!!!!
 
 
 
