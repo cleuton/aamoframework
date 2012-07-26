@@ -19,5 +19,6 @@
 @synthesize onChangeScript;
 @synthesize onCompleteScript;
 @synthesize onClickScript;
+@synthesize onElementSelected;
 @synthesize view;
 @end

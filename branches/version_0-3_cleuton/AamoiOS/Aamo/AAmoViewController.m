@@ -1,3 +1,31 @@
+/*
+ 
+
+O que falta fazer: 
+ 
+ 1 - Criar os comandos "aamo.addListBoxOption" e "aamo.clearListBox"
+ 2 - Copiar os arquivos de "app" do projeto Android, que contém ListBox
+ 3 - O evento de seleção já está pronto...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
+
+
+
+
 //
 //  AAmoViewController.m
 //  Aamo
@@ -14,8 +42,14 @@
 #define MACRO_UI 1
 #define MACRO_ELEMENT 2
 #define L10N_PREFIX @"l10n::"
+#define TEXTBOX 1
+#define LABEL 2
+#define BUTTON 3
+#define CHECKBOX 4
+#define LISTBOX 5
 
-@interface AAmoViewController ()
+
+@interface AAmoViewController () 
 {
 @private
     NSMutableArray * dynaViews;
@@ -50,6 +84,7 @@ static int globalErrorCode;
 @implementation AAmoViewController
 @synthesize execOnLeaveOnBack;
 @synthesize globalParameters;
+@synthesize tableViewData;
 
 - (void)viewDidLoad
 {
@@ -527,7 +562,40 @@ int luaopen_mylib (lua_State *L) {
 
 
 
-//***********************************
+//*****************************************************************
+
+// UITableViewDelegate e UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView 
+cellForRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+    static NSString *cellIdentifier = @"tvcell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if(cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                          reuseIdentifier:cellIdentifier];
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"%d", [tableViewData objectAtIndex:indexPath.row]];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView 
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == tableView.tag && dv.type == LISTBOX) {
+            if (dv.onElementSelected != nil && [dv.onElementSelected length] > 0) {
+                [self execLua:dv.onElementSelected];
+                return;
+            }
+        }
+    }
+}
 
 - (void) loadBundle
 {
@@ -725,7 +793,7 @@ int luaopen_mylib (lua_State *L) {
         float top = (dv.percentTop / 100) * screenSize.height;
         float left = (dv.percentLeft / 100) * screenSize.width;
         switch (dv.type) {
-            case 1: {
+            case TEXTBOX: {
                 // Textbox
                 UITextField * tv = [[UITextField alloc] 
                                     initWithFrame:CGRectMake(left, top, width, height)];
@@ -739,7 +807,7 @@ int luaopen_mylib (lua_State *L) {
                 [mView addSubview:tv];
                 break;
             }
-            case 2: {
+            case LABEL: {
                 // Label
                 UILabel * lv = [[UILabel alloc]
                                 initWithFrame:CGRectMake(left, top, width, height)];
@@ -751,7 +819,7 @@ int luaopen_mylib (lua_State *L) {
                 }
                 break;
             }
-            case 3: {
+            case BUTTON: {
                 // Button
                 UIButton *bv = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 bv.frame = CGRectMake(left, top, width, height);
@@ -765,7 +833,7 @@ int luaopen_mylib (lua_State *L) {
                 }
                 break;
             }
-            case 4: {
+            case CHECKBOX: {
                 // Checkbox
                 UISwitch * sv = [[UISwitch alloc] initWithFrame:CGRectMake(left, top, width, height)];
                 dv.view = sv;
@@ -773,6 +841,15 @@ int luaopen_mylib (lua_State *L) {
                 [sv addTarget:self action:@selector(checkBoxChanged:) forControlEvents:UIControlEventValueChanged];
                 [mView addSubview:sv];
                 [sv setOn:dv.checked];
+                break;
+            }
+            case LISTBOX: {
+                UITableView * tv = [[UITableView alloc] initWithFrame:CGRectMake(left, top, width, height)];
+                dv.view = tv;
+                tv.tag = dv.id;
+                [tv setDelegate:self];
+                [tv setDataSource:self];
+                [mView addSubview:tv];
                 break;
             }
                 
@@ -966,6 +1043,10 @@ int luaopen_mylib (lua_State *L) {
         else if ([currentElementName isEqualToString: @"onChangeScript"]) {
             currentElement.onChangeScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
+        else if ([currentElementName isEqualToString: @"onElementSelected"]) {
+            currentElement.onElementSelected = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+
         
     }
     
