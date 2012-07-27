@@ -1,20 +1,21 @@
 -- local cursor = {}
-cursor = aamo.query("select * from contato")
+cursor = aamo.query("consulta","select * from contato")
 
-for i=1,#cursor do
-   aamo.log(cursor[i])
+while aamo.eof("consulta") do
+    aamo.log("entrou no while")
+	for i=1,#cursor do
+   		aamo.log(cursor[i])
+	end
+
+	cursor = aamo.next("consulta")
+	aamo.log("chamou o next")
 end
 
--- next element
-cursor = aamo.next()
-
---while ~ aamo.eof  --("contatos")
-for i=1,#cursor do
-   aamo.log(cursor[i])
-end
 
 --close the cursor 
-aamo.close()
+aamo.log("vai fechar o cursor consulta")
+aamo.close("consulta")
+aamo.log("fechou o cursor consulta")
 
 -- cursor:moveToNext()
 -- aamo.showMessage(cursor:getString(1))
