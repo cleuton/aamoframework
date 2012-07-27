@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aamo-bd>
-    <version>1.0</version>
+    <version>1</version>
     <name>contatos</name>
         
     <table>
@@ -15,7 +15,6 @@
         	<column>
         		<name>nome</name>
         		<type>text</type>
-        		<notnull/>
         	</column>
         	<column>
         		<name>endereco</name>
