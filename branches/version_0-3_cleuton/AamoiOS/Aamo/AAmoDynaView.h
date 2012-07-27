@@ -27,4 +27,5 @@
 @property (strong, nonatomic) NSString * onClickScript;
 @property (strong, nonatomic) NSString * onElementSelected;
 @property (weak, nonatomic) UIView * view;
+@property (strong, nonatomic) NSMutableArray * listBoxElements;
 @end

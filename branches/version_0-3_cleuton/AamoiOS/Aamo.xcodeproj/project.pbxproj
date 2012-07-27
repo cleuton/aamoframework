@@ -48,18 +48,19 @@
 		A61F9F31158900750024B18B /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0F158900750024B18B /* lzio.c */; };
 		A61F9F33158900750024B18B /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F12158900750024B18B /* print.c */; };
 		A63416A515B61B0A00845252 /* AAmoResourceBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = A63416A415B61B0A00845252 /* AAmoResourceBundle.m */; };
-		A63416B115B6202000845252 /* aamol10n_en_GB.properties in Resources */ = {isa = PBXBuildFile; fileRef = A63416A715B6202000845252 /* aamol10n_en_GB.properties */; };
-		A63416B215B6202000845252 /* aamol10n_en.properties in Resources */ = {isa = PBXBuildFile; fileRef = A63416A815B6202000845252 /* aamol10n_en.properties */; };
-		A63416B315B6202000845252 /* aamol10n.properties in Resources */ = {isa = PBXBuildFile; fileRef = A63416A915B6202000845252 /* aamol10n.properties */; };
-		A63416B415B6202000845252 /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A63416AA15B6202000845252 /* sairDaTela.lua */; };
-		A63416B515B6202000845252 /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A63416AB15B6202000845252 /* tela2.lua */; };
-		A63416B615B6202000845252 /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A63416AC15B6202000845252 /* toqueBotao.lua */; };
-		A63416B715B6202000845252 /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A63416AD15B6202000845252 /* ui_2.xml */; };
-		A63416B815B6202000845252 /* ui_3.xml in Resources */ = {isa = PBXBuildFile; fileRef = A63416AE15B6202000845252 /* ui_3.xml */; };
-		A63416B915B6202000845252 /* ui_4.xml in Resources */ = {isa = PBXBuildFile; fileRef = A63416AF15B6202000845252 /* ui_4.xml */; };
-		A63416BA15B6202000845252 /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A63416B015B6202000845252 /* ui.xml */; };
 		A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */ = {isa = PBXBuildFile; fileRef = A6655C8615AA08EC00E16689 /* AAmoScreenData.m */; };
 		A67AB11315BE05C7004CDAC9 /* AAmoGlobalParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */; };
+		A6B2BEAF15C27A0900FE5F56 /* aamol10n_en_GB.properties in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA415C27A0900FE5F56 /* aamol10n_en_GB.properties */; };
+		A6B2BEB015C27A0900FE5F56 /* aamol10n_en.properties in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA515C27A0900FE5F56 /* aamol10n_en.properties */; };
+		A6B2BEB115C27A0900FE5F56 /* aamol10n.properties in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA615C27A0900FE5F56 /* aamol10n.properties */; };
+		A6B2BEB215C27A0900FE5F56 /* prepararlista.lua in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA715C27A0900FE5F56 /* prepararlista.lua */; };
+		A6B2BEB315C27A0900FE5F56 /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA815C27A0900FE5F56 /* sairDaTela.lua */; };
+		A6B2BEB415C27A0900FE5F56 /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA915C27A0900FE5F56 /* tela2.lua */; };
+		A6B2BEB515C27A0900FE5F56 /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEAA15C27A0900FE5F56 /* toqueBotao.lua */; };
+		A6B2BEB615C27A0900FE5F56 /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEAB15C27A0900FE5F56 /* ui_2.xml */; };
+		A6B2BEB715C27A0900FE5F56 /* ui_3.xml in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEAC15C27A0900FE5F56 /* ui_3.xml */; };
+		A6B2BEB815C27A0900FE5F56 /* ui_4.xml in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEAD15C27A0900FE5F56 /* ui_4.xml */; };
+		A6B2BEB915C27A0900FE5F56 /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEAE15C27A0900FE5F56 /* ui.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,20 +135,21 @@
 		A61F9F12158900750024B18B /* print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = print.c; sourceTree = "<group>"; };
 		A63416A315B61B0A00845252 /* AAmoResourceBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoResourceBundle.h; sourceTree = "<group>"; };
 		A63416A415B61B0A00845252 /* AAmoResourceBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoResourceBundle.m; sourceTree = "<group>"; };
-		A63416A715B6202000845252 /* aamol10n_en_GB.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aamol10n_en_GB.properties; sourceTree = "<group>"; };
-		A63416A815B6202000845252 /* aamol10n_en.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aamol10n_en.properties; sourceTree = "<group>"; };
-		A63416A915B6202000845252 /* aamol10n.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aamol10n.properties; sourceTree = "<group>"; };
-		A63416AA15B6202000845252 /* sairDaTela.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sairDaTela.lua; sourceTree = "<group>"; };
-		A63416AB15B6202000845252 /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
-		A63416AC15B6202000845252 /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
-		A63416AD15B6202000845252 /* ui_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_2.xml; sourceTree = "<group>"; };
-		A63416AE15B6202000845252 /* ui_3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_3.xml; sourceTree = "<group>"; };
-		A63416AF15B6202000845252 /* ui_4.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_4.xml; sourceTree = "<group>"; };
-		A63416B015B6202000845252 /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 		A6655C8515AA08EC00E16689 /* AAmoScreenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoScreenData.h; sourceTree = "<group>"; };
 		A6655C8615AA08EC00E16689 /* AAmoScreenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoScreenData.m; sourceTree = "<group>"; };
 		A67AB11115BE05C7004CDAC9 /* AAmoGlobalParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoGlobalParameter.h; sourceTree = "<group>"; };
 		A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoGlobalParameter.m; sourceTree = "<group>"; };
+		A6B2BEA415C27A0900FE5F56 /* aamol10n_en_GB.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aamol10n_en_GB.properties; sourceTree = "<group>"; };
+		A6B2BEA515C27A0900FE5F56 /* aamol10n_en.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aamol10n_en.properties; sourceTree = "<group>"; };
+		A6B2BEA615C27A0900FE5F56 /* aamol10n.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aamol10n.properties; sourceTree = "<group>"; };
+		A6B2BEA715C27A0900FE5F56 /* prepararlista.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prepararlista.lua; sourceTree = "<group>"; };
+		A6B2BEA815C27A0900FE5F56 /* sairDaTela.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sairDaTela.lua; sourceTree = "<group>"; };
+		A6B2BEA915C27A0900FE5F56 /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
+		A6B2BEAA15C27A0900FE5F56 /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
+		A6B2BEAB15C27A0900FE5F56 /* ui_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_2.xml; sourceTree = "<group>"; };
+		A6B2BEAC15C27A0900FE5F56 /* ui_3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_3.xml; sourceTree = "<group>"; };
+		A6B2BEAD15C27A0900FE5F56 /* ui_4.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_4.xml; sourceTree = "<group>"; };
+		A6B2BEAE15C27A0900FE5F56 /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,16 +231,17 @@
 		A61F9E1F1587C3900024B18B /* app */ = {
 			isa = PBXGroup;
 			children = (
-				A63416A715B6202000845252 /* aamol10n_en_GB.properties */,
-				A63416A815B6202000845252 /* aamol10n_en.properties */,
-				A63416A915B6202000845252 /* aamol10n.properties */,
-				A63416AA15B6202000845252 /* sairDaTela.lua */,
-				A63416AB15B6202000845252 /* tela2.lua */,
-				A63416AC15B6202000845252 /* toqueBotao.lua */,
-				A63416AD15B6202000845252 /* ui_2.xml */,
-				A63416AE15B6202000845252 /* ui_3.xml */,
-				A63416AF15B6202000845252 /* ui_4.xml */,
-				A63416B015B6202000845252 /* ui.xml */,
+				A6B2BEA415C27A0900FE5F56 /* aamol10n_en_GB.properties */,
+				A6B2BEA515C27A0900FE5F56 /* aamol10n_en.properties */,
+				A6B2BEA615C27A0900FE5F56 /* aamol10n.properties */,
+				A6B2BEA715C27A0900FE5F56 /* prepararlista.lua */,
+				A6B2BEA815C27A0900FE5F56 /* sairDaTela.lua */,
+				A6B2BEA915C27A0900FE5F56 /* tela2.lua */,
+				A6B2BEAA15C27A0900FE5F56 /* toqueBotao.lua */,
+				A6B2BEAB15C27A0900FE5F56 /* ui_2.xml */,
+				A6B2BEAC15C27A0900FE5F56 /* ui_3.xml */,
+				A6B2BEAD15C27A0900FE5F56 /* ui_4.xml */,
+				A6B2BEAE15C27A0900FE5F56 /* ui.xml */,
 			);
 			name = app;
 			sourceTree = "<group>";
@@ -357,16 +360,17 @@
 				A61F9E0315878FD40024B18B /* InfoPlist.strings in Resources */,
 				A61F9E0C15878FD40024B18B /* MainStoryboard_iPhone.storyboard in Resources */,
 				A61F9E0F15878FD40024B18B /* MainStoryboard_iPad.storyboard in Resources */,
-				A63416B115B6202000845252 /* aamol10n_en_GB.properties in Resources */,
-				A63416B215B6202000845252 /* aamol10n_en.properties in Resources */,
-				A63416B315B6202000845252 /* aamol10n.properties in Resources */,
-				A63416B415B6202000845252 /* sairDaTela.lua in Resources */,
-				A63416B515B6202000845252 /* tela2.lua in Resources */,
-				A63416B615B6202000845252 /* toqueBotao.lua in Resources */,
-				A63416B715B6202000845252 /* ui_2.xml in Resources */,
-				A63416B815B6202000845252 /* ui_3.xml in Resources */,
-				A63416B915B6202000845252 /* ui_4.xml in Resources */,
-				A63416BA15B6202000845252 /* ui.xml in Resources */,
+				A6B2BEAF15C27A0900FE5F56 /* aamol10n_en_GB.properties in Resources */,
+				A6B2BEB015C27A0900FE5F56 /* aamol10n_en.properties in Resources */,
+				A6B2BEB115C27A0900FE5F56 /* aamol10n.properties in Resources */,
+				A6B2BEB215C27A0900FE5F56 /* prepararlista.lua in Resources */,
+				A6B2BEB315C27A0900FE5F56 /* sairDaTela.lua in Resources */,
+				A6B2BEB415C27A0900FE5F56 /* tela2.lua in Resources */,
+				A6B2BEB515C27A0900FE5F56 /* toqueBotao.lua in Resources */,
+				A6B2BEB615C27A0900FE5F56 /* ui_2.xml in Resources */,
+				A6B2BEB715C27A0900FE5F56 /* ui_3.xml in Resources */,
+				A6B2BEB815C27A0900FE5F56 /* ui_4.xml in Resources */,
+				A6B2BEB915C27A0900FE5F56 /* ui.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
