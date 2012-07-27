@@ -27,10 +27,12 @@ public class DBParser {
 	private Column column;
 	private Database db;
 	
-	public static final int  MACRO_BD = 1;		//aamo-bd
-	public static final int  MACRO_ELEMENT = 2; //table
-	public static final int  MACRO_COLUMNS = 3; //columns
-	public static final int  MACRO_COLUMN = 4;  //column	
+	private static final int  MACRO_BD = 1;		//aamo-bd
+	private static final int  MACRO_ELEMENT = 2; //table
+	private static final int  MACRO_COLUMNS = 3; //columns
+	private static final int  MACRO_COLUMN = 4;  //column	
+	
+	private static final String  PATH_XML = "app/bd/bd.xml";
 	
 	private List<Table> tables = new ArrayList<Table>();
 	private List<Column> columns;
@@ -39,14 +41,14 @@ public class DBParser {
 		 this.ctx = ctx;
 	}
 	
-	public Database readXMLDatabase() throws AamoException {
+	public Database readXMLDatabase(Context ctx) throws AamoException {
 		
 		InputStream xml;
 		
 		try {
 		
 			db = new Database();
-			xml = ctx.getApplicationContext().getAssets().open("bd/bd.xml");
+			xml = ctx.getApplicationContext().getAssets().open(PATH_XML);
 			
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
 			factory.setNamespaceAware(true); 
@@ -54,10 +56,9 @@ public class DBParser {
 			xpp.setInput(xml, "UTF-8");
 			
 			int eventType = xpp.getEventType();
-			
-	        while (eventType != XmlPullParser.END_DOCUMENT) {
+			while (eventType != XmlPullParser.END_DOCUMENT) {
          		if(eventType == XmlPullParser.START_DOCUMENT) {
-	        		 continue;
+	        		 //continue;
 	        	} 
 	        	else if(eventType == XmlPullParser.START_TAG) {
 	        	    
@@ -65,46 +66,43 @@ public class DBParser {
 	        	    
 	        	    if (currentElementName.equals("aamo-bd")){
 	        	        db.setTablesList(null);
+	        	        currentMacro = MACRO_BD;
 	        	    }
 	        	    else if (currentElementName.equals("table")) {
 	        	    	tableElement = new Table();
+	        	    	tables.add(tableElement);	
 	        	    	currentMacro = MACRO_ELEMENT;
 	        	    }
 	        	    else if (currentElementName.equals("columns")){
 	        	    	columns = new ArrayList<Column>();
 	        	    	currentMacro = MACRO_COLUMNS;
+	        	    	tableElement.setColumnsList(columns);
 	        	    }
 	        	    else if (currentElementName.equals("column")){
 	        	    	column = new Column();
+	        	    	columns.add(column);
 	        	    	currentMacro = MACRO_COLUMN;
 	        	    }
 
 	        	} 
 	        	else if(eventType == XmlPullParser.END_TAG) {
-	        	    if (xpp.getName().equals("aamo-bd") ||
-	        	    	xpp.getName().equals("table")) {
+	        	     if (xpp.getName().equals("aamo-bd") ||
+	        	    	xpp.getName().equals("table") ||
+	        	    	xpp.getName().equals("columns")) {
 	        	    	eventType = xpp.next();
 	        	    	continue;
 	        	     }
 	        	     if (currentMacro == MACRO_BD) {
-	        	            if (currentElementName.equals("aamo-bd")) {
-	        	                if (currentElementName.equals("version")) {
-	        	                    // version
-	        	                    double version = Double.parseDouble(currentStringValue);
-	        	                }
-	        	            }
-	        	            else if (currentElementName.equals("name")) {
+	        	            if (currentElementName.equals("name")) {
 	        	            	db.setName(currentStringValue.trim());
 	        	            }
 	        	            else if (currentElementName.equals("version")) {
-	        	            	
 	        	            	db.setVersion(Integer.parseInt(currentStringValue.trim()));
 	        	            }
 	        	            
 	        	     }else if (currentMacro == MACRO_ELEMENT) {  //tables
 	        	            
-	        	    	    // entries.add(readEntry(parser));
-	        	            if (currentElementName.equals("name")) {
+	        	    	    if (currentElementName.equals("name")) {
 	        	                tableElement.setName(currentStringValue.trim());
 	        	            }
 	        	            
@@ -126,22 +124,16 @@ public class DBParser {
 	        	           else if (currentElementName.equals("notnull")) {
 	        	          	  column.setNotNull(true);
 	        	           }
-	        	    	   columns.add(column);
+	        	    	   //columns.add(column);
 	        	    }     
-	        	    
-	        	    tableElement.setColumnsList(columns);
 	        		currentStringValue = null;
 	        		
 	           } 
 	           else if(eventType == XmlPullParser.TEXT) {
 	        		currentStringValue = xpp.getText().trim();
 	           }
-         	
-         	   tables.add(tableElement);	
 	           eventType = xpp.next();
 	         }
-			
-	        
 			
 		} catch (IOException e) {
 			Log.d("XML", "IOException");
@@ -154,7 +146,5 @@ public class DBParser {
 		db.setTablesList(tables);
 		return db;
 	}
-	
-	
 	
 }
