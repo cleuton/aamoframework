@@ -3,7 +3,7 @@
 cursor = aamo.query("consulta","select * from contato")
 
 -- percorre os registros retornados
-while aamo.eof("consulta") do
+while not aamo.eof("consulta") do
     -- imprime os campos do cursor
     for i=1,#cursor do   
    		aamo.log(cursor[i])
