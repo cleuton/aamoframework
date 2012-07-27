@@ -16,7 +16,7 @@
 }
 @property BOOL execOnLeaveOnBack;
 @property (strong, nonatomic) NSMutableArray * globalParameters;
-@property (strong, nonatomic) NSMutableArray * tableViewData;
+
 - (const char *) getTextFieldContent: (double) number;
 - (const char *) getLabelContent: (double) number;
 - (void) setLabelContent: (double) number text: (NSString *) content;
@@ -41,4 +41,6 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView 
     didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void) setListBox:(double)d text:(NSString*)textoMsg;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 @end

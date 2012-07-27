@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
     <version>0.2</version>
-    <uiid>3</uiid>
-    <title>Tela 3</title>
-    <onLoadScript>lua::aamo.log("P1 : " .. aamo.getGlobalParameter("p1"))</onLoadScript>
+    <uiid>4</uiid>
+    <title>Tela 4</title>
+    <onLoadScript>prepararlista</onLoadScript>
     <onEndScript>lua::aamo.log("END SCRIPT TELA 4")</onEndScript>
     <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 4")</onLeaveScript>
     <onBackScript>lua::aamo.log("BACK SCRIPT TELA 4")</onBackScript>
     <element>
         <id>1</id>
-        <type>2</type>
-        <percentTop>10</percentTop>
+        <type>5</type>
+        <percentTop>0</percentTop>
         <percentLeft>0</percentLeft>
-        <percentWidth>40</percentWidth>
-        <percentHeight>10</percentHeight>
-        <text>Esta é a quarta tela</text>
+        <percentWidth>100</percentWidth>
+        <percentHeight>40</percentHeight>
+        <onElementSelected>lua::aamo.showMessage(aamo.getGlobalParameter("aamo::selectedText"))</onElementSelected>
     </element>
-
+	<element>
+        <id>5</id>
+        <type>3</type>
+        <percentTop>42</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Limpar</text>
+        <onClickScript>lua::aamo.clearListBox(1)</onClickScript>
+    </element>
     <element>
         <id>2</id>
         <type>3</type>

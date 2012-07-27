@@ -21,4 +21,14 @@
 @synthesize onClickScript;
 @synthesize onElementSelected;
 @synthesize view;
+@synthesize listBoxElements;
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.listBoxElements = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
 @end

@@ -1,13 +1,10 @@
 /*
  
-
-O que falta fazer: 
+ O GetGlobalParameter entrou em um loop maluco no momento em que a listbox é selecionada...
  
- 1 - Criar os comandos "aamo.addListBoxOption" e "aamo.clearListBox"
- 2 - Copiar os arquivos de "app" do projeto Android, que contém ListBox
- 3 - O evento de seleção já está pronto...
-
- 4 - O Texto da ListBox pode ser L10N! No Android também!!!!!
+ 
+ 
+ */
 
 
 
@@ -18,9 +15,6 @@ O que falta fazer:
 
 
 
-
-
-*/
 
 
 
@@ -47,6 +41,9 @@ O que falta fazer:
 #define BUTTON 3
 #define CHECKBOX 4
 #define LISTBOX 5
+#define GLOBAL_LISTBOX_INDEX @"aamo::selectedIndex"
+#define GLOBAL_LISTBOX_TEXT  @"aamo::selectedText";
+
 
 
 @interface AAmoViewController () 
@@ -84,7 +81,7 @@ static int globalErrorCode;
 @implementation AAmoViewController
 @synthesize execOnLeaveOnBack;
 @synthesize globalParameters;
-@synthesize tableViewData;
+
 
 - (void)viewDidLoad
 {
@@ -533,6 +530,31 @@ static int getGlobalParameter(lua_State *L) {
 
 }
 
+static int addListBoxOption(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1); // id
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+    	}
+    	
+    	const char *msg = lua_tostring(L, -1); // text
+	    if (msg == nil){
+            globalErrorCode = errorCode_12 ; 
+        }
+        else {
+	    	NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
+    		[ponteiro setListBox:d text:textoMsg];
+        }	
+        return 0;
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}    
+
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -550,6 +572,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"getLocalizedText",getLocalizedText},
     {"setGlobalParameter", setGlobalParameter},
     {"getGlobalParameter", getGlobalParameter},
+    {"addListBoxOption", addListBoxOption},
     {NULL, NULL}
 };
 
@@ -564,7 +587,32 @@ int luaopen_mylib (lua_State *L) {
 
 //*****************************************************************
 
+- (void) setListBox:(double)d text:(NSString*)textoMsg
+{
+    
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == d && dv.type == LISTBOX) {
+            [dv.listBoxElements addObject:textoMsg];
+            UITableView *  tv = (UITableView *)dv.view;
+            [tv reloadData];
+            break;
+        }
+    }
+}
+
 // UITableViewDelegate e UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger elementos = 0;
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == tableView.tag && dv.type == LISTBOX) {
+            elementos = [dv.listBoxElements count];
+            break;
+        }
+    }
+    return elementos;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -574,27 +622,60 @@ int luaopen_mylib (lua_State *L) {
 - (UITableViewCell *)tableView:(UITableView *)tableView 
 cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+    
     static NSString *cellIdentifier = @"tvcell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if(cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                           reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%d", [tableViewData objectAtIndex:indexPath.row]];
+    NSString * texto; 
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == tableView.tag && dv.type == LISTBOX) {
+            texto = [dv.listBoxElements objectAtIndex:indexPath.row];
+            
+            break;
+        }
+        
+    }
+    cell.textLabel.text = texto;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView 
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    for (AAmoDynaView * dv in dynaViews) {
+    AAmoDynaView * dv;
+    for (dv in dynaViews) {
         if (dv.id == tableView.tag && dv.type == LISTBOX) {
             if (dv.onElementSelected != nil && [dv.onElementSelected length] > 0) {
-                [self execLua:dv.onElementSelected];
+                break;
                 return;
             }
         }
     }
+    AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+    gp.name = GLOBAL_LISTBOX_INDEX;
+    gp.object = [NSNumber numberWithInteger:indexPath.row];
+    if ([ponteiro.globalParameters containsObject:gp]) {;
+        gp = [ponteiro.globalParameters objectAtIndex:indexPath.row];
+    }
+    else {
+        [ponteiro.globalParameters addObject:gp];
+    }
+    NSLog(@"Indice: %d", [((NSNumber*)gp.object) intValue]);
+    gp = [[AAmoGlobalParameter alloc] init];
+    gp.name = GLOBAL_LISTBOX_TEXT;
+    gp.object = [dv.listBoxElements objectAtIndex:indexPath.row];
+    if ([ponteiro.globalParameters containsObject:gp]) {;
+        gp = [ponteiro.globalParameters objectAtIndex:indexPath.row];
+    }
+    else {
+        [ponteiro.globalParameters addObject:gp];
+    }
+    NSLog(@"Texto: %@", gp.object);
+
+    [self execLua:dv.onElementSelected];
 }
 
 - (void) loadBundle
