@@ -16,7 +16,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 	
 	    private static String databaseName = "contatos.db";;
-	    public static  int databaseVersion= 1;
+	    public static  int databaseVersion = 1;
 	    private static String tableName = "contato";
 	    private Context context;
 	    Database database;
@@ -24,51 +24,43 @@ public class DBHelper extends SQLiteOpenHelper {
 	    private static final String TAG = "AAMO";
 	    private SQLiteDatabase db;
 	    
-	    //private static final String DATABASE_NAME = "aamo.db";
-        //public static final int DATABASE_VERSION = 1;
-        //private static final String TABLE_NAME = "tabela";
 	    
 		public DBHelper(Context context) {
 			super(context, databaseName, null, databaseVersion);
 			this.context = context;
 		}
 		
-		
-		public void readXML(){
-			
-			DBParser parser = new DBParser(context);
-			try {
-				database = parser.readXMLDatabase();
-			} catch (AamoException e) {
-				Log.d(TAG, e.getMessage());
-			}
-			parser = null;
+		public DBHelper(Context context, Database database) {
+			super(context, database.getName(), null, database.getVersion());
+			this.context = context;
+			this.database = database;
 		}
 		
-		 @Override
-         public void onCreate(SQLiteDatabase db) {
-              Log.d(TAG, "Criando a tabela no banco de dados.");
-              
-              db.execSQL("CREATE TABLE " + tableName + " (id INTEGER PRIMARY KEY, nome varchar(50), " +
+		@Override
+        public void onCreate(SQLiteDatabase db) {
+             Log.d(TAG, "onCreate...");
+             /*
+             db.execSQL("CREATE TABLE " + tableName + " (id INTEGER PRIMARY KEY, nome varchar(50), " +
             		  	 " endereco varchar(50), email varchar(50))");
               
-              Log.d(TAG, " Inserindo dados na tabela : " + tableName);
+             Log.d(TAG, " Inserindo dados na tabela : " + tableName);
               
-              db.execSQL("insert into " +  tableName + " (id,nome, endereco,email) " +
+             db.execSQL("insert into " +  tableName + " (id,nome, endereco,email) " +
             		     " values (NULL, 'Aamo db', 'rua 1 qda 2', 'fcmr@aamo.com')");
             
-              Log.d(TAG, " Dados insetidos com sucesso tabela : " + tableName);
+             Log.d(TAG, " Dados insetidos com sucesso tabela : " + tableName);*/
+             onCreateDB (db);
         }
 		 
 		
-		public void onCreateDB(SQLiteDatabase db) {
-			 Log.d(TAG, "Creating tables and database.");
+		private void onCreateDB(SQLiteDatabase db) {
+			 Log.d(TAG, "Creating tables ");
 			 StringBuilder sb = new StringBuilder();
 			 
 			 try{
 				 
-				 db = SQLiteDatabase.openOrCreateDatabase(database.getName() + ".db", null);
-				 Log.d(TAG, "database created.");
+				 //db = SQLiteDatabase.openOrCreateDatabase(database.getName() + ".db", null);
+				 Log.d(TAG, "database is open? " + db.isOpen());
 				 List<Table> tables = database.getTablesList();
 				 
 				 for (Table table : tables) {
@@ -79,6 +71,9 @@ public class DBHelper extends SQLiteOpenHelper {
 					 sb.append ("( ");
 					 
 					 List<Column> columns = table.getColumnsList();
+					 String separador = ",";
+					 int numberOfColumns = columns.size();
+					 int count = 1;
 					 for (Column colunas : columns) {
 						 String columnName = colunas.getName();
 						 sb.append(columnName + " ");
@@ -94,6 +89,11 @@ public class DBHelper extends SQLiteOpenHelper {
 						 }else {
 							 sb.append(" Null ");
 						 }
+						 //comma ","
+						 if (count < numberOfColumns){
+							 sb.append(separador);
+						 }
+						 count ++;
 					 }
 
 					 sb.append (" )");
