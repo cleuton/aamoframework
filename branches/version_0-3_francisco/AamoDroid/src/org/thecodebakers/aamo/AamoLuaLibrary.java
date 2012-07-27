@@ -654,9 +654,9 @@ public class AamoLuaLibrary {
 				    	  else {
 				    		   cursorMaster = cursorMap.get(d.getString());  
 				    		   if(!cursorMaster.isAfterLast()){
-						    		L.pushBoolean(true);
+						    		L.pushBoolean(false);
 					    	    }else {
-					    	    	L.pushBoolean(false);
+					    	    	L.pushBoolean(true);
 					    	    }
 				    	  } 	
 				          return 1;
