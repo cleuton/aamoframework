@@ -16,7 +16,6 @@
 - (BOOL)isEqual:(id)outro
 {
     AAmoGlobalParameter * obj = (AAmoGlobalParameter *) outro;
-    NSLog(@"Este: %@ Outro: %@", self.name,obj.name);
     return [self.name isEqualToString:obj.name];
 }
 

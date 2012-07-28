@@ -1,25 +1,3 @@
-/*
- 
- O GetGlobalParameter entrou em um loop maluco no momento em que a listbox é selecionada...
- 
- 
- 
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //  AAmoViewController.m
 //  Aamo
@@ -555,6 +533,24 @@ static int addListBoxOption(lua_State *L) {
 
 }
 
+static int clearListBox(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1); // id
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ;
+            return 0;
+    	}
+    	
+        [ponteiro clearListBoxControl:d];
+        return 0;
+	}
+	else {
+		globalErrorCode = errorCode_10 ;
+		return 0;
+	}
+    
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -573,6 +569,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"setGlobalParameter", setGlobalParameter},
     {"getGlobalParameter", getGlobalParameter},
     {"addListBoxOption", addListBoxOption},
+    {"clearListBox", clearListBox},
     {NULL, NULL}
 };
 
@@ -645,6 +642,8 @@ cellForRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)tableView:(UITableView *)tableView 
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
     AAmoDynaView * dv;
     for (dv in dynaViews) {
         if (dv.id == tableView.tag && dv.type == LISTBOX) {
@@ -654,28 +653,51 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             }
         }
     }
+    
+    //NSLog(@"Index: %d, texto: %@", indexPath.row,[dv.listBoxElements objectAtIndex:indexPath.row]);
+
+    
     AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
     gp.name = GLOBAL_LISTBOX_INDEX;
-    gp.object = [NSNumber numberWithInteger:indexPath.row];
+    
     if ([ponteiro.globalParameters containsObject:gp]) {;
-        gp = [ponteiro.globalParameters objectAtIndex:indexPath.row];
+        gp = [ponteiro.globalParameters objectAtIndex:[ponteiro.globalParameters indexOfObject:gp]];
     }
     else {
         [ponteiro.globalParameters addObject:gp];
     }
-    NSLog(@"Indice: %d", [((NSNumber*)gp.object) intValue]);
+    gp.object = [NSNumber numberWithInteger:indexPath.row];
+    gp.type = 2;
+    
+    //NSLog(@"gp.name: %@, object: %d", gp.name, [((NSNumber*) gp.object) intValue]);
+    
     gp = [[AAmoGlobalParameter alloc] init];
     gp.name = GLOBAL_LISTBOX_TEXT;
-    gp.object = [dv.listBoxElements objectAtIndex:indexPath.row];
+
     if ([ponteiro.globalParameters containsObject:gp]) {;
-        gp = [ponteiro.globalParameters objectAtIndex:indexPath.row];
+        gp = [ponteiro.globalParameters objectAtIndex:[ponteiro.globalParameters indexOfObject:gp]];
     }
     else {
         [ponteiro.globalParameters addObject:gp];
     }
-    NSLog(@"Texto: %@", gp.object);
-
+    gp.object = [dv.listBoxElements objectAtIndex:indexPath.row];
+    gp.type = 1;
+    
+    //NSLog(@"gp.name: %@, object: %@", gp.name, (NSString*)gp.object);
+    
     [self execLua:dv.onElementSelected];
+}
+
+- (void) clearListBoxControl: (double) idl
+{
+    AAmoDynaView * dv;
+    for (dv in dynaViews) {
+        if (dv.id == idl && dv.type == LISTBOX) {
+            [dv.listBoxElements removeAllObjects];
+            UITableView *tv = (UITableView *) dv.view;
+            [tv reloadData];
+        }
+    }
 }
 
 - (void) loadBundle
@@ -796,6 +818,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             }
         }
     }
+    return nil;
 }
 
 - (void) setLabelContent: (double) number text: (NSString *) content
