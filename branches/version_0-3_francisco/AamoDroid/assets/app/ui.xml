@@ -4,7 +4,7 @@
 <uiid>1</uiid>
 <title/>
 <version>0.3</version>
-<onLoadScript></onLoadScript>
+<onLoadScript>lua::aamo.openDatabase("contatos")</onLoadScript>
 <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
 
 <element>
