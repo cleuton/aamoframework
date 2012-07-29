@@ -16,6 +16,7 @@ public class DBAdapter implements IDBAdapter {
 	private DBHelper dbHelper= null;
 	private static final String TAG = "DBAdapter";
 	private static Context ctx = null;
+	private static Database database = null;
 	
 	public DBAdapter(Context context) {
 		//Database database = readXML (context);
@@ -26,9 +27,9 @@ public class DBAdapter implements IDBAdapter {
 	private Database readXML(Context context){
 		
 		DBParser parser = new DBParser(context);
-		Database database = null;
+		Database base = null;
 		try {
-			database = parser.readXMLDatabase(context);
+			base = parser.readXMLDatabase(context);
 		} catch (AamoException e) {
 			Log.d(TAG, e.getMessage());
 		} catch (Exception ex){
@@ -36,7 +37,7 @@ public class DBAdapter implements IDBAdapter {
 		}
 		parser = null;
 		
-		return database;
+		return base;
 	}
 	
 	public Cursor query(String sql, List<String> params) {
@@ -65,9 +66,13 @@ public class DBAdapter implements IDBAdapter {
 	}
 	
 	public void openDatabase (String nome){
-		Database database = readXML (ctx);
+		if (database == null){
+			database = readXML (ctx);
+		}	
 		dbHelper = new DBHelper(ctx, database);
-		db = dbHelper.getWritableDatabase();
+		if (db == null){
+			db = dbHelper.getWritableDatabase();
+		}	
 	}
 		
 	private String[] formatParams(List<String> params){
