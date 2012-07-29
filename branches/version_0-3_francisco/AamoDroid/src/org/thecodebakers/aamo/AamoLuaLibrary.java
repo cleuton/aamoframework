@@ -710,6 +710,44 @@ public class AamoLuaLibrary {
 		  return 1;
 	}
 	
+	/**
+	 * Create and/or open a database that will be used for reading/writing
+	 * @param L
+	 * @return int
+	 * @throws LuaException
+	 */
+	public static int m_openDatabase(LuaState L) throws LuaException
+	{
+		    
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("openDatabase");
+		  L.pushJavaFunction(new JavaFunction(L) {
+			  public int execute() throws LuaException {
+				   if (L.getTop() > 1) {
+				    	  
+				    	  LuaObject d = getParam(2); // database name
+				    	  if (d == null) {
+				    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+				    		  return 0;
+				    	  }
+				    	  else {
+				    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
+					    	  adapter.openDatabase(d.getString()); 
+				    	  } 	
+				          return 1;
+				   }
+				   else {
+				   	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+				   	  return 0;
+				  }  
+			   }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	 }
+	
 	private static List<String> getQueryParams(LuaState L, int position) throws LuaException 
 	{
 		  List <String> args = new ArrayList<String>();
