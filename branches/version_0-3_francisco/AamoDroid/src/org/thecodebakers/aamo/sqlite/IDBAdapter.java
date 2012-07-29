@@ -39,4 +39,6 @@ public interface IDBAdapter {
 	 */
 	public int getDatabaseVersion();
 	
+	public void openDatabase (String nome);
+	
 }
