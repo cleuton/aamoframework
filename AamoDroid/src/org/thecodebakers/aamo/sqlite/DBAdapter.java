@@ -12,13 +12,15 @@ import android.util.Log;
 
 public class DBAdapter implements IDBAdapter {
 	
-	private SQLiteDatabase db = null;
+	private static SQLiteDatabase db = null;
 	private DBHelper dbHelper= null;
 	private static final String TAG = "DBAdapter";
+	private static Context ctx = null;
 	
 	public DBAdapter(Context context) {
-		Database database = readXML (context);
-		dbHelper = new DBHelper(context, database);
+		//Database database = readXML (context);
+		
+		ctx = context;
     }
 	
 	private Database readXML(Context context){
@@ -29,6 +31,8 @@ public class DBAdapter implements IDBAdapter {
 			database = parser.readXMLDatabase(context);
 		} catch (AamoException e) {
 			Log.d(TAG, e.getMessage());
+		} catch (Exception ex){
+			Log.d(TAG, ex.getMessage());
 		}
 		parser = null;
 		
@@ -41,7 +45,7 @@ public class DBAdapter implements IDBAdapter {
 			args = formatParams (params);
 		}
 		
-		this.db = dbHelper.getReadableDatabase();   
+		//db = dbHelper.getReadableDatabase();   
         Cursor cursor = db.rawQuery(sql, args);
         cursor.moveToFirst();
         
@@ -54,13 +58,18 @@ public class DBAdapter implements IDBAdapter {
 			args = formatParams (params);
 		}
 		
-		this.db = dbHelper.getWritableDatabase();
+		//db = dbHelper.getWritableDatabase();
 		db.execSQL(sql, args);
-		db.close();
+		//db.close();
 		
 	}
 	
-	
+	public void openDatabase (String nome){
+		Database database = readXML (ctx);
+		dbHelper = new DBHelper(ctx, database);
+		db = dbHelper.getWritableDatabase();
+	}
+		
 	private String[] formatParams(List<String> params){
 		String[] args = null;
 		if (params != null){
