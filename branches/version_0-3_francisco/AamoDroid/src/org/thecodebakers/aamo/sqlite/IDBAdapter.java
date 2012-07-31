@@ -3,7 +3,6 @@ package org.thecodebakers.aamo.sqlite;
 import java.util.List;
 
 import android.database.Cursor;
-import android.database.SQLException;
 
 /**
  * DAO Interface.
@@ -39,6 +38,16 @@ public interface IDBAdapter {
 	 */
 	public int getDatabaseVersion();
 	
+	/**
+	 * open the database
+	 * @param nome
+	 */
 	public void openDatabase (String nome);
+	
+	/**
+	 * close the database
+	 * @param nome
+	 */
+	public void closeDatabase (String nome);
 	
 }
