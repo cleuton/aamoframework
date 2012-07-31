@@ -74,6 +74,14 @@ public class DBAdapter implements IDBAdapter {
 			db = dbHelper.getWritableDatabase();
 		}	
 	}
+	
+	public void closeDatabase (String nome){
+		if (db != null){
+		   if(db.isOpen()){
+			   db.close();
+		   }
+		}
+	}
 		
 	private String[] formatParams(List<String> params){
 		String[] args = null;
@@ -88,8 +96,8 @@ public class DBAdapter implements IDBAdapter {
 	}
 	
 	public int getDatabaseVersion() {
-		return DBHelper.databaseVersion;
+		return 0;//DBHelper.databaseVersion;
 	}
-
+	
 	
 }
