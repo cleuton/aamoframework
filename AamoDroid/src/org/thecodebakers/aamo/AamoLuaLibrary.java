@@ -774,5 +774,41 @@ public class AamoLuaLibrary {
 		  return args;
 	}
 	
-	
+	/**
+	 * clode database 
+	 * @param L
+	 * @return int
+	 * @throws LuaException
+	 */
+	public static int m_closeDatabase(LuaState L) throws LuaException
+	{
+		    
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("closeDatabase");
+		  L.pushJavaFunction(new JavaFunction(L) {
+			  public int execute() throws LuaException {
+				   if (L.getTop() > 1) {
+				    	  
+				    	  LuaObject d = getParam(2); // database name
+				    	  if (d == null) {
+				    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
+				    		  return 0;
+				    	  }
+				    	  else {
+				    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
+					    	  adapter.closeDatabase(d.getString()); 
+				    	  } 	
+				          return 1;
+				   }
+				   else {
+				   	  AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+				   	  return 0;
+				  }  
+			   }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	 }
 }
