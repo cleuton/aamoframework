@@ -22,6 +22,7 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_close\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_eof\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_openDatabase\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_closeDatabase\")\r\n		
     </string>
 	<string name="lua_10">Parâmetro faltando.</string>
 	<string name="lua_11">Arquivo não encontrado.</string>
