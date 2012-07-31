@@ -15,20 +15,20 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 	
-	    private static String databaseName = "contatos.db";;
-	    public static  int databaseVersion = 1;
-	    private static String tableName = "contato";
+	    private static String databaseName; // = "contatos.db";;
+	    public  int databaseVersion; 		// = 1;
+	    private String tableName;		    // = "contato";
 	    private Context context;
 	    Database database;
 	    static String[] colunas;
 	    private static final String TAG = "AAMO";
 	    private SQLiteDatabase db;
 	    
-	    
+	    /*
 		public DBHelper(Context context) {
 			super(context, databaseName, null, databaseVersion);
 			this.context = context;
-		}
+		}*/
 		
 		public DBHelper(Context context, Database database) {
 			super(context, database.getName(), null, database.getVersion());
@@ -39,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		@Override
         public void onCreate(SQLiteDatabase db) {
              Log.d(TAG, "onCreate...");
+             
              /*
              db.execSQL("CREATE TABLE " + tableName + " (id INTEGER PRIMARY KEY, nome varchar(50), " +
             		  	 " endereco varchar(50), email varchar(50))");
@@ -49,6 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
             		     " values (NULL, 'Aamo db', 'rua 1 qda 2', 'fcmr@aamo.com')");
             
              Log.d(TAG, " Dados insetidos com sucesso tabela : " + tableName);*/
+             
              onCreateDB (db);
         }
 		 
@@ -114,7 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		     Log.d(TAG, "updating the database");
 		    
 		     if ((newVersion - oldVersion) > 2) {
-		    	 Log.d("HPPFree", "the database will be update");
+		    	 Log.d(TAG, "the database will be update");
 		    	 db.execSQL("DROP TABLE IF EXISTS " + tableName);
 		    	 onCreate(db);
 		     }
