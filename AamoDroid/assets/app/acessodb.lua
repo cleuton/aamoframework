@@ -14,6 +14,10 @@ while not aamo.eof("consulta") do
 end
 
 
---close the cursor 
+-- close the cursor 
 aamo.close("consulta")
 aamo.log("fechou o cursor consulta")
+
+-- close de database
+aamo.closeDatabase("consulta")
+aamo.log("fechou o banco de dados")
