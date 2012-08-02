@@ -738,6 +738,21 @@ public class AamoLuaLibrary {
 		  L.setTable(-3);
 		  return 1;
 	}
-
 	
+	//m_showMenu
+
+	public static int m_showMenu(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("showMenu");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		      selfRef.openOptionsMenu();
+		      return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
 }
