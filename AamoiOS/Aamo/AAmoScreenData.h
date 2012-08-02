@@ -16,4 +16,6 @@
 @property (strong, nonatomic) NSString * onEndScript;
 @property (strong, nonatomic) NSString * onLeaveScript;
 @property (strong, nonatomic) NSString * onBackScript;
+@property (strong, nonatomic) NSString * onMenuSelected;
+@property (strong, nonatomic) NSMutableArray * menuOptions;
 @end

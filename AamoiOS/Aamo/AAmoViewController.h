@@ -44,4 +44,5 @@
 - (void) setListBox:(double)d text:(NSString*)textoMsg;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 - (void) clearListBoxControl: (double) idl;
+- (void) showScreenMenu;
 @end
