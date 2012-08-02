@@ -26,6 +26,8 @@ public class DynaView {
 	public String onChangeScript;
 	public String onClickScript;
 	public String onElementSelected;
+	
 	public List<String> listElements;
+	
 	public View view;
 }

@@ -7,7 +7,13 @@
      onLoadScript: nome do arquivo ".lua" que será invocado na carga da tela
      onEndScript: nome do arquivo ".lua" que será invocado no final da aplicação
      -->
-    <version>0.2</version>
+    <menu>
+    	<option>Opção Zero</option>
+    	<option>Opção Um</option>
+    	<option>Opção Dois</option>
+    	<onMenuSelected>lua::aamo.showMessage(aamo.getGlobalParameter("aamo::selectedMenuText"))</onMenuSelected>
+    </menu>
+    <version>0.3</version>
     <uiid>1</uiid>
     <title>Teste AAMO</title>
     <onLoadScript></onLoadScript>
@@ -67,10 +73,10 @@
         <type>3</type>
         <percentTop>40</percentTop>
         <percentLeft>0</percentLeft>
-        <percentWidth>15</percentWidth>
+        <percentWidth>20</percentWidth>
         <percentHeight>10</percentHeight>
-        <text>Ok</text>
-        <onClickScript>toqueBotao</onClickScript>
+        <text>Menu</text>
+        <onClickScript>lua::aamo.showMenu()</onClickScript>
     </element>
     <element>
         <id>9</id>

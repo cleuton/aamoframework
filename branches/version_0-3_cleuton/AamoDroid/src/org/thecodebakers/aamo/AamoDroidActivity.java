@@ -28,6 +28,8 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -53,10 +55,13 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	public static final double VERSION = 0.3;
 	public static final int MACRO_UI = 1;
 	public static final int  MACRO_ELEMENT = 2;
+	public static final int  MACRO_MENU = 3;
 	public static final String AAMOL10N = "aamol10n";
 	public static final String AAMOL10N_MARKER = "l10n::";
 	public static final String GLOBAL_LISTBOX_INDEX = "aamo::selectedIndex";
 	public static final String GLOBAL_LISTBOX_TEXT = "aamo::selectedText";
+	public static final String GLOBAL_MENU_INDEX = "aamo::selectedMenuIndex";
+	public static final String GLOBAL_MENU_TEXT = "aamo::selectedMenuText";
 	protected List<DynaView> dynaViews;
 	
 	protected ScreenData screenData;
@@ -278,10 +283,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 
 	protected boolean loadUI(int screenId) throws AamoException {
 		
-		/***************************************************************
-		 * Falta testar se já existe uma tela com esse id na pilha....
-		 ***************************************************************/
-		
+	
 		InputStream istr;
 		boolean resultado = true;
 		try {
@@ -328,14 +330,24 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	        screenData.onEndScript = null;
 	        	        currentMacro = MACRO_UI;
 	        	    }
+	        	    else if (currentElementName.equals("menu")) {
+	        	    	currentMacro = MACRO_MENU;
+	        	    	screenData.menuOptions = new ArrayList<String>();
+	        	    }
 
 	        	} 
 	        	else if(eventType == XmlPullParser.END_TAG) {
-	        	    if (xpp.getName().equals("ui") ||
-	        	    		xpp.getName().equals("element")) {
-	        	    		eventType = xpp.next();
-	        	    		continue;
-	        	        }
+		        	    if (xpp.getName().equals("ui") ||
+		        	    		xpp.getName().equals("element")) {
+		        	    		eventType = xpp.next();
+		        	    		continue;
+		        	    }
+		        	    if (xpp.getName().equals("menu")) {
+		        	    	// temos que voltar ao macro_ui
+		        	    	currentMacro = MACRO_UI;
+		        	    	eventType = xpp.next();
+		        	    	continue;
+		        	    }
 	        	        if (currentMacro == MACRO_UI) {
 	        	            if (currentElementName.equals("ui")) {
 	        	                if (currentElementName.equals("version")) {
@@ -408,6 +420,15 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	            }
 
 	        	        }
+	        	        else if (currentMacro == MACRO_MENU) {
+	        	        	 if (currentElementName.equals("option")) {
+	        	        		 	screenData.menuOptions.add(currentStringValue.trim());
+		        	         }
+	        	        	 else if (currentElementName.equals("onMenuSelected")) {
+	        	        		 	screenData.onMenuSelected = currentStringValue.trim();
+	        	        	 }
+	        	        }
+	        	        	
 
 	        	        currentStringValue = null;
 	        	} 
@@ -572,4 +593,54 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
         }
 		
 	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean retorno = false;
+		if (screenData.menuOptions != null) {
+			menu.clear();
+			for (String texto : screenData.menuOptions) {
+				MenuItem item = menu.add(texto);
+			}
+			retorno = true;
+		}
+		return retorno;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int posicao = screenData.menuOptions.indexOf(item.getTitle().toString());
+		GlobalParameter gp = new GlobalParameter();
+		gp.setName(GLOBAL_MENU_INDEX);
+		if (globalParameters.contains(gp)) {
+			gp = globalParameters.get(globalParameters.indexOf(gp));
+			gp.setJavaObject(new Integer(posicao));
+		}
+		else {
+			gp.setJavaObject(new Integer(posicao));
+			globalParameters.add(gp);
+		}
+		gp = new GlobalParameter();
+		gp.setName(GLOBAL_MENU_TEXT);
+		if (globalParameters.contains(gp)) {
+			gp = globalParameters.get(globalParameters.indexOf(gp));
+			gp.setJavaObject(item.getTitle().toString());
+		}
+		else {
+			gp.setJavaObject(item.getTitle().toString());
+			globalParameters.add(gp);
+		}
+		if (screenData.onMenuSelected != null && screenData.onMenuSelected.length() > 0) {
+			execLua(screenData.onMenuSelected);
+		}
+		return true;
+	}
+
+	@Override
+	public void onBackPressed() {
+		AamoLuaLibrary.exitScreen();
+	}
+	
+	
+	
 }
