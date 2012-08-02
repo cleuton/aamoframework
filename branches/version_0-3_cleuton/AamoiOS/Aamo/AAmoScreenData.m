@@ -15,4 +15,6 @@
 @synthesize onLoadScript;
 @synthesize onBackScript;
 @synthesize onLeaveScript;
+@synthesize menuOptions;
+@synthesize onMenuSelected;
 @end

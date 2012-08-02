@@ -13,6 +13,7 @@
 #define VERSION 0.3
 #define MACRO_UI 1
 #define MACRO_ELEMENT 2
+#define MACRO_MENU 3
 #define L10N_PREFIX @"l10n::"
 #define TEXTBOX 1
 #define LABEL 2
@@ -21,6 +22,8 @@
 #define LISTBOX 5
 #define GLOBAL_LISTBOX_INDEX @"aamo::selectedIndex"
 #define GLOBAL_LISTBOX_TEXT  @"aamo::selectedText";
+#define GLOBAL_MENU_INDEX @"aamo::selectedMenuIndex"
+#define GLOBAL_MENU_TEXT  @"aamo::selectedMenuText";
 
 
 
@@ -551,6 +554,11 @@ static int clearListBox(lua_State *L) {
     
 }
 
+static int showMenu(lua_State *L) {
+    [ponteiro showScreenMenu];
+    return 0;
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -570,6 +578,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"getGlobalParameter", getGlobalParameter},
     {"addListBoxOption", addListBoxOption},
     {"clearListBox", clearListBox},
+    {"showMenu", showMenu},
     {NULL, NULL}
 };
 
@@ -583,6 +592,60 @@ int luaopen_mylib (lua_State *L) {
 
 
 //*****************************************************************
+
+- (void) showScreenMenu
+{
+    UIActionSheet * sheet;
+    if (screenData.menuOptions != nil && [screenData.menuOptions count] > 0) {
+        sheet = [[UIActionSheet alloc] initWithTitle:nil
+                                            delegate:self
+                                   cancelButtonTitle:@"X"
+                              destructiveButtonTitle:nil
+                                   otherButtonTitles: nil];
+        for (NSString * option in screenData.menuOptions) {
+            [sheet addButtonWithTitle:[self checkL10N: option]];
+        }
+        
+        // Show the sheet
+        [sheet showInView:self.view];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    AAmoGlobalParameter * gp = [[AAmoGlobalParameter alloc] init];
+    gp.name = GLOBAL_MENU_INDEX;
+    
+    if ([ponteiro.globalParameters containsObject:gp]) {;
+        gp = [ponteiro.globalParameters objectAtIndex:[ponteiro.globalParameters indexOfObject:gp]];
+    }
+    else {
+        [ponteiro.globalParameters addObject:gp];
+    }
+    gp.object = [NSNumber numberWithInteger:buttonIndex];
+    gp.type = 2;
+    
+    //NSLog(@"gp.name: %@, object: %d", gp.name, [((NSNumber*) gp.object) intValue]);
+    
+    gp = [[AAmoGlobalParameter alloc] init];
+    gp.name = GLOBAL_MENU_TEXT;
+    
+    if ([ponteiro.globalParameters containsObject:gp]) {;
+        gp = [ponteiro.globalParameters objectAtIndex:[ponteiro.globalParameters indexOfObject:gp]];
+    }
+    else {
+        [ponteiro.globalParameters addObject:gp];
+    }
+    gp.object = [self checkL10N:[screenData.menuOptions objectAtIndex:buttonIndex]];
+    gp.type = 1;
+    
+    //NSLog(@"gp.name: %@, object: %@", gp.name, (NSString*)gp.object);
+    
+    if (screenData.onMenuSelected != nil) {
+        [self execLua:screenData.onMenuSelected];
+    }
+    
+}
 
 - (void) setListBox:(double)d text:(NSString*)textoMsg
 {
@@ -1061,6 +1124,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         screenData.onEndScript = nil;
         currentMacro = MACRO_UI;
     }
+    else if ([elementName isEqualToString:@"menu"]) {
+        currentMacro = MACRO_MENU;
+        screenData.menuOptions = [[NSMutableArray alloc] init];
+    }
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
@@ -1075,6 +1142,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([elementName isEqualToString:@"ui"] ||
         [elementName isEqualToString:@"element"]) {
+        return;
+    }
+    if ([elementName isEqualToString:@"menu"]) {
+        // temos que voltar ao macro_ui
+        currentMacro = MACRO_UI;
         return;
     }
     if (currentMacro == MACRO_UI) {
@@ -1153,11 +1225,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
         
     }
+    else if (currentMacro == MACRO_MENU) {
+        if ([currentElementName isEqualToString:@"option"]) {
+            [screenData.menuOptions addObject:[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
+        else if ([currentElementName isEqualToString:@"onMenuSelected"]) {
+            screenData.onMenuSelected = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+    }
     
     currentStringValue = nil;
 }
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError 
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     NSString * mensagem = [NSString stringWithFormat:@"%@ line: %i Column: %i", 
                            [[parser parserError] localizedDescription], [parser lineNumber],
