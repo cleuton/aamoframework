@@ -103,12 +103,25 @@
         <id>7</id>
         <type>3</type>
         <percentTop>60</percentTop>
-        <percentLeft>50</percentLeft>
+        <percentLeft>40</percentLeft>
         <percentWidth>30</percentWidth>
         <percentHeight>10</percentHeight>
         <text>Change Text</text>
         <onClickScript>lua::aamo.setTextField(1,"OK")</onClickScript>
     </element>
+       
+    <element>
+        <id>10</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>70</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Tela 5</text>
+        <onClickScript>lua::aamo.loadScreen(5)</onClickScript>
+    </element>       
+       
+ 
     <element>
         <id>6</id>
         <type>3</type>
