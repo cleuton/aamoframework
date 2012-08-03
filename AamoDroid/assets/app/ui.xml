@@ -20,6 +20,7 @@
     <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
     <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 1")</onLeaveScript>
     <onBackScript>lua::aamo.log("BACK SCRIPT TELA 1")</onBackScript>
+    <backgroundColor>#00BFFF</backgroundColor>
     <element>
         <!--
          id: id do elemento
