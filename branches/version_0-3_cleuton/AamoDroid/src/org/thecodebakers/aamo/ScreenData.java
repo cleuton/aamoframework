@@ -2,6 +2,7 @@ package org.thecodebakers.aamo;
 
 import java.util.List;
 
+import android.graphics.Color;
 import android.widget.RelativeLayout;
 
 public class ScreenData {
@@ -14,4 +15,5 @@ public class ScreenData {
     public RelativeLayout dvLayout;
     public List<String> menuOptions;
     public String onMenuSelected;
+    public int bgColor;
 }

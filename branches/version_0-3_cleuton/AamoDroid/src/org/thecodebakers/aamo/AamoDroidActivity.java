@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -136,11 +137,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         dvLayout = new RelativeLayout(this.getApplicationContext());
         dvLayout.setLayoutParams(rlParams);
-        
+        dvLayout.setBackgroundColor(screenData.bgColor);
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int screenHeight = metrics.heightPixels;
 		int screenWidth = metrics.widthPixels;
+		
 	    for(DynaView dv : dynaViews) {
 	    	
 	        int height = (int) Math.round((dv.percentHeight / 100.00f) * (float)screenHeight);
@@ -377,6 +379,9 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	            else if (currentElementName.equals("onBackScript")) {
 	        	            	screenData.onBackScript = currentStringValue.trim();
 	        	            }
+	        	            else if (currentElementName.equals("backgroundColor")) {
+	        	            	screenData.bgColor = checkColor(currentStringValue.trim());
+	        	            }
 	        	        }
 	        	        else if (currentMacro == MACRO_ELEMENT) {
 	        	            
@@ -454,6 +459,26 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		return resultado;
 	}
     
+	private int checkColor(String htmlCode) {
+		// #FFCCDD
+		// 0123456
+		int color = Color.BLACK;
+		if (htmlCode != null &&
+				htmlCode.length() == 7 &&
+				htmlCode.charAt(0) == '#') {
+			try {
+				int cRed   = Integer.parseInt(htmlCode.substring(1, 3),16);
+				int cGreen = Integer.parseInt(htmlCode.substring(3, 5),16);
+				int cBlue  = Integer.parseInt(htmlCode.substring(5),16);
+				color = Color.rgb(cRed, cGreen, cBlue);
+			}
+			catch (NumberFormatException nfe) {
+				
+			}
+		}
+		return color;
+	}
+
 	protected void showAlertMessage(String msg) {
 		new AlertDialog.Builder(this).setMessage(msg)
         .setNeutralButton("OK", new DialogInterface.OnClickListener() {
