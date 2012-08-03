@@ -35,6 +35,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -265,6 +268,23 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                }
 	            	break;
 	            }
+	            
+	            case WEBBOX: {
+	            	WebView wv = new WebView(this);
+	            	RelativeLayout.LayoutParams params4 = new RelativeLayout.LayoutParams((int)width, (int)height);
+	            	params4.leftMargin = (int) left;
+	            	params4.topMargin = (int) top;
+	            	dvLayout.addView(wv, params4);
+	                dv.view = wv;
+	                wv.setTag(dv.id);
+	                wv.setWebViewClient(new WebCallback());
+	                WebSettings webSettings = wv.getSettings();
+	                webSettings.setJavaScriptEnabled(true);
+	                if (dv.url != null && dv.url.length() > 0) {
+	                	wv.loadUrl(dv.url);
+	                }
+	            	break;
+	            }
 	                
 	        }
 	        
@@ -422,6 +442,9 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	            }
 	        	            else if (currentElementName.equals("onElementSelected")) {
 	        	                currentElement.onElementSelected = currentStringValue.trim();
+	        	            }
+	        	            else if (currentElementName.equals("url")) {
+	        	                currentElement.url = this.checkL10N(currentStringValue.trim());
 	        	            }
 
 	        	        }
@@ -671,6 +694,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	
+	private class WebCallback extends WebViewClient { 
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return (false);
+        }
+
+    }
 	
 }
