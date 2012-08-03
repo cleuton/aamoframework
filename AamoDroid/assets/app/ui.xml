@@ -8,7 +8,7 @@
      onEndScript: nome do arquivo ".lua" que será invocado no final da aplicação
      -->
     <menu>
-    	<option>Opção Zero</option>
+    	<option>l10n::first</option>
     	<option>Opção Um</option>
     	<option>Opção Dois</option>
     	<onMenuSelected>lua::aamo.showMessage(aamo.getGlobalParameter("aamo::selectedMenuText"))</onMenuSelected>

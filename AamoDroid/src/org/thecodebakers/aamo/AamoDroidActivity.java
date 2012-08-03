@@ -600,7 +600,7 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		if (screenData.menuOptions != null) {
 			menu.clear();
 			for (String texto : screenData.menuOptions) {
-				MenuItem item = menu.add(texto);
+				MenuItem item = menu.add(this.checkL10N(texto));
 			}
 			retorno = true;
 		}
@@ -624,10 +624,10 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		gp.setName(GLOBAL_MENU_TEXT);
 		if (globalParameters.contains(gp)) {
 			gp = globalParameters.get(globalParameters.indexOf(gp));
-			gp.setJavaObject(item.getTitle().toString());
+			gp.setJavaObject(this.checkL10N(item.getTitle().toString()));
 		}
 		else {
-			gp.setJavaObject(item.getTitle().toString());
+			gp.setJavaObject(this.checkL10N(item.getTitle().toString()));
 			globalParameters.add(gp);
 		}
 		if (screenData.onMenuSelected != null && screenData.onMenuSelected.length() > 0) {
@@ -638,7 +638,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		AamoLuaLibrary.exitScreen();
+		if (screenStack.size() > 1) {
+			AamoLuaLibrary.exitScreen();
+		}
+		else {
+			super.onBackPressed();
+		}
 	}
 	
 	
