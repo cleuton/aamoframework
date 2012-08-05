@@ -45,4 +45,5 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 - (void) clearListBoxControl: (double) idl;
 - (void) showScreenMenu;
+- (void) urlNavigate:(double) idc to:(NSString*) url;
 @end

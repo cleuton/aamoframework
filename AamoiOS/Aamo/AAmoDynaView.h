@@ -28,4 +28,5 @@
 @property (strong, nonatomic) NSString * onElementSelected;
 @property (weak, nonatomic) UIView * view;
 @property (strong, nonatomic) NSMutableArray * listBoxElements;
+@property (strong, nonatomic) NSString * url;
 @end
