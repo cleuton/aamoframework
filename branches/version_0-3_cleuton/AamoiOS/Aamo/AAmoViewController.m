@@ -953,6 +953,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     CGRect  viewRect = CGRectMake(0, 0, screenSize.width, screenSize.height);
     UIControl * mView = [[UIControl alloc] initWithFrame:viewRect];
     [mView addTarget:self action:@selector(dismissKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    [mView setBackgroundColor:screenData.bgColor];
     for(id el in dynaViews) {
         dv = el;
         float height = (dv.percentHeight / 100) * screenSize.height;
@@ -1180,7 +1181,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         else if ([currentElementName isEqualToString: @"onBackScript"]) {
             screenData.onBackScript = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
-
+        else if ([currentElementName isEqualToString:@"backgroundColor"]) {
+            screenData.bgColor = [self checkColor: [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
     }
     else if (currentMacro == MACRO_ELEMENT) {
         
@@ -1235,6 +1238,41 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     
     currentStringValue = nil;
+}
+
+- (UIColor *) checkColor: (NSString *) htmlCode
+{
+    // #FFCCDD
+    // 0123456
+    UIColor * color = [UIColor whiteColor];
+    if (htmlCode != nil &&
+        [htmlCode length] == 7 &&
+        [htmlCode characterAtIndex:0] == '#') {
+        
+        unsigned int cRed = 0;
+        NSScanner *scanner = [NSScanner scannerWithString:
+                              [htmlCode substringWithRange:NSMakeRange(1, 2)]
+                              ];
+        if ([scanner scanHexInt:&cRed] == YES) {
+            unsigned int cGreen = 0;
+            scanner = [NSScanner scannerWithString:
+                       [htmlCode substringWithRange:NSMakeRange(3, 2)]
+                       ];
+            if ([scanner scanHexInt:&cGreen]) {
+                unsigned int cBlue = 0;
+                scanner = [NSScanner scannerWithString:
+                           [htmlCode substringWithRange:NSMakeRange(5, 2)]
+                           ];
+                if ([scanner scanHexInt:&cBlue]) {
+                    color = [UIColor colorWithRed:(cRed / 255.0)
+                                            green:(cGreen / 255.0)
+                                             blue:(cBlue / 255.0)
+                                            alpha:(1.0)];
+                }
+            }
+        }
+    }
+    return color;
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
