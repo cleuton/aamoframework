@@ -20,6 +20,7 @@
 #define BUTTON 3
 #define CHECKBOX 4
 #define LISTBOX 5
+#define WEBBOX 6
 #define GLOBAL_LISTBOX_INDEX @"aamo::selectedIndex"
 #define GLOBAL_LISTBOX_TEXT  @"aamo::selectedText";
 #define GLOBAL_MENU_INDEX @"aamo::selectedMenuIndex"
@@ -559,6 +560,32 @@ static int showMenu(lua_State *L) {
     return 0;
 }
 
+static int navigateTo(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1); // id
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ;
+            return 0;
+    	}
+    	
+    	const char *url = lua_tostring(L, -1); // text
+        if (url == nil){
+            globalErrorCode = errorCode_12 ;
+		   	return 0;
+        }
+        else {
+		    NSString *textoUrl = [NSString stringWithCString:url encoding:[NSString defaultCStringEncoding]];
+    		[ponteiro urlNavigate:d to:textoUrl];
+	    	return 0;
+        }
+	}
+	else {
+		globalErrorCode = errorCode_10 ;
+		return 0;
+	}
+
+}
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -579,6 +606,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"addListBoxOption", addListBoxOption},
     {"clearListBox", clearListBox},
     {"showMenu", showMenu},
+    {"navigateTo", navigateTo},
     {NULL, NULL}
 };
 
@@ -592,6 +620,20 @@ int luaopen_mylib (lua_State *L) {
 
 
 //*****************************************************************
+
+- (void) urlNavigate:(double) idc to:(NSString*) wurl
+{
+    
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == idc && dv.type == WEBBOX) {
+            UIWebView * wv = (UIWebView *) dv.view;
+            NSURL *url = [NSURL URLWithString:[self checkL10N:wurl]];
+            NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+            [wv loadRequest:requestObj];
+            break;
+        }
+    }
+}
 
 - (void) showScreenMenu
 {
@@ -1020,10 +1062,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                 [mView addSubview:tv];
                 break;
             }
-                
+            case WEBBOX: {
+                UIWebView *wv = [[UIWebView alloc] initWithFrame:CGRectMake(left, top, width, height)];
+                dv.view = wv;
+                wv.tag = dv.id;
+                [mView addSubview:wv];
+                if (dv.url != nil && [dv.url length] > 0) {
+                    NSURL *url = [NSURL URLWithString:dv.url];
+                    NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+                    [wv loadRequest:requestObj];
+                }
+                break;
+            }
         }
-        
-        
     }
     
     [viewStack addObject:mView];
@@ -1225,7 +1276,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         else if ([currentElementName isEqualToString: @"onElementSelected"]) {
             currentElement.onElementSelected = [currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
-
+        else if ([currentElementName isEqualToString:@"url"]) {
+            currentElement.url = [self checkL10N:[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
         
     }
     else if (currentMacro == MACRO_MENU) {

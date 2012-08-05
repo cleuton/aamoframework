@@ -22,6 +22,7 @@
 @synthesize onElementSelected;
 @synthesize view;
 @synthesize listBoxElements;
+@synthesize url;
 
 - (id)init
 {
