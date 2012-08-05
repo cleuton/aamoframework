@@ -18,4 +18,5 @@
 @property (strong, nonatomic) NSString * onBackScript;
 @property (strong, nonatomic) NSString * onMenuSelected;
 @property (strong, nonatomic) NSMutableArray * menuOptions;
+@property (strong, nonatomic) UIColor * bgColor;
 @end

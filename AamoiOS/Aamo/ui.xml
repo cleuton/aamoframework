@@ -24,6 +24,7 @@
         <option>Opção 13</option>
     	<onMenuSelected>lua::aamo.showMessage(aamo.getGlobalParameter("aamo::selectedMenuText"))</onMenuSelected>
     </menu>
+    <backgroundColor>#00BFFF</backgroundColor>
     <version>0.3</version>
     <uiid>1</uiid>
     <title>Teste AAMO</title>

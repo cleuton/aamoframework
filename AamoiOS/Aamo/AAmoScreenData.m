@@ -17,4 +17,5 @@
 @synthesize onLeaveScript;
 @synthesize menuOptions;
 @synthesize onMenuSelected;
+@synthesize bgColor;
 @end
