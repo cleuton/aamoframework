@@ -46,4 +46,5 @@
 - (void) clearListBoxControl: (double) idl;
 - (void) showScreenMenu;
 - (void) urlNavigate:(double) idc to:(NSString*) url;
+- (void) setPictureNow: (double) ib file: (NSString *) picture;
 @end
