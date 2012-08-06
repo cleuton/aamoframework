@@ -39,4 +39,16 @@
         <onClickScript>lua::aamo.navigateTo(1,"l10n::murl")</onClickScript>
     </element>
     
+    <element>
+        <id>4</id>
+        <type>7</type>
+        <percentTop>75</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>100</percentWidth>
+        <percentHeight>30</percentHeight>
+        <picture>l10n::imagem</picture>
+        <stretch>1</stretch>
+        <onClickScript>lua::aamo.showMessage("Clicou Imagem")</onClickScript>
+    </element>
+    
 </ui>

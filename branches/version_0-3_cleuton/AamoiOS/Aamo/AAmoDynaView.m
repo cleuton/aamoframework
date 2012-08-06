@@ -23,6 +23,8 @@
 @synthesize view;
 @synthesize listBoxElements;
 @synthesize url;
+@synthesize picture;
+@synthesize stretch;
 
 - (id)init
 {

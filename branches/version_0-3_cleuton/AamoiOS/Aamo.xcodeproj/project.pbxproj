@@ -48,6 +48,9 @@
 		A61F9F31158900750024B18B /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0F158900750024B18B /* lzio.c */; };
 		A61F9F33158900750024B18B /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F12158900750024B18B /* print.c */; };
 		A63416A515B61B0A00845252 /* AAmoResourceBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = A63416A415B61B0A00845252 /* AAmoResourceBundle.m */; };
+		A648B90A15CFCA32008B70F1 /* brasil.png in Resources */ = {isa = PBXBuildFile; fileRef = A648B90715CFCA32008B70F1 /* brasil.png */; };
+		A648B90B15CFCA32008B70F1 /* eua.png in Resources */ = {isa = PBXBuildFile; fileRef = A648B90815CFCA32008B70F1 /* eua.png */; };
+		A648B90C15CFCA32008B70F1 /* gb.png in Resources */ = {isa = PBXBuildFile; fileRef = A648B90915CFCA32008B70F1 /* gb.png */; };
 		A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */ = {isa = PBXBuildFile; fileRef = A6655C8615AA08EC00E16689 /* AAmoScreenData.m */; };
 		A67AB11315BE05C7004CDAC9 /* AAmoGlobalParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */; };
 		A6B2BEB215C27A0900FE5F56 /* prepararlista.lua in Resources */ = {isa = PBXBuildFile; fileRef = A6B2BEA715C27A0900FE5F56 /* prepararlista.lua */; };
@@ -136,6 +139,9 @@
 		A61F9F12158900750024B18B /* print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = print.c; sourceTree = "<group>"; };
 		A63416A315B61B0A00845252 /* AAmoResourceBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoResourceBundle.h; sourceTree = "<group>"; };
 		A63416A415B61B0A00845252 /* AAmoResourceBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoResourceBundle.m; sourceTree = "<group>"; };
+		A648B90715CFCA32008B70F1 /* brasil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brasil.png; sourceTree = "<group>"; };
+		A648B90815CFCA32008B70F1 /* eua.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eua.png; sourceTree = "<group>"; };
+		A648B90915CFCA32008B70F1 /* gb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gb.png; sourceTree = "<group>"; };
 		A6655C8515AA08EC00E16689 /* AAmoScreenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoScreenData.h; sourceTree = "<group>"; };
 		A6655C8615AA08EC00E16689 /* AAmoScreenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoScreenData.m; sourceTree = "<group>"; };
 		A67AB11115BE05C7004CDAC9 /* AAmoGlobalParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoGlobalParameter.h; sourceTree = "<group>"; };
@@ -233,6 +239,9 @@
 		A61F9E1F1587C3900024B18B /* app */ = {
 			isa = PBXGroup;
 			children = (
+				A648B90715CFCA32008B70F1 /* brasil.png */,
+				A648B90815CFCA32008B70F1 /* eua.png */,
+				A648B90915CFCA32008B70F1 /* gb.png */,
 				A6BDA16815CEF555009FF39A /* aamol10n_en_GB.properties */,
 				A6BDA16915CEF555009FF39A /* aamol10n_en.properties */,
 				A6BDA16A15CEF555009FF39A /* aamol10n.properties */,
@@ -375,6 +384,9 @@
 				A6BDA16B15CEF555009FF39A /* aamol10n_en_GB.properties in Resources */,
 				A6BDA16C15CEF555009FF39A /* aamol10n_en.properties in Resources */,
 				A6BDA16D15CEF555009FF39A /* aamol10n.properties in Resources */,
+				A648B90A15CFCA32008B70F1 /* brasil.png in Resources */,
+				A648B90B15CFCA32008B70F1 /* eua.png in Resources */,
+				A648B90C15CFCA32008B70F1 /* gb.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

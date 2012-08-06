@@ -21,6 +21,7 @@
 #define CHECKBOX 4
 #define LISTBOX 5
 #define WEBBOX 6
+#define IMAGEBOX 7
 #define GLOBAL_LISTBOX_INDEX @"aamo::selectedIndex"
 #define GLOBAL_LISTBOX_TEXT  @"aamo::selectedText";
 #define GLOBAL_MENU_INDEX @"aamo::selectedMenuIndex"
@@ -586,6 +587,35 @@ static int navigateTo(lua_State *L) {
 
 }
 
+//setPicture
+static int setPicture(lua_State *L) {
+    if (lua_gettop (L)>0){
+	    double d = lua_tonumber(L, 1); // id
+	    if (d == 0){
+            globalErrorCode = errorCode_12 ;
+            return 0;
+    	}
+    	
+    	const char *url = lua_tostring(L, -1); // text
+        if (url == nil){
+            globalErrorCode = errorCode_12 ;
+		   	return 0;
+        }
+        else {
+		    NSString *textoUrl = [NSString stringWithCString:url encoding:[NSString defaultCStringEncoding]];
+            
+            
+	    	return 0;
+        }
+	}
+	else {
+		globalErrorCode = errorCode_10 ;
+		return 0;
+	}
+    
+}
+
+
 static const struct luaL_Reg aamo_f [] = {
     {"getTextField", getTextField},
     {"showMessage", showMessage},
@@ -607,6 +637,7 @@ static const struct luaL_Reg aamo_f [] = {
     {"clearListBox", clearListBox},
     {"showMenu", showMenu},
     {"navigateTo", navigateTo},
+    {"setPicture", setPicture},
     {NULL, NULL}
 };
 
@@ -1074,6 +1105,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                 }
                 break;
             }
+            case IMAGEBOX: {
+                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(left, top, width, height)];
+                dv.view = iv;
+                iv.tag = dv.id;
+                [mView addSubview:iv];
+                if (dv.picture != nil && [dv.picture length] > 0) {
+                    UIImage * imagem = [UIImage imageNamed:dv.picture];
+                    [iv setImage:imagem];
+                    if (dv.stretch == 0) {
+                        [iv sizeToFit];
+                    }
+                }
+            }
         }
     }
     
@@ -1279,6 +1323,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         else if ([currentElementName isEqualToString:@"url"]) {
             currentElement.url = [self checkL10N:[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
         }
+        else if ([currentElementName isEqualToString:@"picture"]) {
+            currentElement.picture = [self checkL10N:[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
+        else if ([currentElementName isEqualToString:@"stretch"]) {
+            currentElement.stretch = [self getStretch:[currentStringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
         
     }
     else if (currentMacro == MACRO_MENU) {
@@ -1291,6 +1341,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     
     currentStringValue = nil;
+}
+
+- (int) getStretch: (NSString *) stretch
+{
+    int resultado = 0;
+    if (stretch != nil && [stretch length] == 1) {
+        if ([stretch isEqualToString:@"1"]) {
+            resultado = 1;
+        }
+    }
+    return resultado;
 }
 
 - (UIColor *) checkColor: (NSString *) htmlCode
