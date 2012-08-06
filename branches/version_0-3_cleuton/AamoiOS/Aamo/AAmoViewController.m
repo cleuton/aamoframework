@@ -604,7 +604,7 @@ static int setPicture(lua_State *L) {
         else {
 		    NSString *textoUrl = [NSString stringWithCString:url encoding:[NSString defaultCStringEncoding]];
             
-            
+            [ponteiro setPictureNow:d file:textoUrl];
 	    	return 0;
         }
 	}
@@ -650,7 +650,23 @@ int luaopen_mylib (lua_State *L) {
 
 
 
-//*****************************************************************
+//*****************************************************************************************************
+
+- (void) setPictureNow:(double)ib file:(NSString *)picture
+{
+    for (AAmoDynaView * dv in dynaViews) {
+        if (dv.id == ib && dv.type == IMAGEBOX) {
+            UIImage * image = [UIImage imageNamed:picture];
+            UIImageView * iv = (UIImageView *) dv.view;
+            [iv setImage:image];
+            if (dv.stretch == 0) {
+                [iv sizeToFit];
+            }
+
+            break;
+        }
+    }
+}
 
 - (void) urlNavigate:(double) idc to:(NSString*) wurl
 {
@@ -1112,6 +1128,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                 [mView addSubview:iv];
                 if (dv.picture != nil && [dv.picture length] > 0) {
                     UIImage * imagem = [UIImage imageNamed:dv.picture];
+                    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(left, top, width, height)];
+                    [btn setBackgroundColor:[UIColor clearColor]];
+                    btn.tag = dv.id;
+                    [btn addTarget:self action:@selector(imageClick:) forControlEvents:UIControlEventTouchDown];
+                    [mView addSubview:btn];
                     [iv setImage:imagem];
                     if (dv.stretch == 0) {
                         [iv sizeToFit];
@@ -1443,6 +1464,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     for(id el in dynaViews) {
         dv = el;
         if (dv.type == 3) {
+            if (dv.id == ((UIView *)sender).tag) {
+                [self execLua: dv.onClickScript];
+                return;
+            }
+        }
+    }
+    
+    
+}
+
+-(void) imageClick:(id)sender
+{
+    AAmoDynaView *dv = nil;
+    for(id el in dynaViews) {
+        dv = el;
+        if (dv.type == IMAGEBOX) {
             if (dv.id == ((UIView *)sender).tag) {
                 [self execLua: dv.onClickScript];
                 return;
