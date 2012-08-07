@@ -24,6 +24,7 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_clearListBox\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showMenu\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_navigateTo\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setPicture\")\r\n
     </string>
 	<string name="lua_10">Parâmetro faltando.</string>
 	<string name="lua_11">Arquivo não encontrado.</string>

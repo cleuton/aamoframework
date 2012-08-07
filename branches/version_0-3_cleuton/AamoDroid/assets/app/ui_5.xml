@@ -32,11 +32,34 @@
         <id>3</id>
         <type>3</type>
         <percentTop>60</percentTop>
-        <percentLeft>40</percentLeft>
+        <percentLeft>0</percentLeft>
         <percentWidth>30</percentWidth>
         <percentHeight>10</percentHeight>
         <text>Navegar</text>
         <onClickScript>lua::aamo.navigateTo(1,"l10n::murl")</onClickScript>
+    </element>
+    
+    <element>
+        <id>5</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Trocar</text>
+        <onClickScript>lua::aamo.setPicture(4,"brasil.png")</onClickScript>
+    </element>
+    
+    <element>
+        <id>4</id>
+        <type>7</type>
+        <percentTop>75</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>100</percentWidth>
+        <percentHeight>30</percentHeight>
+        <picture>l10n::imagem</picture>
+        <stretch>0</stretch>
+        <onClickScript>lua::aamo.loadScreen(6)</onClickScript>
     </element>
     
 </ui>
