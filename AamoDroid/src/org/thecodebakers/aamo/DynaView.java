@@ -5,7 +5,7 @@ import java.util.List;
 import android.view.View;
 
 public class DynaView {
-	public enum CONTROL_TYPE {NONE, TEXTBOX, LABEL, BUTTON, CHECKBOX, LISTBOX, WEBBOX};
+	public enum CONTROL_TYPE {NONE, TEXTBOX, LABEL, BUTTON, CHECKBOX, LISTBOX, WEBBOX, IMAGEBOX};
 	public static int NOT_INITIALIZED = -1; 
 	public int screenId = NOT_INITIALIZED;
 	public int id = NOT_INITIALIZED;
@@ -27,6 +27,8 @@ public class DynaView {
 	public String onChangeScript;
 	public String onClickScript;
 	public String onElementSelected;
+	public String picture;
+	public boolean stretch;
 	
 	public List<String> listElements;
 	

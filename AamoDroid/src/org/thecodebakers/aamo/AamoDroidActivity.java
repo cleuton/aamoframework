@@ -25,6 +25,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -46,6 +48,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -285,6 +289,45 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	                }
 	            	break;
 	            }
+	            
+	            case IMAGEBOX: {
+	            	final ImageView iv = new ImageView(this);
+	            	RelativeLayout.LayoutParams params4 = new RelativeLayout.LayoutParams((int)width, (int)height);
+	            	params4.leftMargin = (int) left;
+	            	params4.topMargin = (int) top;
+	            	dvLayout.addView(iv, params4);
+	                dv.view = iv;
+	                iv.setTag(dv.id);
+	                iv.setOnClickListener(new OnClickListener() {
+						public void onClick(View arg0) {
+							for (DynaView dv : dynaViews) {
+								if (iv.getTag().equals(new Integer(dv.id))) {
+									if (dv.onClickScript != null && dv.onClickScript.length() > 0) {
+										execLua(dv.onClickScript);
+									}
+									break;
+								}
+							}
+						}
+	                });
+	                if (dv.picture != null && dv.picture.length() > 0) {
+	                	try {
+							InputStream istr = this.getApplicationContext().getAssets().open("app/" + dv.picture);
+							Bitmap bmImg = BitmapFactory.decodeStream(istr);
+		                	iv.setImageBitmap(bmImg);
+						} catch (IOException e) {
+							Log.d("AAMO::Lua","Exception loading IMAGEBOX: " + e.getLocalizedMessage());
+						}
+	                	
+	                }
+	                if (!dv.stretch) {
+	                	iv.setAdjustViewBounds(true);
+	                }
+	                else {
+	                	iv.setScaleType(ScaleType.FIT_XY);
+		                iv.setAdjustViewBounds(false);
+	                }
+	            }
 	                
 	        }
 	        
@@ -446,6 +489,12 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 	        	            else if (currentElementName.equals("url")) {
 	        	                currentElement.url = this.checkL10N(currentStringValue.trim());
 	        	            }
+	        	            else if (currentElementName.equals("picture")) {
+	        	                currentElement.picture = this.checkL10N(currentStringValue.trim());
+	        	            }
+	        	            else if (currentElementName.equals("stretch")) {
+	        	                currentElement.stretch = this.getStretch(currentStringValue.trim());
+	        	            }
 
 	        	        }
 	        	        else if (currentMacro == MACRO_MENU) {
@@ -482,6 +531,18 @@ public class AamoDroidActivity extends Activity implements OnClickListener {
 		return resultado;
 	}
     
+	private boolean getStretch(String tagstretch) {
+		boolean stretch = false;
+		try {
+			int stvalue = Integer.parseInt(tagstretch);
+			stretch = (stvalue == 1) ? true : false;
+		}
+		catch (NumberFormatException nfe) {
+			
+		}
+		return stretch;
+	}
+
 	private int checkColor(String htmlCode) {
 		// #FFCCDD
 		// 0123456

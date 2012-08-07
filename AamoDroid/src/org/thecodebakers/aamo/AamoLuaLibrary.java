@@ -1,19 +1,26 @@
 package org.thecodebakers.aamo;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.keplerproject.luajava.JavaFunction;
 import org.keplerproject.luajava.LuaException;
 import org.keplerproject.luajava.LuaObject;
 import org.keplerproject.luajava.LuaState;
 import org.thecodebakers.aamo.DynaView.CONTROL_TYPE;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 public class AamoLuaLibrary {
 	
@@ -793,6 +800,67 @@ public class AamoLuaLibrary {
 			  });
 		  L.setTable(-3);
 		  return 1;
+	}
+	
+	public static int m_setPicture(LuaState L) throws LuaException {
+		  L.newTable();
+		  L.pushValue(-1);
+		  L.getGlobal("aamo");
+		  L.pushString("setPicture");
+		  L.pushJavaFunction(new JavaFunction(L) {
+		    public int execute() throws LuaException {  
+		    	if (L.getTop() > 1) {
+			    	LuaObject d = getParam(2);
+			    	LuaObject e = getParam(3);
+			    	if (d == null){
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
+				    }
+				    else if (e == null) {
+				       AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode();
+				       return 0;
+				    }
+				    else {
+				       setPicture(d,e);
+				    }
+			    }
+		    	else 
+		    	{
+		    		AamoLuaLibrary.errorCode = Errors.LUA_10.getErrorCode();
+			    }
+			    return 0;
+		    }
+		  });
+		  L.setTable(-3);
+		  return 1;
+	}
+
+	protected static void setPicture(LuaObject d, LuaObject e) {
+		int controle = (int) d.getNumber();
+		for (DynaView dv : selfRef.dynaViews) {			
+			if (dv.view.getTag().equals(new Integer(controle))) {
+				ImageView iv = (ImageView) dv.view;
+                if (dv.picture != null && dv.picture.length() > 0) {
+                	try {
+						InputStream istr = selfRef.getApplicationContext().getAssets().open("app/" + e.getString());
+						Bitmap bmImg = BitmapFactory.decodeStream(istr);
+	                	iv.setImageBitmap(bmImg);
+					} catch (IOException ex) {
+						Log.d("AAMO::Lua","Exception loading IMAGEBOX: " + ex.getLocalizedMessage());
+					}
+                	
+                }
+                if (!dv.stretch) {
+                	iv.setAdjustViewBounds(true);
+                }
+                else {
+                	iv.setScaleType(ScaleType.FIT_XY);
+	                iv.setAdjustViewBounds(false);
+                }
+				break;
+			}
+		}
+		
 	}
 	
 }
