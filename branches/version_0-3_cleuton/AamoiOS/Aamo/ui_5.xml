@@ -59,7 +59,7 @@
         <percentHeight>30</percentHeight>
         <picture>l10n::imagem</picture>
         <stretch>0</stretch>
-        <onClickScript>lua::aamo.showMessage("Clicou Imagem")</onClickScript>
+        <onClickScript>lua::aamo.loadScreen(6)</onClickScript>
     </element>
     
 </ui>

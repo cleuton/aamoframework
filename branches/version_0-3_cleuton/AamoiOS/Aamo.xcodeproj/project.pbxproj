@@ -47,6 +47,7 @@
 		A61F9F30158900750024B18B /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0D158900750024B18B /* lvm.c */; };
 		A61F9F31158900750024B18B /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F0F158900750024B18B /* lzio.c */; };
 		A61F9F33158900750024B18B /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = A61F9F12158900750024B18B /* print.c */; };
+		A633897C15D0FAD100CA3A9D /* ui_6.xml in Resources */ = {isa = PBXBuildFile; fileRef = A633897B15D0FAD100CA3A9D /* ui_6.xml */; };
 		A63416A515B61B0A00845252 /* AAmoResourceBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = A63416A415B61B0A00845252 /* AAmoResourceBundle.m */; };
 		A648B90A15CFCA32008B70F1 /* brasil.png in Resources */ = {isa = PBXBuildFile; fileRef = A648B90715CFCA32008B70F1 /* brasil.png */; };
 		A648B90B15CFCA32008B70F1 /* eua.png in Resources */ = {isa = PBXBuildFile; fileRef = A648B90815CFCA32008B70F1 /* eua.png */; };
@@ -137,6 +138,7 @@
 		A61F9F0F158900750024B18B /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzio.c; sourceTree = "<group>"; };
 		A61F9F10158900750024B18B /* lzio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzio.h; sourceTree = "<group>"; };
 		A61F9F12158900750024B18B /* print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = print.c; sourceTree = "<group>"; };
+		A633897B15D0FAD100CA3A9D /* ui_6.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_6.xml; sourceTree = "<group>"; };
 		A63416A315B61B0A00845252 /* AAmoResourceBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAmoResourceBundle.h; sourceTree = "<group>"; };
 		A63416A415B61B0A00845252 /* AAmoResourceBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAmoResourceBundle.m; sourceTree = "<group>"; };
 		A648B90715CFCA32008B70F1 /* brasil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brasil.png; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				A6B2BEA815C27A0900FE5F56 /* sairDaTela.lua */,
 				A6B2BEA915C27A0900FE5F56 /* tela2.lua */,
 				A6B2BEAA15C27A0900FE5F56 /* toqueBotao.lua */,
+				A633897B15D0FAD100CA3A9D /* ui_6.xml */,
 			);
 			name = app;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				A648B90A15CFCA32008B70F1 /* brasil.png in Resources */,
 				A648B90B15CFCA32008B70F1 /* eua.png in Resources */,
 				A648B90C15CFCA32008B70F1 /* gb.png in Resources */,
+				A633897C15D0FAD100CA3A9D /* ui_6.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
