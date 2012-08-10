@@ -52,7 +52,15 @@
 		A66777B615A4EC770070233D /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B115A4EC770070233D /* tela2.lua */; };
 		A66777B715A4EC770070233D /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B215A4EC770070233D /* toqueBotao.lua */; };
 		A66777B815A4EC770070233D /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B315A4EC770070233D /* ui_2.xml */; };
-		A66777B915A4EC770070233D /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B415A4EC770070233D /* ui.xml */; };
+		F88B275015D1D14F00872B7D /* acessodb.lua in Resources */ = {isa = PBXBuildFile; fileRef = F88B274F15D1D14F00872B7D /* acessodb.lua */; };
+		F88B275215D1D16A00872B7D /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = F88B275115D1D16A00872B7D /* ui.xml */; };
+		F88B275415D1D17A00872B7D /* bd.xml in Resources */ = {isa = PBXBuildFile; fileRef = F88B275315D1D17A00872B7D /* bd.xml */; };
+		F8934C6015D0A9340045469C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F8934C5F15D0A9340045469C /* libsqlite3.dylib */; };
+		F8934C7015D0B9CF0045469C /* AamoDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = F8934C6F15D0B9CF0045469C /* AamoDBAdapter.m */; };
+		F8939BB715D475B200F3A7C2 /* AAmoColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB015D475B200F3A7C2 /* AAmoColumn.m */; };
+		F8939BB815D475B200F3A7C2 /* AAmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB215D475B200F3A7C2 /* AAmoDatabase.m */; };
+		F8939BB915D475B200F3A7C2 /* AAmoDBParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB415D475B200F3A7C2 /* AAmoDBParser.m */; };
+		F8939BBA15D475B200F3A7C2 /* AAmoTable.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB615D475B200F3A7C2 /* AAmoTable.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -131,7 +139,20 @@
 		A66777B115A4EC770070233D /* tela2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tela2.lua; sourceTree = "<group>"; };
 		A66777B215A4EC770070233D /* toqueBotao.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toqueBotao.lua; sourceTree = "<group>"; };
 		A66777B315A4EC770070233D /* ui_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui_2.xml; sourceTree = "<group>"; };
-		A66777B415A4EC770070233D /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ui.xml; sourceTree = "<group>"; };
+		F88B274F15D1D14F00872B7D /* acessodb.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = acessodb.lua; path = ../../../../desenv/workspace/AamoDroid/assets/app/acessodb.lua; sourceTree = "<group>"; };
+		F88B275115D1D16A00872B7D /* ui.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = ui.xml; path = ../../../../desenv/workspace/AamoDroid/assets/app/ui.xml; sourceTree = "<group>"; };
+		F88B275315D1D17A00872B7D /* bd.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = bd.xml; path = ../../../../desenv/workspace/AamoDroid/assets/app/bd/bd.xml; sourceTree = "<group>"; };
+		F8934C5F15D0A9340045469C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		F8934C6E15D0B9CF0045469C /* AamoDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AamoDBAdapter.h; sourceTree = "<group>"; };
+		F8934C6F15D0B9CF0045469C /* AamoDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AamoDBAdapter.m; sourceTree = "<group>"; };
+		F8939BAF15D475B200F3A7C2 /* AAmoColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAmoColumn.h; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoColumn.h; sourceTree = "<group>"; };
+		F8939BB015D475B200F3A7C2 /* AAmoColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAmoColumn.m; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoColumn.m; sourceTree = "<group>"; };
+		F8939BB115D475B200F3A7C2 /* AAmoDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAmoDatabase.h; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoDatabase.h; sourceTree = "<group>"; };
+		F8939BB215D475B200F3A7C2 /* AAmoDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAmoDatabase.m; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoDatabase.m; sourceTree = "<group>"; };
+		F8939BB315D475B200F3A7C2 /* AAmoDBParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAmoDBParser.h; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoDBParser.h; sourceTree = "<group>"; };
+		F8939BB415D475B200F3A7C2 /* AAmoDBParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAmoDBParser.m; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoDBParser.m; sourceTree = "<group>"; };
+		F8939BB515D475B200F3A7C2 /* AAmoTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAmoTable.h; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoTable.h; sourceTree = "<group>"; };
+		F8939BB615D475B200F3A7C2 /* AAmoTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAmoTable.m; path = ../../../../Downloads/DecoderXML/DecoderXML/AAmoTable.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8934C6015D0A9340045469C /* libsqlite3.dylib in Frameworks */,
 				A61F9DF915878FD40024B18B /* UIKit.framework in Frameworks */,
 				A61F9DFB15878FD40024B18B /* Foundation.framework in Frameworks */,
 				A61F9DFD15878FD40024B18B /* CoreGraphics.framework in Frameworks */,
@@ -168,6 +190,7 @@
 		A61F9DF715878FD40024B18B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F8934C5F15D0A9340045469C /* libsqlite3.dylib */,
 				A61F9DF815878FD40024B18B /* UIKit.framework */,
 				A61F9DFA15878FD40024B18B /* Foundation.framework */,
 				A61F9DFC15878FD40024B18B /* CoreGraphics.framework */,
@@ -178,6 +201,14 @@
 		A61F9DFE15878FD40024B18B /* Aamo */ = {
 			isa = PBXGroup;
 			children = (
+				F8939BAF15D475B200F3A7C2 /* AAmoColumn.h */,
+				F8939BB015D475B200F3A7C2 /* AAmoColumn.m */,
+				F8939BB115D475B200F3A7C2 /* AAmoDatabase.h */,
+				F8939BB215D475B200F3A7C2 /* AAmoDatabase.m */,
+				F8939BB315D475B200F3A7C2 /* AAmoDBParser.h */,
+				F8939BB415D475B200F3A7C2 /* AAmoDBParser.m */,
+				F8939BB515D475B200F3A7C2 /* AAmoTable.h */,
+				F8939BB615D475B200F3A7C2 /* AAmoTable.m */,
 				A61F9EDA158900750024B18B /* lua */,
 				A61F9E1F1587C3900024B18B /* app */,
 				A61F9E0715878FD40024B18B /* AAmoAppDelegate.h */,
@@ -191,6 +222,8 @@
 				A61F9E191587913C0024B18B /* AAmoDynaView.m */,
 				A6655C8515AA08EC00E16689 /* AAmoScreenData.h */,
 				A6655C8615AA08EC00E16689 /* AAmoScreenData.m */,
+				F8934C6E15D0B9CF0045469C /* AamoDBAdapter.h */,
+				F8934C6F15D0B9CF0045469C /* AamoDBAdapter.m */,
 			);
 			path = Aamo;
 			sourceTree = "<group>";
@@ -209,11 +242,13 @@
 		A61F9E1F1587C3900024B18B /* app */ = {
 			isa = PBXGroup;
 			children = (
+				F88B275115D1D16A00872B7D /* ui.xml */,
+				F88B274F15D1D14F00872B7D /* acessodb.lua */,
+				F8934C5D15D081900045469C /* bd */,
 				A66777B015A4EC770070233D /* sairDaTela.lua */,
 				A66777B115A4EC770070233D /* tela2.lua */,
 				A66777B215A4EC770070233D /* toqueBotao.lua */,
 				A66777B315A4EC770070233D /* ui_2.xml */,
-				A66777B415A4EC770070233D /* ui.xml */,
 			);
 			name = app;
 			sourceTree = "<group>";
@@ -278,6 +313,14 @@
 			path = lua;
 			sourceTree = "<group>";
 		};
+		F8934C5D15D081900045469C /* bd */ = {
+			isa = PBXGroup;
+			children = (
+				F88B275315D1D17A00872B7D /* bd.xml */,
+			);
+			name = bd;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -336,7 +379,9 @@
 				A66777B615A4EC770070233D /* tela2.lua in Resources */,
 				A66777B715A4EC770070233D /* toqueBotao.lua in Resources */,
 				A66777B815A4EC770070233D /* ui_2.xml in Resources */,
-				A66777B915A4EC770070233D /* ui.xml in Resources */,
+				F88B275015D1D14F00872B7D /* acessodb.lua in Resources */,
+				F88B275215D1D16A00872B7D /* ui.xml in Resources */,
+				F88B275415D1D17A00872B7D /* bd.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +427,11 @@
 				A61F9F31158900750024B18B /* lzio.c in Sources */,
 				A61F9F33158900750024B18B /* print.c in Sources */,
 				A6655C8715AA08EC00E16689 /* AAmoScreenData.m in Sources */,
+				F8934C7015D0B9CF0045469C /* AamoDBAdapter.m in Sources */,
+				F8939BB715D475B200F3A7C2 /* AAmoColumn.m in Sources */,
+				F8939BB815D475B200F3A7C2 /* AAmoDatabase.m in Sources */,
+				F8939BB915D475B200F3A7C2 /* AAmoDBParser.m in Sources */,
+				F8939BBA15D475B200F3A7C2 /* AAmoTable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
