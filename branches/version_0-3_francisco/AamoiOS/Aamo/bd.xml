@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aamo-bd>
+    <version>1</version>
+    <name>contatos</name>
+    
+    <table>
+     	<name>contato</name>
+        <columns>
+        	<column>
+        		<primarykey/>
+        		<name>ID</name>
+        		<type>integer</type>
+        		<notnull/>
+        	</column>
+        	<column>
+        		<name>nome</name>
+        		<type>text</type>
+        	</column>
+        	<column>
+        		<name>endereco</name>
+        		<type>text</type>
+        	</column>
+        	<column>
+        		<name>email</name>
+        		<type>text</type>
+        	</column>
+        </columns>
+    </table>
+    
+</aamo-bd>
