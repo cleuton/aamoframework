@@ -23,7 +23,7 @@
 - (void) hideViews;
 - (void) showViews;
 - (void) exitScreenProc;
--(void) sendAlert:(NSString *) msg;
+- (void) sendAlert:(NSString *) msg;
 - (int) getCheckBox: (double) idc;
 - (void) setCheckBoxValue:(double) d value:(double) e;
 - (int) getCurrentScreenId;
