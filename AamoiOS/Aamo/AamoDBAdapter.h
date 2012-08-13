@@ -13,7 +13,7 @@
 
 @property (nonatomic) sqlite3 *database;
 
-- (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params dbName:(NSString *) name;
+- (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params;
 - (void) closeDatabase;
 - (sqlite3 *) openDatabase: (NSString *) name;
 - (BOOL) execSQL: (NSString *) sql paramQuery: (NSMutableArray *) params;

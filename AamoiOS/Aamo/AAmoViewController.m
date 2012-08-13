@@ -8,6 +8,7 @@
 #import "AAmoViewController.h"
 #import "AAmoDynaView.h"
 #import "AAmoScreenData.h"
+#import "AamoDBAdapter.h"
 
 #define VERSION 0.2
 #define MACRO_UI 1
@@ -28,12 +29,17 @@
     NSMutableArray * controlsStack;
     NSMutableArray * screenDataStack;
     int globalErrorCode;
-    	// Valor igual a nulo ou zero
+    	
+    
+    NSMutableArray * args;
+    
     
 }
 @end
 
 static AAmoViewController * ponteiro;
+static AamoDBAdapter * dbAdapter;
+static NSMutableDictionary * mapaConsultas;
 //errors
 const int errorCode_10 = 10;
 const int errorCode_11 = 11;
@@ -68,8 +74,11 @@ static int globalErrorCode;
     [self.view addSubview:((UIView *)[viewStack lastObject])];
     
     //errors
-    //enum Errors errorCode;
     globalErrorCode = 0;
+    
+    dbAdapter = [[AamoDBAdapter alloc] init];
+    args = [[NSMutableArray alloc] init];
+    mapaConsultas = [NSMutableDictionary dictionary];
 }
 
 - (void) execLua: (NSString *) script
@@ -313,6 +322,111 @@ static int getErrorCode(lua_State *L) {
 	
    	lua_pushnumber(L, globalErrorCode);
    	return 1;
+}
+
+static int query (lua_State *L)
+{
+    if (lua_gettop (L)>0){
+        const char *title = lua_tostring(L, 1);
+	    if (title == nil){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+		}
+       
+        const char *sql = lua_tostring(L, 2);
+        if (sql == nil){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+		}
+        
+    	NSMutableArray * args = [[NSMutableArray alloc] init];
+                
+        sqlite3_stmt *statement ;
+        
+        //int i;// = getQueryParams(L, 3);
+        for (int i=3; i < lua_gettop (L)>0; i++) {
+            const char *param = lua_tostring(L, i);
+            NSString *texto = [[NSString alloc] initWithUTF8String:param];
+            [args addObject:texto];
+        }
+        
+        NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) 
+                           sql];
+        
+        statement = [dbAdapter query:querySQL  paramQuery:args]; 
+               
+        [mapaConsultas setObject: statement  forKey: title];
+
+        
+        if (sqlite3_step(statement) == SQLITE_ROW)
+        {
+            
+            lua_newtable(L);
+            lua_pushnumber(L, 1);
+                
+            NSString *texto = [[NSString alloc] initWithUTF8String:(const char *) 
+                                               sqlite3_column_text(statement, 1)];
+            const char *param = [texto UTF8String];
+            lua_pushstring(L, param);
+            lua_settable(L, -3);
+            
+        } 
+    	return 1;
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}    
+}
+
+static int next (lua_State *L)
+{
+    if (lua_gettop (L)>0){
+        const char *title = lua_tostring(L, 1);
+	    if (title == nil){
+            globalErrorCode = errorCode_12 ; 
+            return 0;
+		}
+        
+        
+        
+    	NSMutableArray * args = [[NSMutableArray alloc] init];
+        
+        
+        if (sqlite3_step(statement) == SQLITE_ROW)
+        {
+            
+            lua_newtable(L);
+            lua_pushnumber(L, 1);
+            
+            NSString *texto = [[NSString alloc] initWithUTF8String:(const char *) 
+                               sqlite3_column_text(statement, 1)];
+            const char *param = [texto UTF8String];
+            lua_pushstring(L, param);
+            lua_settable(L, -3);
+            
+        } 
+    	return 1;
+	}
+	else {
+		globalErrorCode = errorCode_10 ; 
+		return 0;
+	}    
+}
+
+
+static NSMutableArray* getQueryParams (lua_State *L, int position)
+{
+   
+    NSMutableArray *  ret = [[NSMutableArray alloc] init];
+    int i;
+    for (i=position; i < lua_gettop (L)>0; i++) {
+        const char *param = lua_tostring(L, i);
+        NSString *texto = [[NSString alloc] initWithUTF8String:param];
+        [ret addObject:texto];
+    }
+
+    return ret;
 }
 
 static const struct luaL_Reg aamo_f [] = {

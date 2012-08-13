@@ -64,12 +64,11 @@
     return resultado;
 }
 
-- (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params dbName:(NSString *) name
+- (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params
 {
     
     //@"SELECT address, phone FROM contacts WHERE name=\"%@\"",
-    NSString *querySQL = [NSString stringWithFormat: @"SELECT address, phone FROM contacts WHERE name=\"%@\"",
-                              name];
+    NSString *querySQL = [NSString stringWithFormat: @"SELECT address, phone FROM contacts WHERE name=name"];
         
     const char *query_stmt = [querySQL UTF8String];
       
