@@ -51,6 +51,8 @@ static int globalErrorCode;
 
 @implementation AAmoViewController
 
+@synthesize mapaConsultas;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -350,13 +352,14 @@ static int query (lua_State *L)
             [args addObject:texto];
         }
         
-        NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) 
-                           sql];
+        NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
         
         statement = [dbAdapter query:querySQL  paramQuery:args]; 
-               
-        [mapaConsultas setObject: statement  forKey: title];
-
+        
+        NSString *chave = [[NSString alloc] initWithUTF8String:title];
+        
+        [mapaConsultas setObject:(__bridge id)statement  forKey:chave];
+       
         
         if (sqlite3_step(statement) == SQLITE_ROW)
         {
@@ -388,10 +391,11 @@ static int next (lua_State *L)
             return 0;
 		}
         
-        
+        NSString *chave = [[NSString alloc] initWithUTF8String:title];
         
     	NSMutableArray * args = [[NSMutableArray alloc] init];
         
+        sqlite3_stmt *statement;// = [mapaConsultas objectForKey:chave];
         
         if (sqlite3_step(statement) == SQLITE_ROW)
         {

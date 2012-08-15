@@ -13,6 +13,9 @@
 @interface AAmoViewController : UIViewController {
     lua_State *L;
 }
+
+@property (strong, nonatomic) NSMutableDictionary * mapaConsultas;;
+
 - (const char *) getTextFieldContent: (double) number;
 - (const char *) getLabelContent: (double) number;
 - (void) setLabelContent: (double) number text: (NSString *) content;
