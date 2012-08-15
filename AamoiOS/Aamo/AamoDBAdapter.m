@@ -7,9 +7,15 @@
 //
 
 #import "AamoDBAdapter.h"
+#import "AAmoDBParser.h"
+#import "AAmoDatabase.h"
+#import "AAmoTable.h"
+#import "AAmoColumn.h"
 
 @implementation AamoDBAdapter
- sqlite3_stmt    *statement;
+
+sqlite3_stmt    *statement;
+ 
 @synthesize database = _db;
 
 - (NSString *) getDatabasePath: (NSString *) name
@@ -26,23 +32,31 @@
 }
 
 
+
 - (sqlite3 *) openDatabase: (NSString *) name
 {
-    const char *dbpath = [[self getDatabasePath: name] UTF8String];
+    
+    AAmoDBParser * parser = [[AAmoDBParser alloc] init];
+    AAmoDatabase * db = parser.readXMLDatabase;
+    NSLog(@"DB Name: %@ Version: %d", db.name, db.version);
+    /*
+    for (AAmoTable * table in db.tablesList) {
+        NSLog(@"Table: %@", table.name);
+        for (AAmoColumn * column in table.columnsList) {
+            NSLog(@"Column Name: %@, Type: %@, PK: %d, NOTNULL: %d",
+                 column.name, column.type, column.primaryKey, column.notNull);
+        }
+    }
+    */
+    
+    const char *dbpath = [[self getDatabasePath: db.name] UTF8String];
     sqlite3 * db;
     if (sqlite3_open(dbpath, &db) == SQLITE_OK)
     {
-        char *errMsg;
-        const char *sql_stmt = "CREATE TABLE IF NOT EXISTS elemento  (uid TEXT PRIMARY KEY, textoSecreto BLOB)";
-        if (sqlite3_exec(db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-        {
-            //[self showMsgDialog:@"Problem para criar a tabela."];
-            db = nil;
-        }
-        
+        NSLog(@"banco de dados aberto com com sucesso %@" , name);
     }
     else {
-        NSLog(@"Erro ao abrir o banco");
+        NSLog(@"Erro ao abrir o banco %@", name);
         db = nil;
     }
     return db;
@@ -59,7 +73,12 @@
     if (sqlite3_step(statement) != SQLITE_DONE)
     {
         resultado = NO;
+        NSLog(@"Erro no Comando sql: %@ ", sql);
     }
+    else {
+        resultado = YES;
+        NSLog(@"Comando sql executado com sucesso: %@ ", sql);
+    }    
     sqlite3_finalize(statement);
     return resultado;
 }
@@ -67,25 +86,26 @@
 - (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params
 {
     
-    //@"SELECT address, phone FROM contacts WHERE name=\"%@\"",
-    NSString *querySQL = [NSString stringWithFormat: @"SELECT address, phone FROM contacts WHERE name=name"];
-        
-    const char *query_stmt = [querySQL UTF8String];
+    NSLog(@"Comando sql executado %@ ", sql);
+    const char *query_stmt = [sql UTF8String];
       
     if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
     {
+       //carrega os parametros
+       for (int i=0; i < [params count]; i++){
+	       sqlite3_bind_text(statement, i);       
+       }
+       //retorna o statement com os dados da consulta
        if (sqlite3_step(statement) == SQLITE_ROW)
        {
-           //NSString *addressField = [[NSString alloc] initWithUTF8String:(const char *) 
-           //sqlite3_column_text(statement, 0)];
-           //address.text = addressField;
            return statement;
-                                               
-           //[addressField release];
-                
-        } 
-            
-     }
+       } 
+     
+    }
+    else {
+       NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db)];
+	   NSLog(msg);
+    }
     return nil;
        
 }
@@ -98,12 +118,14 @@
       return statement;
           
    } else {
+
        return nil;
+
    }
    
 }
 
-- (BOOL) eof: (NSString *) cursor 
+- (BOOL) eof: (sqlite3_stmt *) statement
 {
     if (sqlite3_step(statement) == SQLITE_ROW)
     {
@@ -114,9 +136,10 @@
     }
 }
 
-- (void) close:(NSString *) cursor
+- (void) close:(sqlite3_stmt *) statement
 {
     sqlite3_finalize(statement);
+    sqlite3_reset(statement);
 }
 
 
@@ -127,6 +150,7 @@
     if (_db != nil)
     {
        sqlite3_close(_db);
+       _db = nil;
     }
     
 }
