@@ -14,6 +14,8 @@
     lua_State *L;
 }
 
+@property (strong, nonatomic) NSMutableArray * mapaQuery;
+
 @property (strong, nonatomic) NSMutableDictionary * mapaConsultas;;
 
 - (const char *) getTextFieldContent: (double) number;

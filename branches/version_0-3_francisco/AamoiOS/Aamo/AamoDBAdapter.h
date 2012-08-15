@@ -20,6 +20,6 @@
 - (NSString *) getDatabasePath: (NSString *) name;
 - (BOOL) eof: (NSString *) cursor;
 - (sqlite3_stmt *) next:(NSString *) cursor;
-- (void) close:(NSString *) cursor;
+- (void) close:(sqlite3_stmt *) statement;
 
 @end
