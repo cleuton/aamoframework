@@ -453,7 +453,7 @@ static int closeCursor(lua_State *L)
         
         if (statement != NULL)
         {
-            [dbAdapter close:statement]; 
+            [dbAdapter closeCursor:statement]; 
         	statement = NULL;    
         } 
     	return 1;
@@ -521,8 +521,6 @@ static int execSQL (lua_State *L)
         
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
         BOOL result = [dbAdapter execSQL:querySQL  paramQuery:args]; 
-        
-        //NSString *chave = [[NSString alloc] initWithUTF8String:title];
         
         //NSString *texto = [[NSString alloc] initWithUTF8String:@"Command executed successfully."];
         //const char *param = [texto UTF8String];
