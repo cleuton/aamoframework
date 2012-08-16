@@ -14,55 +14,132 @@
 
 @implementation AamoDBAdapter
 
-sqlite3_stmt    *statement;
- 
+sqlite3_stmt *statement;
+AAmoDatabase *aamoDB; 
+NSString *databasePath;
+
 @synthesize database = _db;
 
 - (NSString *) getDatabasePath: (NSString *) name
 {
     NSString *docsDir;
     NSArray *dirPaths;
-    NSString *databasePath;
     dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     docsDir = [dirPaths objectAtIndex:0];
-    databasePath = [[NSString alloc] initWithString:[docsDir stringByAppendingPathComponent:@".db"]];
+    databasePath = [[NSString alloc] initWithString:[docsDir stringByAppendingPathComponent:name]];
     docsDir = nil;
     dirPaths = nil;
+    
     return databasePath;
 }
 
 
+- (Database) readXML()
+ {
+               
+	 AAmoDBParser * parser = [[AAmoDBParser alloc] init];
+     AAmoDatabase * base = parser.readXMLDatabase;     
+     
+     //dbHelper = new DBHelper(ctx, database);          
+     
+     return base;
+}
+
+
+- (NSString *) createTables() {
+	
+	 NSMutableString *buffer = [[NSMutableString alloc] init];
+	 NSString *name;
+     NSString *separador = [NSString stringWithCString:@","];     
+     NSString *columnName;           
+     NSString *type;
+     
+     for (AAmoTable * table in db.tablesList) {                                  
+          name   = table.name;
+          [buffer appendString:@ "CREATE TABLE IF NOT EXISTS "];           
+		  [buffer appendString:name];           
+		  [buffer appendString:@"( "];           
+
+          int numberOfColumns = [table.columnsList count];
+          int count = 1;
+          for (AAmoColumn * column in table.columnsList) {
+               columnName = [NSString stringWithCString:column.name];
+               [buffer appendString:columnName]; 
+               [buffer appendString:@ " "];
+               type = [NSString stringWithCString:column.type]; 
+               [buffer appendString:@ " "];
+
+               //PK
+               if (column.primaryKey){
+                   [buffer appendString:@ " PRIMARY KEY "];
+               }      
+               //not null
+               if (column.notNull){
+                   [buffer appendString:@ " Not Null "];
+                   
+               }else {
+                   [buffer appendString:@ " Null "];
+               }
+               //comma ","
+               if (count < numberOfColumns){
+                   [buffer appendString:separador];
+               }
+               count ++;
+          }
+          
+          [buffer appendString:@ " )"];
+          
+          
+	}
+    return 	buffer;
+                                 
+}                         
 
 - (sqlite3 *) openDatabase: (NSString *) name
 {
-    
-    AAmoDBParser * parser = [[AAmoDBParser alloc] init];
-    AAmoDatabase * db = parser.readXMLDatabase;
-    NSLog(@"DB Name: %@ Version: %d", db.name, db.version);
-    /*
-    for (AAmoTable * table in db.tablesList) {
-        NSLog(@"Table: %@", table.name);
-        for (AAmoColumn * column in table.columnsList) {
-            NSLog(@"Column Name: %@, Type: %@, PK: %d, NOTNULL: %d",
-                 column.name, column.type, column.primaryKey, column.notNull);
-        }
-    }
-    */
-    
-    const char *dbpath = [[self getDatabasePath: db.name] UTF8String];
-    ///sqlite3 * db;
-    if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
+
+    const char *dbpath = [[self getDatabasePath: name] UTF8String];
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+
+    if ([filemgr fileExistsAtPath: databasePath ] == NO)
     {
-        NSLog(@"banco de dados aberto com com sucesso %@" , name);
+        
+        NSLog(@"BD não existe, ler xml e criar o Banco %@", name);
+        AAmoDBParser * parser = [[AAmoDBParser alloc] init];
+        aamoDB = parser.readXMLDatabase;
+		NSLog(@"DB Name: %@ Version: %d", aamoDB.name, aamoDB.version);
+    	
+    	if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
+   		{
+		    NSLog(@"banco de dados criado com sucesso %@" , name);
+		    
+		    char *errMsg;
+            const char *sql_stmt = [self createTables];
+
+            if (sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+            {
+                 NSLog(@"Falha na criação da tabela", errMsg);
+            }
+            else {
+            }    NSLog(@"Tabela criada com sucesso");
+		}
+		else {
+			_db = nil;
+		}	
+	    
     }
     else {
-        NSLog(@"Erro ao abrir o banco %@", name);
-        _db = nil;
-    }
+        if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
+   		{
+		    NSLog(@"banco de dados aberto com sucesso %@", name);
+		}
+		else {
+			_db = nil;
+		}
+    }    
     return _db;
     
 }
-
 
 - (BOOL) execSQL: (NSString *) sql paramQuery: (NSMutableArray *) params
 {
@@ -70,6 +147,15 @@ sqlite3_stmt    *statement;
     sqlite3_stmt *statement;
     const char *chrComando = [sql UTF8String];
     sqlite3_prepare_v2(_db, chrComando, -1, &statement, NULL);
+    
+    if (params != nil){
+     	//carrega os parametros
+        for (int i=0; i < [params count]; i++){
+           const char * param = [[params objectAtIndex:i] UTF8String];
+	       sqlite3_bind_text(statement, i,param ,-1,SQLITE_TRANSIENT);      
+        }
+    }
+    
     if (sqlite3_step(statement) != SQLITE_DONE)
     {
         resultado = NO;
@@ -78,8 +164,10 @@ sqlite3_stmt    *statement;
     else {
         resultado = YES;
         NSLog(@"Comando sql executado com sucesso: %@ ", sql);
-    }    
+    }   
+     
     sqlite3_finalize(statement);
+    
     return resultado;
 }
 
