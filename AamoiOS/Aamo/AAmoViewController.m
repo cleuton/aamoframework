@@ -9,6 +9,8 @@
 #import "AAmoDynaView.h"
 #import "AAmoScreenData.h"
 #import "AamoDBAdapter.h"
+#import "AAmoMapaQuery.h"
+
 
 #define VERSION 0.2
 #define MACRO_UI 1
@@ -46,7 +48,7 @@ const int errorCode_11 = 11;
 const int errorCode_12 = 12;
 
 static int globalErrorCode;
-
+static sqlite3_stmt * statement;
 
 
 @implementation AAmoViewController
@@ -359,7 +361,7 @@ static int query (lua_State *L)
         
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
         AAmoMapaQuery * gp = [[AAmoMapaQuery alloc] init];
-        gp.name = [NSString stringWithCString:chave encoding:[NSString defaultCStringEncoding]];
+        gp.name = chave;//[NSString stringWithCString:chave encoding:[NSString defaultCStringEncoding]];
         
         if ([ponteiro.mapaQuery containsObject:gp]) {
             int indice = [ponteiro.mapaQuery indexOfObject:gp];
@@ -406,7 +408,8 @@ static int next (lua_State *L)
            mp = [ponteiro.mapaQuery objectAtIndex:indice];
         }
         
-        sqlite3_stmt *statement = (sqlite3_stmt *)mp.object;
+        
+        statement = (__bridge sqlite3_stmt *)mp.object;
         
         if (sqlite3_step(statement) == SQLITE_ROW) {
 		    lua_newtable(L);
@@ -425,7 +428,8 @@ static int next (lua_State *L)
 	}    
 }
 
-static int close (lua_State *L)
+
+static int closeCursor(lua_State *L)
 {
     if (lua_gettop (L)>0){
         const char *title = lua_tostring(L, 1);
@@ -445,7 +449,7 @@ static int close (lua_State *L)
            
         }
         
-        sqlite3_stmt *statement = (sqlite3_stmt *)mp.object;
+        statement = (__bridge sqlite3_stmt *)mp.object;
         
         if (statement != NULL)
         {
@@ -479,13 +483,13 @@ static int eof (lua_State *L)
            mp = [ponteiro.mapaQuery objectAtIndex:indice];
         }
         
-        sqlite3_stmt *statement = (sqlite3_stmt *)mp.object;
+        sqlite3_stmt *statement = (__bridge sqlite3_stmt *)mp.object;
         BOOL result = [dbAdapter eof:statement]; 
         if (result)
         {
-            L.pushBoolean(true);
+            lua_pushboolean(L,true);
         } else {
-            L.pushBoolean(false);
+            lua_pushboolean(L,false);
         }
     	return 1;
 	}
@@ -520,9 +524,9 @@ static int execSQL (lua_State *L)
         
         //NSString *chave = [[NSString alloc] initWithUTF8String:title];
         
-        NSString *texto = [[NSString alloc] initWithUTF8String:@"Command executed successfully."];
-        const char *param = [texto UTF8String];
-        lua_pushstring(L, param);
+        //NSString *texto = [[NSString alloc] initWithUTF8String:@"Command executed successfully."];
+        //const char *param = [texto UTF8String];
+        //lua_pushstring(L, param);
             
     	return 1;
 	}
@@ -542,9 +546,9 @@ static int openDatabase (lua_State *L)
             return 0;
 		}
         
-        NSString *dbName = [[NSString alloc] initWithUTF8String:dbName];
+        NSString *databaseName = [[NSString alloc] initWithUTF8String:dbName];
         
-        statement = [dbAdapter openDatabse:dbName ]; 
+        statement = [dbAdapter openDatabase:databaseName ]; 
         
         return 1;
 	}
@@ -564,9 +568,9 @@ static int closeDatabase (lua_State *L)
             return 0;
 		}
         
-        NSString *dbName = [[NSString alloc] initWithUTF8String:dbName];
+        NSString *databaseName = [[NSString alloc] initWithUTF8String:dbName];
         
-        statement = [dbAdapter closeDatabse:dbName ]; 
+        [dbAdapter closeDatabase:databaseName ]; 
         
         return 1;
 	}
