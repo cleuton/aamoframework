@@ -50,16 +50,16 @@ sqlite3_stmt    *statement;
     */
     
     const char *dbpath = [[self getDatabasePath: db.name] UTF8String];
-    sqlite3 * db;
-    if (sqlite3_open(dbpath, &db) == SQLITE_OK)
+    ///sqlite3 * db;
+    if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
     {
         NSLog(@"banco de dados aberto com com sucesso %@" , name);
     }
     else {
         NSLog(@"Erro ao abrir o banco %@", name);
-        db = nil;
+        _db = nil;
     }
-    return db;
+    return _db;
     
 }
 
@@ -93,7 +93,9 @@ sqlite3_stmt    *statement;
     {
        //carrega os parametros
        for (int i=0; i < [params count]; i++){
-	       sqlite3_bind_text(statement, i);       
+           const char * param = [[params objectAtIndex:i] UTF8String];
+	       sqlite3_bind_text(statement, i,param ,-1,SQLITE_TRANSIENT);      
+           //strLastName UTF8String
        }
        //retorna o statement com os dados da consulta
        if (sqlite3_step(statement) == SQLITE_ROW)
