@@ -34,7 +34,7 @@ NSString *databasePath;
 }
 
 
-- (Database) readXML()
+- (AAmoDatabase *) readXML
  {
                
 	 AAmoDBParser * parser = [[AAmoDBParser alloc] init];
@@ -46,11 +46,12 @@ NSString *databasePath;
 }
 
 
-- (NSString *) createTables() {
+- (NSString *) createTables: (AAmoDatabase *) db
+{
 	
 	 NSMutableString *buffer = [[NSMutableString alloc] init];
 	 NSString *name;
-     NSString *separador = [NSString stringWithCString:@","];     
+     NSString *separador = @",";     
      NSString *columnName;           
      NSString *type;
      
@@ -63,10 +64,10 @@ NSString *databasePath;
           int numberOfColumns = [table.columnsList count];
           int count = 1;
           for (AAmoColumn * column in table.columnsList) {
-               columnName = [NSString stringWithCString:column.name];
+               columnName = column.name;
                [buffer appendString:columnName]; 
                [buffer appendString:@ " "];
-               type = [NSString stringWithCString:column.type]; 
+               type = column.type; 
                [buffer appendString:@ " "];
 
                //PK
@@ -114,11 +115,11 @@ NSString *databasePath;
 		    NSLog(@"banco de dados criado com sucesso %@" , name);
 		    
 		    char *errMsg;
-            const char *sql_stmt = [self createTables];
+            const char *sql_stmt = [[self createTables: aamoDB] UTF8String];
 
             if (sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                 NSLog(@"Falha na criação da tabela", errMsg);
+                 NSLog(@"Falha na criação da tabela %@", errMsg);
             }
             else {
             }    NSLog(@"Tabela criada com sucesso");
@@ -193,8 +194,8 @@ NSString *databasePath;
      
     }
     else {
-       NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db)];
-	   NSLog(msg);
+       NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db) encoding:[NSString defaultCStringEncoding]];
+	   NSLog(@"Error na query %@ ", msg);
     }
     return nil;
        
@@ -226,7 +227,7 @@ NSString *databasePath;
     }
 }
 
-- (void) close:(sqlite3_stmt *) statement
+- (void) closeCursor:(sqlite3_stmt *) statement
 {
     sqlite3_finalize(statement);
     sqlite3_reset(statement);

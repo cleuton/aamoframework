@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "/usr/include/sqlite3.h"
 
+
 @interface AamoDBAdapter : NSObject
 
 @property (nonatomic) sqlite3 *database;
@@ -20,6 +21,6 @@
 - (NSString *) getDatabasePath: (NSString *) name;
 - (BOOL) eof: (sqlite3_stmt *) statement;
 - (sqlite3_stmt *) next:(NSString *) cursor;
-- (void) close:(sqlite3_stmt *) statement;
+- (void) closeCursor:(sqlite3_stmt *) statement;
 
 @end
