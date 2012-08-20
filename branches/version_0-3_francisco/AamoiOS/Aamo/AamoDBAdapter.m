@@ -14,8 +14,8 @@
 
 @implementation AamoDBAdapter
 
-sqlite3_stmt *statement;
-AAmoDatabase *aamoDB; 
+static sqlite3_stmt *statement;
+static AAmoDatabase *aamoDB; 
 NSString *databasePath;
 
 @synthesize database = _db;
@@ -34,18 +34,6 @@ NSString *databasePath;
 }
 
 
-- (AAmoDatabase *) readXML
- {
-               
-	 AAmoDBParser * parser = [[AAmoDBParser alloc] init];
-     AAmoDatabase * base = parser.readXMLDatabase;     
-     
-     //dbHelper = new DBHelper(ctx, database);          
-     
-     return base;
-}
-
-
 - (NSString *) createTables: (AAmoDatabase *) db
 {
 	
@@ -57,6 +45,7 @@ NSString *databasePath;
      
      for (AAmoTable * table in db.tablesList) {                                  
           name   = table.name;
+         //INTEGER PRIMARY KEY AUTOINCREMENT
           [buffer appendString:@ "CREATE TABLE IF NOT EXISTS "];           
 		  [buffer appendString:name];           
 		  [buffer appendString:@"( "];           
@@ -68,35 +57,39 @@ NSString *databasePath;
                [buffer appendString:columnName]; 
                [buffer appendString:@ " "];
                type = column.type; 
+               [buffer appendString:type];
                [buffer appendString:@ " "];
-
+              
                //PK
                if (column.primaryKey){
-                   [buffer appendString:@ " PRIMARY KEY "];
-               }      
-               //not null
-               if (column.notNull){
-                   [buffer appendString:@ " Not Null "];
-                   
-               }else {
+                   [buffer appendString:@ " PRIMARY KEY AUTOINCREMENT "];
+               } 
+               
+              if (column.notNull){
+                  [buffer appendString:@ " Not Null "];
+                       
+              }else {
                    [buffer appendString:@ " Null "];
-               }
-               //comma ","
-               if (count < numberOfColumns){
-                   [buffer appendString:separador];
-               }
-               count ++;
+              }
+              //comma ","
+              if (count < numberOfColumns){
+                  [buffer appendString:separador];
+              }
+              count ++;
           }
           
           [buffer appendString:@ " )"];
           
           
 	}
+    
+    NSLog(@"sql da tabela ser criada %@", buffer);
+    
     return 	buffer;
                                  
 }                         
 
-- (sqlite3 *) openDatabase: (NSString *) name
+- (int) openDatabase: (NSString *) name
 {
 
     const char *dbpath = [[self getDatabasePath: name] UTF8String];
@@ -119,13 +112,16 @@ NSString *databasePath;
 
             if (sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                 NSLog(@"Falha na criação da tabela %@", errMsg);
+                // NSLog(@"Falha na criação da tabela %@", errMsg);
+                NSAssert1(0, @"Falha na criação da tabela '%s'", errMsg);
+                
             }
             else {
             }    NSLog(@"Tabela criada com sucesso");
 		}
 		else {
 			_db = nil;
+            return 1;
 		}	
 	    
     }
@@ -136,38 +132,52 @@ NSString *databasePath;
 		}
 		else {
 			_db = nil;
+            return 1;
+
 		}
     }    
-    return _db;
+    return 0;
     
 }
 
 - (BOOL) execSQL: (NSString *) sql paramQuery: (NSMutableArray *) params
 {
     BOOL resultado = YES;
-    sqlite3_stmt *statement;
+    sqlite3_stmt *execStmt;
     const char *chrComando = [sql UTF8String];
-    sqlite3_prepare_v2(_db, chrComando, -1, &statement, NULL);
     
-    if (params != nil){
-     	//carrega os parametros
-        for (int i=0; i < [params count]; i++){
-           const char * param = [[params objectAtIndex:i] UTF8String];
-	       sqlite3_bind_text(statement, i,param ,-1,SQLITE_TRANSIENT);      
-        }
-    }
-    
-    if (sqlite3_step(statement) != SQLITE_DONE)
+    //const char *dbpath = [[self getDatabasePath: @"contatos"] UTF8String];
+    if ([self openDatabase:@"contatos"] == SQLITE_OK)
+    //if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
     {
-        resultado = NO;
-        NSLog(@"Erro no Comando sql: %@ ", sql);
+
+    
+        sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
+        int contador = 2;
+        //int lastID = sqlite3_last_insert_rowid(_db);
+        //sqlite3_bind_int(execStmt, 1, lastID++);
+        if (params != nil){
+            //carrega os parametros
+            for (int i=0; i < [params count];i++){
+                const char * param = [[params objectAtIndex:i] UTF8String];
+                sqlite3_bind_text(execStmt, contador ,param ,-1,SQLITE_TRANSIENT); 
+                contador++;
+            }
+        }
+               
+        if (sqlite3_step(execStmt) != SQLITE_DONE)
+        {
+            resultado = NO;
+            NSLog(@"Erro no Comando sql: %@ ", sql);
+            NSAssert1(0, @"Error ao criar o statement '%s'", sqlite3_errmsg(_db));
+        }
+        else {
+            resultado = YES;
+            NSLog(@"Comando sql executado com sucesso: %@ ", sql);
+        }   
     }
-    else {
-        resultado = YES;
-        NSLog(@"Comando sql executado com sucesso: %@ ", sql);
-    }   
-     
-    sqlite3_finalize(statement);
+    
+    sqlite3_finalize(execStmt);
     
     return resultado;
 }
@@ -180,12 +190,13 @@ NSString *databasePath;
       
     if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
     {
+        NSLog(@"total parametros %d ", [params count]);
+
        //carrega os parametros
        for (int i=0; i < [params count]; i++){
            const char * param = [[params objectAtIndex:i] UTF8String];
 	       sqlite3_bind_text(statement, i,param ,-1,SQLITE_TRANSIENT);      
-           //strLastName UTF8String
-       }
+        }
        //retorna o statement com os dados da consulta
        if (sqlite3_step(statement) == SQLITE_ROW)
        {
@@ -216,7 +227,7 @@ NSString *databasePath;
    
 }
 
-- (BOOL) eof: (sqlite3_stmt *) statement
+- (BOOL) eof: (sqlite3_stmt *) stmt
 {
     if (sqlite3_step(statement) == SQLITE_ROW)
     {
@@ -230,7 +241,7 @@ NSString *databasePath;
 - (void) closeCursor:(sqlite3_stmt *) statement
 {
     sqlite3_finalize(statement);
-    sqlite3_reset(statement);
+    //sqlite3_reset(statement);
 }
 
 

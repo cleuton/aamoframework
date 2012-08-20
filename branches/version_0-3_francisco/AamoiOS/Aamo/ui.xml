@@ -4,7 +4,7 @@
 <uiid>1</uiid>
 <title/>
 <version>0.3</version>
-<onLoadScript>lua::aamo.openDatabase("contatos")</onLoadScript>
+<onLoadScript><!--lua::aamo.openDatabase("contatos")--></onLoadScript>
 <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
 
 <element>
@@ -102,7 +102,7 @@
 <id>8</id>
 <checked>0</checked>
 <onChangeScript/>
-<onClickScript>lua::aamo.execSQL("insert into contato (id , nome, endereco, email) values (?,?,?,?)", NULL,aamo.getTextField(4),aamo.getTextField(6),aamo.getTextField(2))</onClickScript>
+<onClickScript>lua::aamo.execSQL("insert into contato (id,nome, endereco, email) values (?,?,?,?)", aamo.getTextField(4),aamo.getTextField(6),aamo.getTextField(2))</onClickScript>
 <percentHeight>10.0</percentHeight>
 <percentLeft>5.0</percentLeft>
 <percentTop>57.0</percentTop>

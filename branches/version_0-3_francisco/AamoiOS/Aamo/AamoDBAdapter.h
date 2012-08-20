@@ -16,7 +16,7 @@
 
 - (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params;
 - (void) closeDatabase: (NSString *) name;
-- (sqlite3 *) openDatabase: (NSString *) name;
+- (int) openDatabase: (NSString *) name;
 - (BOOL) execSQL: (NSString *) sql paramQuery: (NSMutableArray *) params;
 - (NSString *) getDatabasePath: (NSString *) name;
 - (BOOL) eof: (sqlite3_stmt *) statement;
