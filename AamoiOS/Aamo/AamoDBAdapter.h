@@ -13,8 +13,9 @@
 @interface AamoDBAdapter : NSObject
 
 @property (nonatomic) sqlite3 *database;
+@property NSString *databasePath;
 
-- (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params;
+- (NSMutableArray *) query:(NSString *)sql paramQuery:(NSMutableArray *)params;
 - (void) closeDatabase: (NSString *) name;
 - (int) openDatabase: (NSString *) name;
 - (BOOL) execSQL: (NSString *) sql paramQuery: (NSMutableArray *) params;

@@ -16,7 +16,7 @@
 
 static sqlite3_stmt *statement;
 static AAmoDatabase *aamoDB; 
-NSString *databasePath;
+@synthesize databasePath;
 
 @synthesize database = _db;
 
@@ -45,7 +45,6 @@ NSString *databasePath;
      
      for (AAmoTable * table in db.tablesList) {                                  
           name   = table.name;
-         //INTEGER PRIMARY KEY AUTOINCREMENT
           [buffer appendString:@ "CREATE TABLE IF NOT EXISTS "];           
 		  [buffer appendString:name];           
 		  [buffer appendString:@"( "];           
@@ -181,7 +180,7 @@ NSString *databasePath;
     return resultado;
 }
 
-- (sqlite3_stmt *) query:(NSString *)sql paramQuery:(NSMutableArray *)params
+- (NSMutableArray *) query:(NSString *)sql paramQuery:(NSMutableArray *)params
 {
     
     NSLog(@"Comando sql executado %@ ", sql);
@@ -190,18 +189,35 @@ NSString *databasePath;
     if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
     {
         NSLog(@"total parametros %d ", [params count]);
-
-       //carrega os parametros
-       for (int i=0; i < [params count]; i++){
+        
+        //carrega os parametros
+        for (int i=0; i < [params count]; i++){
            const char * param = [[params objectAtIndex:i] UTF8String];
 	       sqlite3_bind_text(statement, i,param ,-1,SQLITE_TRANSIENT);      
         }
-       //retorna o statement com os dados da consulta
-       if (sqlite3_step(statement) == SQLITE_ROW)
-       {
+        
+        NSMutableArray *result = [NSMutableArray array];
+        
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+           NSMutableArray *row = [NSMutableArray array];
+           for (int i=0; i<sqlite3_column_count(statement); i++) {
+               char *coluna = (char *)sqlite3_column_text(statement, i);
+               NSString *strColuna = [NSString stringWithCString:coluna encoding:[NSString defaultCStringEncoding]];
+               [row addObject:strColuna];
+           }
+            
+           [result addObject:row];
+            
+        } 
+        return result;
+        
+        //retorna o statement com os dados da consulta
+        /*
+        if (sqlite3_step(statement) == SQLITE_ROW)
+        {
            return statement;
-       } 
-     
+        } 
+         */
     }
     else {
        NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db) encoding:[NSString defaultCStringEncoding]];
