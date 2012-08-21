@@ -154,8 +154,7 @@ NSString *databasePath;
     
         sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
         int contador = 2;
-        //int lastID = sqlite3_last_insert_rowid(_db);
-        //sqlite3_bind_int(execStmt, 1, lastID++);
+        
         if (params != nil){
             //carrega os parametros
             for (int i=0; i < [params count];i++){

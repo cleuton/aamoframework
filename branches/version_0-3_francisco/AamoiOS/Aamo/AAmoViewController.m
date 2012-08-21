@@ -55,6 +55,7 @@ static sqlite3_stmt * statement;
 
 @synthesize mapaConsultas;
 @synthesize mapaQuery;
+@synthesize isEof;
 
 - (void)viewDidLoad
 {
@@ -359,10 +360,18 @@ static int query (lua_State *L)
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
         //sqlite3_stmt *statement ;
         statement = (sqlite3_stmt *) [dbAdapter query:querySQL  paramQuery:args]; 
-        
+        if (statement == nil)
+        {
+            ponteiro.isEof = YES;
+            return 0;
+        } 
+        else {
+            ponteiro.isEof = NO;
+        }
+              
         
         NSMutableArray *consultas = [[NSMutableArray alloc] init];
-       
+        
         lua_newtable(L);
         for(int j=0; j<sqlite3_column_count(statement); j++) {
             char *coluna = (char *)sqlite3_column_text(statement, j);
@@ -386,7 +395,7 @@ static int query (lua_State *L)
             
             gp.object = consultas;
             [ponteiro.mapaQuery addObject:gp];
-            NSLog(@"%d", [ponteiro.mapaQuery count]);
+            NSLog(@" CONTATOR DE REG %d", [ponteiro.mapaQuery count]);
         }    
         
         
@@ -419,18 +428,23 @@ static int next (lua_State *L)
         
         //statement = (__bridge sqlite3_stmt *)mp.object;
                 
-        NSMutableArray *consultas = (NSMutableArray *) mp.object;
+        //NSMutableArray *consultas = (NSMutableArray *) mp.object;
         if (sqlite3_step(statement) == SQLITE_ROW)
         {
+            ponteiro.isEof = NO;
+            
             lua_newtable(L);
             for(int j=0; j < sqlite3_column_count(statement); j++) {
-                NSString *strColuna =[consultas objectAtIndex:j];
-                const char *coluna = [strColuna UTF8String]; // (char *)sqlite3_column_text(statement, j);
+                //NSString *strColuna =[consultas objectAtIndex:j];
+                const char *coluna = (char *)sqlite3_column_text(statement, j);//[strColuna UTF8String]; 
                 lua_pushnumber(L, j);
                 lua_pushstring(L, coluna);
                 lua_settable(L, -3);                                                    
             }
                         
+        }
+        else {
+            ponteiro.isEof = YES;
         }
         
     	return 1;
@@ -452,7 +466,7 @@ static int closeCursor(lua_State *L)
 		}
         
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
-        
+        /*
         AAmoMapaQuery * mp = [[AAmoMapaQuery alloc] init];
     	mp.name = chave;
     
@@ -463,7 +477,7 @@ static int closeCursor(lua_State *L)
         }
         
         statement = (__bridge sqlite3_stmt *)mp.object;
-        
+        */
         if (statement != nil)
         {
             [dbAdapter closeCursor:statement]; 
@@ -496,14 +510,15 @@ static int eof (lua_State *L)
            mp = [ponteiro.mapaQuery objectAtIndex:indice];
         }
         
-        sqlite3_stmt *statement = (__bridge sqlite3_stmt *)mp.object;
+        //sqlite3_stmt *statement = (__bridge sqlite3_stmt *)mp.object;
         
-        BOOL result = [dbAdapter eof:statement]; //SQLITE_ROW
+        BOOL result = [ponteiro isEof]; 
+        //[ponteiro.mapaQuery indexOfObject:gp];
         if (result)
         {
-           lua_pushboolean(L, false);
-        } else {
            lua_pushboolean(L, true);
+        } else {
+           lua_pushboolean(L, false);
 
         }
         
