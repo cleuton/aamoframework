@@ -56,6 +56,7 @@ static sqlite3_stmt * statement;
 @synthesize mapaConsultas;
 @synthesize mapaQuery;
 @synthesize isEof;
+static int contador;
 
 - (void)viewDidLoad
 {
@@ -357,22 +358,33 @@ static int query (lua_State *L)
            [args addObject:texto];
         }
         
+        contador =0;
+        
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
-        //sqlite3_stmt *statement ;
-        statement = (sqlite3_stmt *) [dbAdapter query:querySQL  paramQuery:args]; 
-        if (statement == nil)
+        NSMutableArray *consultas = (NSMutableArray *) [dbAdapter query:querySQL  paramQuery:args]; 
+        
+        if (contador < [consultas count])
         {
-            ponteiro.isEof = YES;
-            return 0;
+            ponteiro.isEof = NO;
         } 
         else {
-            ponteiro.isEof = NO;
+            ponteiro.isEof = YES;
+            return 0;            
         }
-              
         
-        NSMutableArray *consultas = [[NSMutableArray alloc] init];
+        NSArray *row = [consultas objectAtIndex:contador];
+        lua_newtable(L);      
+        for(int j=0; j< [row count]; j++) {
+            NSString *retorno = [row objectAtIndex:j];
+            NSLog(@"retorno da consulta %@",  retorno);
+            char *coluna = (char *)sqlite3_column_text(statement, j);
+           	lua_pushnumber(L, j);
+			lua_pushstring(L, coluna);
+           	lua_settable(L, -3); 
+        }
+        //NSMutableArray *consultas = [[NSMutableArray alloc] init];
         
-        lua_newtable(L);
+        /*
         for(int j=0; j<sqlite3_column_count(statement); j++) {
             char *coluna = (char *)sqlite3_column_text(statement, j);
            	lua_pushnumber(L, j);
@@ -381,7 +393,7 @@ static int query (lua_State *L)
             
             NSString *strColuna = [NSString stringWithCString:coluna encoding:[NSString defaultCStringEncoding]];
             [consultas addObject:strColuna];
-        }
+        }*/
 	    
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
         AAmoMapaQuery * gp = [[AAmoMapaQuery alloc] init];
@@ -395,7 +407,6 @@ static int query (lua_State *L)
             
             gp.object = consultas;
             [ponteiro.mapaQuery addObject:gp];
-            NSLog(@" CONTATOR DE REG %d", [ponteiro.mapaQuery count]);
         }    
         
         
@@ -426,9 +437,35 @@ static int next (lua_State *L)
            mp = [ponteiro.mapaQuery objectAtIndex:indice];
         }
         
-        //statement = (__bridge sqlite3_stmt *)mp.object;
+        contador++;
+        
+        NSMutableArray *consultas = (NSMutableArray *) mp.object;
+        
+        NSLog(@"next.contador %d",  contador);
+        NSLog(@"next.consultas count %d",  [consultas count]);
+        if (contador < [consultas count])
+        {
+            ponteiro.isEof = NO;
+        } 
+        else {
+            ponteiro.isEof = YES;
+            return 0;            
+        }
+
+        
+        NSArray *row = [consultas objectAtIndex:contador];
                 
-        //NSMutableArray *consultas = (NSMutableArray *) mp.object;
+        lua_newtable(L);      
+        for(int j=0; j< [row count]; j++) {
+            NSString *retorno = [row objectAtIndex:j];
+            NSLog(@"retorno %@",  retorno);
+            char *coluna = (char *)sqlite3_column_text(statement, j);
+           	lua_pushnumber(L, j);
+			lua_pushstring(L, coluna);
+           	lua_settable(L, -3); 
+        }
+        
+        /*
         if (sqlite3_step(statement) == SQLITE_ROW)
         {
             ponteiro.isEof = NO;
@@ -445,7 +482,7 @@ static int next (lua_State *L)
         }
         else {
             ponteiro.isEof = YES;
-        }
+        }*/
         
     	return 1;
 	}
@@ -466,7 +503,7 @@ static int closeCursor(lua_State *L)
 		}
         
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
-        /*
+       /*
         AAmoMapaQuery * mp = [[AAmoMapaQuery alloc] init];
     	mp.name = chave;
     
@@ -510,10 +547,8 @@ static int eof (lua_State *L)
            mp = [ponteiro.mapaQuery objectAtIndex:indice];
         }
         
-        //sqlite3_stmt *statement = (__bridge sqlite3_stmt *)mp.object;
-        
+               
         BOOL result = [ponteiro isEof]; 
-        //[ponteiro.mapaQuery indexOfObject:gp];
         if (result)
         {
            lua_pushboolean(L, true);
