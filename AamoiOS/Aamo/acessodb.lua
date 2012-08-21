@@ -4,9 +4,9 @@ aamo.openDatabase("contatos")
 -- executa a query
 cursor = aamo.query("consulta","select * from contato")
 
-for i=1,#cursor do   
-   		aamo.log(cursor[i])
-end
+-- for i=1,#cursor do   
+--	aamo.log(cursor[i])
+-- end
 
 -- percorre os registros retornados
 while not aamo.eof("consulta") do
