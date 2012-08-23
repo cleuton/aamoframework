@@ -17,7 +17,6 @@
 @property (strong, nonatomic) NSMutableArray * mapaQuery;
 @property (strong, nonatomic) NSMutableDictionary * mapaConsultas;;
 @property BOOL isEof;
-@property int contador;
 
 - (const char *) getTextFieldContent: (double) number;
 - (const char *) getLabelContent: (double) number;
