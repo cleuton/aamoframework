@@ -47,6 +47,10 @@ const int errorCode_10 = 10;
 const int errorCode_11 = 11;
 const int errorCode_12 = 12;
 
+const int errorCode_20 = 20; //error open database
+const int errorCode_21 = 21; //query is empty
+const int errorCode_22 = 22; //
+
 static int globalErrorCode;
 static sqlite3_stmt * statement;
 
@@ -612,18 +616,22 @@ static int openDatabase (lua_State *L)
         if (dbName == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
+        }
         
         NSString *databaseName = [[NSString alloc] initWithUTF8String:dbName];
         
         int ret = [dbAdapter openDatabase:databaseName ]; 
-        
-        return 1;
+	if (ret == 1) {
+	   globalErrorCode = errorCode_20 ; 
+            return 0;	
 	}
-	else {
-		globalErrorCode = errorCode_10 ; 
-		return 0;
-	}    
+	
+        return 1;
+   }
+   else {
+	globalErrorCode = errorCode_10 ; 
+	return 0;
+   }    
 
 }
 
@@ -652,7 +660,7 @@ static int closeDatabase (lua_State *L)
 static NSMutableArray* getQueryParams (lua_State *L, int position)
 {
    
-    NSMutableArray *  ret = [[NSMutableArray alloc] init];
+    NSMutableArray * ret = [[NSMutableArray alloc] init];
     int i;
     for (i=position; i < lua_gettop (L)>0; i++) {
         const char *param = lua_tostring(L, i);
