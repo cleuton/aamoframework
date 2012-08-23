@@ -20,8 +20,6 @@
 - (int) openDatabase: (NSString *) name;
 - (BOOL) execSQL: (NSString *) sql paramQuery: (NSMutableArray *) params;
 - (NSString *) getDatabasePath: (NSString *) name;
-- (BOOL) eof: (sqlite3_stmt *) statement;
-- (sqlite3_stmt *) next:(NSString *) cursor;
 - (void) closeCursor:(sqlite3_stmt *) statement;
 
 @end
