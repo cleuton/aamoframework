@@ -17,6 +17,7 @@
 static sqlite3_stmt *statement;
 static AAmoDatabase *aamoDB;
 static NSString *databaseName;  
+
 @synthesize databasePath;
 
 @synthesize database = _db;
@@ -47,8 +48,8 @@ static NSString *databaseName;
      for (AAmoTable * table in db.tablesList) {                                  
           name   = table.name;
           [buffer appendString:@ "CREATE TABLE IF NOT EXISTS "];           
-	  [buffer appendString:name];           
-	  [buffer appendString:@"( "];           
+          [buffer appendString:name];           
+          [buffer appendString:@"( "];           
 
           int numberOfColumns = [table.columnsList count];
           int count = 1;
@@ -83,7 +84,7 @@ static NSString *databaseName;
           
 	}
     
-    NSLog(@"sql da tabela ser criada %@", buffer);
+    NSLog(@"tabela ser criada %@", buffer);
     
     return 	buffer;
                                  
@@ -106,7 +107,7 @@ static NSString *databaseName;
     	if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
         {
             NSLog(@"banco de dados criado com sucesso %@" , name);
-	    char *errMsg;
+            char *errMsg;
             const char *sql_stmt = [[self createTables: aamoDB] UTF8String];
 
             if (sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
@@ -120,7 +121,7 @@ static NSString *databaseName;
 	}
 	else {
 	    _db = nil;
-            return 1;
+        return 1;
 	}	
 	    
     }
@@ -131,7 +132,7 @@ static NSString *databaseName;
 	}
 	else {
 	    _db = nil;
-            return 1;
+        return 1;
 
 	}
     }    
@@ -145,8 +146,7 @@ static NSString *databaseName;
     sqlite3_stmt *execStmt;
     const char *chrComando = [sql UTF8String];
     
-    //const char *dbpath = [[self getDatabasePath: @"contatos"] UTF8String];
-    //if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
+    //if ([self openDatabase:databasePath] == SQLITE_OK)
     if ([self openDatabase:databaseName] == SQLITE_OK)
     {
     
@@ -225,7 +225,6 @@ static NSString *databaseName;
 {
     sqlite3_finalize(statement);
     statement = nil;
-    //sqlite3_reset(statement);
 }
 
 
