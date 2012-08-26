@@ -4,7 +4,7 @@
 <uiid>1</uiid>
 <title/>
 <version>0.3</version>
-<onLoadScript><!--lua::aamo.openDatabase("contatos")--></onLoadScript>
+<onLoadScript>lua::aamo.openDatabase("contatos")</onLoadScript>
 <onEndScript>lua::aamo.log("END SCRIPT TELA 1")</onEndScript>
 
 <element>
@@ -115,7 +115,7 @@
 <id>9</id>
 <checked>0</checked>
 <onChangeScript/>
-<onClickScript>lua::aamo.showMessage(aamo.execSQL("delete FROM contato where id=?", 3))</onClickScript>
+<onClickScript>lua::aamo.showMessage(aamo.execSQL("delete FROM contato where id=?", 2))</onClickScript>
 <percentHeight>10.0</percentHeight>
 <percentLeft>33.0</percentLeft>
 <percentTop>57.0</percentTop>
