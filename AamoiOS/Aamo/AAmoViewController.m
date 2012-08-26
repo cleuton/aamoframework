@@ -47,9 +47,9 @@ const int errorCode_10 = 10;
 const int errorCode_11 = 11;
 const int errorCode_12 = 12;
 
-const int errorCode_20 = 20; //error open database
-const int errorCode_21 = 21; //query is empty
-const int errorCode_22 = 22; //
+const int errorCode_20 = 20; //erro no open database
+const int errorCode_21 = 21; //erro na query 
+const int errorCode_22 = 22; //erro na execução do ExecSQL
 
 static int globalErrorCode;
 static sqlite3_stmt * statement;
@@ -62,6 +62,9 @@ static sqlite3_stmt * statement;
 @synthesize isEof;
 static int contador;
 
++ (void) initialize {
+   dbAdapter = [[AamoDBAdapter alloc] init];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -87,7 +90,7 @@ static int contador;
     //errors
     globalErrorCode = 0;
     
-    dbAdapter = [[AamoDBAdapter alloc] init];
+    //dbAdapter = [[AamoDBAdapter alloc] init];
     args = [[NSMutableArray alloc] init];
     mapaConsultas = [NSMutableDictionary dictionary];
     mapaQuery = [[NSMutableArray alloc] init];
@@ -352,9 +355,8 @@ static int query (lua_State *L)
 		}
         
     	NSMutableArray * args = [[NSMutableArray alloc] init];
-        //int objectType = lua_type(L, -1);
-    	 
         //getQueryParams(L, 3);
+        
         for (int i=3; i < lua_gettop (L)>0; i++) {
            const char *param = lua_tostring(L, i);
            NSString *texto = [NSString stringWithCString:param encoding:[NSString defaultCStringEncoding]];
@@ -550,7 +552,7 @@ static int execSQL (lua_State *L)
         for (int i=2; i <= top; i++) {
             const char *param = lua_tostring(L, i);
             NSString *texto = [NSString stringWithCString:param encoding:[NSString defaultCStringEncoding]];
-            NSLog(@"PARAMETRO controller %@", texto);    
+            NSLog(@"PARAMETRO CTRL %@", texto);    
             [args addObject:texto];
         }
         
@@ -563,6 +565,10 @@ static int execSQL (lua_State *L)
            const char *param = [texto UTF8String];
            lua_pushstring(L, param);
         }  
+        else {
+            globalErrorCode = errorCode_22 ; 
+            return 0;
+        }
     	return 1;
 	}
 	else {
@@ -583,7 +589,7 @@ static int openDatabase (lua_State *L)
         
         NSString *databaseName = [[NSString alloc] initWithUTF8String:dbName];
         
-        int ret = [dbAdapter openDatabase:databaseName ]; 
+        int ret = [dbAdapter openDatabase:databaseName]; 
 	    if (ret == 1) {
 	        globalErrorCode = errorCode_20 ; 
             return 0;	

@@ -17,6 +17,7 @@
 static sqlite3_stmt *statement;
 static AAmoDatabase *aamoDB;
 static NSString *databaseName;  
+static BOOL isDBOpen;
 
 @synthesize databasePath;
 
@@ -114,27 +115,32 @@ static NSString *databaseName;
             {
                 // NSLog(@"Falha na criação da tabela '%s'", errMsg);
                 NSAssert1(0, @"Falha na criação da tabela '%s'", errMsg);
-	        return 1;    
+                return 1;    
             }
             else {
-            }    NSLog(@"Tabela criada com sucesso");
-	}
-	else {
-	    _db = nil;
-        return 1;
-	}	
+                NSLog(@"Tabela criada com sucesso");
+            }   
+             isDBOpen = YES;
+        }
+        else {
+            _db = nil;
+             isDBOpen = NO;
+            return 1;
+        }	
 	    
     }
     else {
         if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
-   	{
-	    NSLog(@"banco de dados aberto com sucesso %@", name);
-	}
-	else {
-	    _db = nil;
-        return 1;
+        {
+            NSLog(@"banco de dados aberto com sucesso %@", name);
+            isDBOpen = YES;
+        }
+        else {
+            _db = nil;
+             isDBOpen = NO;
+            return 1;
 
-	}
+        }
     }    
     return 0;
     
@@ -146,8 +152,10 @@ static NSString *databaseName;
     sqlite3_stmt *execStmt;
     const char *chrComando = [sql UTF8String];
     
-    //if ([self openDatabase:databasePath] == SQLITE_OK)
-    if ([self openDatabase:databaseName] == SQLITE_OK)
+    NSLog(@"is DB Open %d ", isDBOpen);
+    
+    //if ([self openDatabase:databaseName] == SQLITE_OK)
+    if (isDBOpen)
     {
     
         sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
@@ -161,7 +169,22 @@ static NSString *databaseName;
                 contador++;
             }
         }
-               
+        /*
+        char*errMsg=nil;
+        
+        if(sqlite3_exec(_db, chrComando, NULL, NULL, &errMsg)==SQLITE_OK)
+        {
+            resultado = YES;
+            NSLog(@"Comando sql executado com sucesso: %@ ", sql);
+
+        }
+        else {
+            resultado = NO;
+            NSLog(@"Erro no comando sql: %@ ", sql);
+            NSAssert1(0, @"Error ao criar o statement '%s'", sqlite3_errmsg(_db));
+        }
+        */
+        
         if (sqlite3_step(execStmt) != SQLITE_DONE)
         {
             resultado = NO;
@@ -171,7 +194,7 @@ static NSString *databaseName;
         else {
             resultado = YES;
             NSLog(@"Comando sql executado com sucesso: %@ ", sql);
-        }   
+        }  
     }
     
     sqlite3_finalize(execStmt);
@@ -208,13 +231,15 @@ static NSString *databaseName;
            [result addObject:row];
             
         } 
-
+        
+        [self closeCursor:statement];
+               
         return result;
 
     }
     else {
-       NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db) encoding:[NSString defaultCStringEncoding]];
-       NSLog(@"Error na query %@ ", msg);
+        NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db) encoding:[NSString defaultCStringEncoding]];
+        NSLog(@"Error na query %@ ", msg);
     }
     return nil;
        
@@ -223,6 +248,7 @@ static NSString *databaseName;
 
 - (void) closeCursor:(sqlite3_stmt *) statement
 {
+    sqlite3_reset (statement);
     sqlite3_finalize(statement);
     statement = nil;
 }
