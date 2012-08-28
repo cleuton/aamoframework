@@ -590,7 +590,7 @@ public class AamoLuaLibrary {
 	 * @return
 	 * @throws LuaException
 	 */
-	public static int m_close(LuaState L) throws LuaException
+	public static int m_closeCursor(LuaState L) throws LuaException
 	{
 		    
 		  L.newTable();
