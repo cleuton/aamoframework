@@ -19,7 +19,7 @@
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_query\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_execSQL\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_next\")\r\n
-					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_close\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_closeCursor\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_eof\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_openDatabase\")\r\n
 					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_closeDatabase\")\r\n		
