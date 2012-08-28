@@ -15,7 +15,7 @@ end
 
 
 -- close the cursor 
-aamo.close("consulta")
+aamo.closeCursor("consulta")
 aamo.log("fechou o cursor consulta")
 
 -- close de database
