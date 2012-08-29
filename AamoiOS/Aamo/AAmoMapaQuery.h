@@ -11,6 +11,6 @@
 @interface AAmoMapaQuery : NSObject
 @property (strong, nonatomic) NSString * name;
 @property (strong, nonatomic) NSObject * object;
-
+@property int type; // 1: STRING, 2: NUMBER (DOUBLE), 3: BOOL
 - (BOOL) isEqual:(id)outro;
 @end

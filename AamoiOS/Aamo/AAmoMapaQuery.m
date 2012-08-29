@@ -11,6 +11,7 @@
 @implementation AAmoMapaQuery
 @synthesize name;
 @synthesize object;
+@synthesize type;
 
 - (BOOL)isEqual:(id)outro
 {
