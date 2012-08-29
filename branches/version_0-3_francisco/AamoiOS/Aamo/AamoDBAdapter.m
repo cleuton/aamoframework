@@ -11,6 +11,7 @@
 #import "AAmoDatabase.h"
 #import "AAmoTable.h"
 #import "AAmoColumn.h"
+#import "AAmoMapaQuery.h"
 
 @implementation AamoDBAdapter
 
@@ -153,22 +154,46 @@ static BOOL isDBOpen;
     const char *chrComando = [sql UTF8String];
     
     NSLog(@"is DB Open %d ", isDBOpen);
-    
     //if ([self openDatabase:databaseName] == SQLITE_OK)
+    for (AAmoMapaQuery* obj in params){
+        NSLog(@"valor name: %@", obj.name);
+        NSLog(@"valor object: %@", obj.object);
+    } 
+    
     if (isDBOpen)
     {
-    
         sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
         int contador = 2;
-        
-        if (params != nil){
+        NSLog(@"[params count] %d ", [params count]);
+
+        if ([params count] > 0){
             //carrega os parametros
-            for (int i=0; i < [params count];i++){
-                const char * param = [[params objectAtIndex:i] UTF8String];
-                sqlite3_bind_text(execStmt, contador ,param ,-1,SQLITE_TRANSIENT); 
+            //for (int i=0; i < [params count];i++){ 
+            for (AAmoMapaQuery* gp in params){    
+                //AAmoMapaQuery * gp = [params objectAtIndex:i];
+            
+                switch (gp.type) {
+                    case 1: {   //String
+                        
+                        NSString * saida = (NSString *)  gp.object;
+                        const char * param = [saida cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                        sqlite3_bind_text(execStmt, contador ,param ,-1,SQLITE_TRANSIENT); 
+                        break;
+                    }
+                    case 2: {   // Number
+                        double numero = [((NSNumber *)gp.object) doubleValue];
+                        sqlite3_bind_int(execStmt, contador, numero);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
                 contador++;
-            }
+            } 
         }
+    
+        
         /*
         char*errMsg=nil;
         
@@ -183,7 +208,9 @@ static BOOL isDBOpen;
             NSLog(@"Erro no comando sql: %@ ", sql);
             NSAssert1(0, @"Error ao criar o statement '%s'", sqlite3_errmsg(_db));
         }
-        */
+       
+        
+                */
         
         if (sqlite3_step(execStmt) != SQLITE_DONE)
         {
@@ -265,5 +292,43 @@ static BOOL isDBOpen;
     }
     
 }
+
+/*
+- (void) loadParamType: (NSDictionary *) dic andStmt: (sqlite3_stmt *) stmt
+{
+    	        
+    
+    NSEnumerator *enumerator = [dic keyEnumerator];
+    id key;
+    
+    while ((key = [enumerator nextObject])){
+        
+        int chave = [((NSNumber *) [dic objectForKey: key]) intValue];
+        switch (chave) {
+            case 1: {   //String
+                NSString * saida =  [dic objectForKey: key];
+                const char * param = [saida cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                sqlite3_bind_text(stmt, contador ,param ,-1,SQLITE_TRANSIENT); 
+                break;
+            }
+            case 2: {   // Number
+                
+                double numero = [((NSNumber *)[dic objectForKey: key]) doubleValue];
+                sqlite3_bind_int(stmt, contador, numero);
+                break;
+            }
+            case 3: {   // BOOL
+                int resultado = [((NSNumber *) [dic objectForKey: key]) intValue];
+                sqlite3_bind_int(stmt, contador, resultado);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    } 
+
+   // return 0;
+}*/
 
 @end

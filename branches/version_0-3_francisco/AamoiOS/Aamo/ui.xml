@@ -89,7 +89,7 @@
 <id>7</id>
 <checked>0</checked>
 <onChangeScript/>
-<onClickScript>lua::aamo.showMessage(aamo.execSQL("update contato set nome=?, endereco=?, email=? where id=?", aamo.getTextField(4),aamo.getTextField(6),aamo.getTextField(2),3))</onClickScript>
+<onClickScript>lua::aamo.execSQL("update contato set nome=?, endereco=?, email=? where id=?", aamo.getTextField(4),aamo.getTextField(6),aamo.getTextField(2),3.0)</onClickScript>
 <percentHeight>10.0</percentHeight>
 <percentLeft>63.0</percentLeft>
 <percentTop>57.0</percentTop>
