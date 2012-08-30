@@ -29,9 +29,9 @@ public class AamoLuaLibrary {
 	    LUA_10(10), 	// parametro faltando 
 	    LUA_11(11), 	// Arquivo não encontrado
 	    LUA_12(12), 	// Valor igual a nulo
-	    LUA_13(13),
-	    LUA_14(14), 
-	    LUA_15(15); 
+	    LUA_20(20),		// erro no open database
+	    LUA_21(21),     // erro na query - retorna nil 
+	    LUA_22(22);     // erro no ExecSQL - comando invalido
 	    
 	    int errorCode;
 	    
@@ -43,13 +43,7 @@ public class AamoLuaLibrary {
 	    	return errorCode;
 	    }
 	}
-	/*
-	private static final int SQLITE_TYPE_BLOB = 4; 
-	private static final int SQLITE_TYPE_FLOAT = 2;	
-	private static final int SQLITE_TYPE_INTEGER = 1;
-	private static final int SQLITE_TYPE_NULL = 0;	
-	private static final int SQLITE_TYPE_STRING = 3;
-	*/
+	
 	//**** Funcoes a serem invocadas pelo codigo Lua
 	public static int m_getTextField(LuaState L) throws LuaException {
 	  L.newTable();
@@ -494,7 +488,7 @@ public class AamoLuaLibrary {
 		    public int execute() throws LuaException {  
 		      if (L.getTop() > 1) {
 		    	  
-		    	  LuaObject d = getParam(2); // titulo da query
+		    	  LuaObject d = getParam(2);   // titulo da query
 		    	  LuaObject sql = getParam(3); // sql
 		    	  if (d == null) {
 		    		  AamoLuaLibrary.errorCode = Errors.LUA_12.getErrorCode(); 
@@ -502,10 +496,15 @@ public class AamoLuaLibrary {
 		    	  }
 		    	  else {
 		    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
-		    		  //List <String> args = new ArrayList <String>();
+		    		  
 		    		  List <String> args = getQueryParams(L, 4);
 		    		  
 		    		  Cursor cursor = adapter.query(sql.getString(), args); 
+		    		  if (cursor == null){
+		    			  AamoLuaLibrary.errorCode = Errors.LUA_21.getErrorCode();
+				    	  return 0; 
+		    		  }
+		    		  
 		    		  cursor.moveToFirst();
 		    		  cursorMaster = cursor;
 		    		  cursorMap.put(d.getString(), cursor);  
@@ -691,11 +690,16 @@ public class AamoLuaLibrary {
 		    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
 		    		  List <String> args = getQueryParams(L, 3); //capture the parameters 
 		    		  
-		    		  //call update comand
-		    		  adapter.execSQL(d.getString(), args); 
-		    		  String  registro = "Command executed successfully.";
+		    		  String  registro = null;
+		    		  try {
+		    			  adapter.execSQL(d.getString(), args); 
+		    			  registro = "Command executed successfully.";
+		    		  }catch (Exception e){
+		    			  AamoLuaLibrary.errorCode = Errors.LUA_22.getErrorCode();
+				    	  return 0;
+		    		  }
 		    		  
-		    	      L.pushString(registro);
+		    		  L.pushString(registro);
 		    		  
 		    		  return 1;
 		    	  }	  
@@ -734,7 +738,12 @@ public class AamoLuaLibrary {
 				    	  }
 				    	  else {
 				    		  DBAdapter adapter = new DBAdapter(selfRef.getApplicationContext());
-					    	  adapter.openDatabase(d.getString()); 
+					    	  try {
+					    		  adapter.openDatabase(d.getString());
+					    	  }catch (Exception e){
+					    		  AamoLuaLibrary.errorCode = Errors.LUA_20.getErrorCode();
+							   	  return 0;
+					    	  }
 				    	  } 	
 				          return 1;
 				   }
