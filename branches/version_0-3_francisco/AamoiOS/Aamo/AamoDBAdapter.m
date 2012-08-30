@@ -155,36 +155,37 @@ static BOOL isDBOpen;
     
     NSLog(@"is DB Open %d ", isDBOpen);
     //if ([self openDatabase:databaseName] == SQLITE_OK)
+    /*
     for (AAmoMapaQuery* obj in params){
         NSLog(@"valor name: %@", obj.name);
         NSLog(@"valor object: %@", obj.object);
-    } 
+    } */
     
     if (isDBOpen)
     {
         sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
-        int contador = 2;
+        
         NSLog(@"[params count] %d ", [params count]);
 
         if ([params count] > 0){
+            int contador = 1;
             //carrega os parametros
-            //for (int i=0; i < [params count];i++){ 
             for (AAmoMapaQuery* gp in params){    
-                //AAmoMapaQuery * gp = [params objectAtIndex:i];
-            
                 switch (gp.type) {
+            
                     case 1: {   //String
-                        
                         NSString * saida = (NSString *)  gp.object;
                         const char * param = [saida cStringUsingEncoding:[NSString defaultCStringEncoding]];
                         sqlite3_bind_text(execStmt, contador ,param ,-1,SQLITE_TRANSIENT); 
                         break;
                     }
+                    
                     case 2: {   // Number
                         double numero = [((NSNumber *)gp.object) doubleValue];
                         sqlite3_bind_int(execStmt, contador, numero);
                         break;
                     }
+                    
                     default: {
                         break;
                     }
@@ -193,24 +194,6 @@ static BOOL isDBOpen;
             } 
         }
     
-        
-        /*
-        char*errMsg=nil;
-        
-        if(sqlite3_exec(_db, chrComando, NULL, NULL, &errMsg)==SQLITE_OK)
-        {
-            resultado = YES;
-            NSLog(@"Comando sql executado com sucesso: %@ ", sql);
-
-        }
-        else {
-            resultado = NO;
-            NSLog(@"Erro no comando sql: %@ ", sql);
-            NSAssert1(0, @"Error ao criar o statement '%s'", sqlite3_errmsg(_db));
-        }
-       
-        
-                */
         
         if (sqlite3_step(execStmt) != SQLITE_DONE)
         {
@@ -221,7 +204,7 @@ static BOOL isDBOpen;
         else {
             resultado = YES;
             NSLog(@"Comando sql executado com sucesso: %@ ", sql);
-        }  
+        }         
     }
     
     sqlite3_finalize(execStmt);

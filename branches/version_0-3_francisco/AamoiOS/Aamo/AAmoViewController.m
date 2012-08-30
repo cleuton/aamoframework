@@ -52,7 +52,6 @@ const int errorCode_22 = 22; //erro na execução do ExecSQL
 
 static int globalErrorCode;
 static sqlite3_stmt * statement;
-static NSDictionary *dicParam;
 
 @implementation AAmoViewController
 
@@ -354,24 +353,20 @@ static int query (lua_State *L)
             globalErrorCode = errorCode_12 ; 
             return 0;
 		}
-        
+        /*
     	NSMutableArray * args = [[NSMutableArray alloc] init];
-        //getQueryParams(L, 3);
-        
-       
-        
         for (int i=3; i < lua_gettop (L)>0; i++) {
-            
            const char *param = lua_tostring(L, i);
            NSString *texto = [NSString stringWithCString:param encoding:[NSString defaultCStringEncoding]];
-           
            [args addObject:texto];
-        }
+        }*/
+        int position = 3; 
+        int ret = paramType (L, position);
         
         contador =0;
         
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
-        NSMutableArray *consultas = (NSMutableArray *) [dbAdapter query:querySQL  paramQuery:args]; 
+        NSMutableArray *consultas = (NSMutableArray *) [dbAdapter query:querySQL  paramQuery:ponteiro.args]; 
         
         if (contador < [consultas count])
         {
@@ -454,7 +449,7 @@ static int next (lua_State *L)
         lua_newtable(L);      
         for(int j=0; j< [row count]; j++) {
             NSString *retorno = [row objectAtIndex:j];
-            NSLog(@"retorno %@",  retorno);
+            //NSLog(@"retorno %@",  retorno);
             char *coluna = (char *)sqlite3_column_text(statement, j);
            	lua_pushnumber(L, j);
 			lua_pushstring(L, coluna);
@@ -551,12 +546,9 @@ static int execSQL (lua_State *L)
 		}
         
         int position = 2; 
-        int posType = -2;
-    	int ret = paramType (L, position, posType);
+        int ret = paramType (L, position);
         
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
-        NSLog(@"SQL Controller %@", querySQL);    
-        
         BOOL result = [dbAdapter execSQL:querySQL paramQuery:ponteiro.args]; 
         
         if (result){
@@ -625,21 +617,19 @@ static int closeDatabase (lua_State *L)
 
 }
 
-int paramType (lua_State *L, int position, int posType) 
+int paramType (lua_State *L, int position) 
 {
     int top = lua_gettop (L);	        
     
+    if (top == 0) return 0;
+    
     for (int i=position; i <= top; i++) {
         
-    	int paramType = lua_type(L, posType);
-        NSLog(@"paramType %d",paramType);
+    	int argType = lua_type(L, i);
         AAmoMapaQuery * mq = [[AAmoMapaQuery alloc] init];
-        
-        switch (paramType) {
+        switch (argType) {
             case LUA_TSTRING: {             
                 const char *param = lua_tostring(L, i);
-                NSLog(@"valor string lua: %s", param);
-                
                 NSString *texto = [NSString stringWithCString:param encoding:[NSString defaultCStringEncoding]];
                 NSString *ch=@"key"; 
                 NSString *chave = [ch stringByAppendingFormat:@"%d ",i];
@@ -647,18 +637,13 @@ int paramType (lua_State *L, int position, int posType)
                 mq.name = chave;
                 mq.object = texto;
                 mq.type = 1;
-                
                 break;
             }          
             case LUA_TNUMBER: {             
                 double num = lua_tonumber(L, i);
-                NSLog(@"valor LUA num: %f", num);
                 NSNumber *numberKey = [NSNumber numberWithInt:num];
-                NSLog(@"number %@",numberKey);
-                
                 NSString *ch=@"key"; 
                 NSString *chave = [ch stringByAppendingFormat:@"%d ",i];
-                NSLog(@"chave %@",chave);
                 
                 mq.name = chave;
                 mq.object = numberKey;
@@ -668,19 +653,18 @@ int paramType (lua_State *L, int position, int posType)
             }
          
         }
-        posType--;
-        
+              
         [ponteiro.args addObject:mq];
         
 
     }
-    
+    /*
     for (AAmoMapaQuery* obj in ponteiro.args){
         NSLog(@"valor name: %@", obj.name);
         NSLog(@"valor object: %@", obj.object);
     }    
-     
-    return 0;
+     */
+    return 1;
 }
 
 static const struct luaL_Reg aamo_f [] = {
