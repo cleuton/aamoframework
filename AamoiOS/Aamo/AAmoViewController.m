@@ -41,14 +41,13 @@
 static AAmoViewController * ponteiro;
 static AamoDBAdapter * dbAdapter;
 
-//errors
-const int errorCode_10 = 10;
-const int errorCode_11 = 11;
-const int errorCode_12 = 12;
-
-const int errorCode_20 = 20; //erro no open database
-const int errorCode_21 = 21; //erro na query 
-const int errorCode_22 = 22; //erro na execução do ExecSQL
+//constantes de erros do LUA
+const int errorCode_10 = 10;  // parametro faltando 
+const int errorCode_11 = 11;  // Arquivo não encontrado
+const int errorCode_12 = 12;  // Valor igual a nulo
+const int errorCode_20 = 20;  // Erro no open database
+const int errorCode_21 = 21;  // Erro na query - retorna nil 
+const int errorCode_22 = 22;  // Erro no ExecSQL - comando invalido
 
 static int globalErrorCode;
 static sqlite3_stmt * statement;
@@ -343,23 +342,17 @@ static int query (lua_State *L)
 {
     if (lua_gettop (L)>0){
         const char *title = lua_tostring(L, 1);
-	    if (title == nil){
+	if (title == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
+	}
        
         const char *sql = lua_tostring(L, 2);
         if (sql == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
-        /*
-    	NSMutableArray * args = [[NSMutableArray alloc] init];
-        for (int i=3; i < lua_gettop (L)>0; i++) {
-           const char *param = lua_tostring(L, i);
-           NSString *texto = [NSString stringWithCString:param encoding:[NSString defaultCStringEncoding]];
-           [args addObject:texto];
-        }*/
+	}
+       
         int position = 3; 
         int ret = paramType (L, position);
         
@@ -368,7 +361,12 @@ static int query (lua_State *L)
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
         NSMutableArray *consultas = (NSMutableArray *) [dbAdapter query:querySQL  paramQuery:ponteiro.args]; 
         
-        if (contador < [consultas count])
+	if (consultas == nil) {
+            globalErrorCode = errorCode_21; 
+            return 0;
+        }
+        
+	if (contador < [consultas count])
         {
             ponteiro.isEof = NO;
         } 
@@ -381,11 +379,12 @@ static int query (lua_State *L)
         lua_newtable(L);      
         for(int j=0; j< [row count]; j++) {
             NSString *retorno = [row objectAtIndex:j];
-            NSLog(@"retorno da consulta %@",  retorno);
-            char *coluna = (char *)sqlite3_column_text(statement, j);
-           	lua_pushnumber(L, j);
-			lua_pushstring(L, coluna);
-           	lua_settable(L, -3); 
+            NSLog(@"retorno da query %@",  retorno);
+            //char *coluna = (char *)sqlite3_column_text(statement, j);
+	    const char * coluna = [retorno cStringUsingEncoding:[NSString defaultCStringEncoding]];
+            lua_pushnumber(L, j);
+            lua_pushstring(L, coluna);
+            lua_settable(L, -3); 
         }
         	    
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
@@ -402,8 +401,8 @@ static int query (lua_State *L)
             [ponteiro.mapaQuery addObject:gp];
         }    
         
-        
     	return 1;
+
 	}
 	else {
 		globalErrorCode = errorCode_10 ; 
@@ -449,20 +448,21 @@ static int next (lua_State *L)
         lua_newtable(L);      
         for(int j=0; j< [row count]; j++) {
             NSString *retorno = [row objectAtIndex:j];
-            //NSLog(@"retorno %@",  retorno);
-            char *coluna = (char *)sqlite3_column_text(statement, j);
-           	lua_pushnumber(L, j);
-			lua_pushstring(L, coluna);
-           	lua_settable(L, -3); 
+            NSLog(@"retorno NEXT %@",  retorno);
+            //char *coluna = (char *)sqlite3_column_text(statement, j);
+	    const char * coluna = [retorno cStringUsingEncoding:[NSString defaultCStringEncoding]];
+            lua_pushnumber(L, j);
+	    lua_pushstring(L, coluna);
+            lua_settable(L, -3); 
         }
         
-        
-    	return 1;
-	}
-	else {
-		globalErrorCode = errorCode_10 ; 
-		return 0;
-	}    
+  	return 1;
+
+     }
+     else {
+	globalErrorCode = errorCode_10 ; 
+	return 0;
+     }    
 }
 
 
@@ -470,10 +470,10 @@ static int closeCursor(lua_State *L)
 {
     if (lua_gettop (L)>0){
         const char *title = lua_tostring(L, 1);
-	    if (title == nil){
+	if (title == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
+	}
         
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
         AAmoMapaQuery * mp = [[AAmoMapaQuery alloc] init];
@@ -489,21 +489,21 @@ static int closeCursor(lua_State *L)
         chave = nil;
        
     	return 1;
-	}
-	else {
-		globalErrorCode = errorCode_10 ; 
-		return 0;
-	}    
+    }
+    else {
+	globalErrorCode = errorCode_10 ; 
+	return 0;
+    }    
 }
 
 static int eof (lua_State *L)
 {
     if (lua_gettop (L)>0){
         const char *title = lua_tostring(L, 1);
-	    if (title == nil){
+	if (title == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
+	}
         
         NSString *chave = [[NSString alloc] initWithUTF8String:title];
         
@@ -524,7 +524,10 @@ static int eof (lua_State *L)
            lua_pushboolean(L, false);
 
         }
-        
+
+        mp = nil;
+        chave = nil;
+
     	return 1;
 	}
 	else {
@@ -543,7 +546,7 @@ static int execSQL (lua_State *L)
         if (sql == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
+	}
         
         int position = 2; 
         int ret = paramType (L, position);
@@ -562,10 +565,10 @@ static int execSQL (lua_State *L)
         }
     	return 1;
 	}
-	else {
-		globalErrorCode = errorCode_10 ; 
-		return 0;
-	}    
+    else {
+	globalErrorCode = errorCode_10 ; 
+	return 0;
+    }    
 
 }
 
@@ -581,10 +584,10 @@ static int openDatabase (lua_State *L)
         NSString *databaseName = [[NSString alloc] initWithUTF8String:dbName];
         
         int ret = [dbAdapter openDatabase:databaseName]; 
-	    if (ret == 1) {
-	        globalErrorCode = errorCode_20 ; 
+	if (ret == 1) {
+	    globalErrorCode = errorCode_20 ; 
             return 0;	
-	    }
+	}
 	
         return 1;
    }
@@ -602,7 +605,7 @@ static int closeDatabase (lua_State *L)
         if (dbName == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-		}
+	}
         
         NSString *databaseName = [[NSString alloc] initWithUTF8String:dbName];
         
@@ -655,15 +658,9 @@ int paramType (lua_State *L, int position)
         }
               
         [ponteiro.args addObject:mq];
-        
-
+    
     }
-    /*
-    for (AAmoMapaQuery* obj in ponteiro.args){
-        NSLog(@"valor name: %@", obj.name);
-        NSLog(@"valor object: %@", obj.object);
-    }    
-     */
+    
     return 1;
 }
 
