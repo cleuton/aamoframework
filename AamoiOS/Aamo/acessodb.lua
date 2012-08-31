@@ -2,7 +2,7 @@
 aamo.openDatabase("contatos")
 
 -- executa a query
-cursor = aamo.query("consulta","select * from contato")
+cursor = aamo.query("consulta","select * from contato where ID = ?", 3)
 
 -- for i=1,#cursor do   
 --	aamo.log(cursor[i])
