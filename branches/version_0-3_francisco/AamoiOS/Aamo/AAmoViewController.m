@@ -351,7 +351,7 @@ static int query (lua_State *L)
         if (sql == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-	}
+        }
        
         int position = 3; 
         int ret = paramType (L, position);
@@ -361,12 +361,12 @@ static int query (lua_State *L)
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
         NSMutableArray *consultas = (NSMutableArray *) [dbAdapter query:querySQL  paramQuery:ponteiro.args]; 
         
-	if (consultas == nil) {
+        if (consultas == nil) {
             globalErrorCode = errorCode_21; 
             return 0;
         }
         
-	if (contador < [consultas count])
+        if (contador < [consultas count])
         {
             ponteiro.isEof = NO;
         } 
@@ -379,9 +379,8 @@ static int query (lua_State *L)
         lua_newtable(L);      
         for(int j=0; j< [row count]; j++) {
             NSString *retorno = [row objectAtIndex:j];
-            NSLog(@"retorno da query %@",  retorno);
-            //char *coluna = (char *)sqlite3_column_text(statement, j);
-	    const char * coluna = [retorno cStringUsingEncoding:[NSString defaultCStringEncoding]];
+            //NSLog(@"retorno da query %@",  retorno);
+            const char * coluna = [retorno cStringUsingEncoding:[NSString defaultCStringEncoding]];
             lua_pushnumber(L, j);
             lua_pushstring(L, coluna);
             lua_settable(L, -3); 
@@ -546,7 +545,7 @@ static int execSQL (lua_State *L)
         if (sql == nil){
             globalErrorCode = errorCode_12 ; 
             return 0;
-	}
+        }
         
         int position = 2; 
         int ret = paramType (L, position);

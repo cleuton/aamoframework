@@ -104,7 +104,7 @@ static BOOL isDBOpen;
         NSLog(@"BD não existe, ler xml e criar o Banco %@", name);
         AAmoDBParser * parser = [[AAmoDBParser alloc] init];
         aamoDB = parser.readXMLDatabase;
-	NSLog(@"DB Name: %@ Version: %d", aamoDB.name, aamoDB.version);
+        NSLog(@"DB Name: %@ Version: %d", aamoDB.name, aamoDB.version);
     	
     	if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
         {
@@ -214,19 +214,13 @@ static BOOL isDBOpen;
     if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
     {
         NSLog(@"total parametros %d ", [params count]);
-	/*
-        for (int i=0; i < [params count]; i++){
-            const char * param = [[params objectAtIndex:i] UTF8String];
-	    sqlite3_bind_text(statement, i,param ,-1,SQLITE_TRANSIENT);      
+	
+        //carrega os parametros pelo tipo
+        if ([params count] > 0){
+            [self loadParamType: params andStmt: statement];
         }
-        */
-
-	//carrega os parametros pelo tipo
-	if ([params count] > 0){
-	    [self loadParamType: params andStmt: statement];
-	}
         
-	NSMutableArray *result = [NSMutableArray array];
+        NSMutableArray *result = [NSMutableArray array];
         
         while (sqlite3_step(statement) == SQLITE_ROW) {
            NSMutableArray *row = [NSMutableArray array];
@@ -278,19 +272,19 @@ static BOOL isDBOpen;
 
 - (void) loadParamType: (NSMutableArray *) params andStmt: (sqlite3_stmt *) stmt
 {
-   
+     int contador = 1;
      for (AAmoMapaQuery* gp in params){    
             
 	  switch (gp.type) {
               case 1: {   //String
                    NSString * saida = (NSString *)  gp.object;
                    const char * param = [saida cStringUsingEncoding:[NSString defaultCStringEncoding]];
-                   sqlite3_bind_text(execStmt, contador ,param ,-1,SQLITE_TRANSIENT); 
+                   sqlite3_bind_text(stmt, contador ,param ,-1,SQLITE_TRANSIENT); 
                    break;
               }
               case 2: {   // Number
                    double numero = [((NSNumber *)gp.object) doubleValue];
-                   sqlite3_bind_int(execStmt, contador, numero);
+                   sqlite3_bind_int(stmt, contador, numero);
                    break;
               }
               default: {
