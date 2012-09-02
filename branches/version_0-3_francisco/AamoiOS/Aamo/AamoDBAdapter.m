@@ -157,37 +157,15 @@ static BOOL isDBOpen;
     if (isDBOpen)
     {
         sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
-        
+                
         NSLog(@"[params count] %d ", [params count]);
-
-        if ([params count] > 0){
-            int contador = 1;
-            //carrega os parametros
-            for (AAmoMapaQuery* gp in params){    
-                switch (gp.type) {
-            
-                    case 1: {   //String
-                        NSString * saida = (NSString *)  gp.object;
-                        const char * param = [saida cStringUsingEncoding:[NSString defaultCStringEncoding]];
-                        sqlite3_bind_text(execStmt, contador ,param ,-1,SQLITE_TRANSIENT); 
-                        break;
-                    }
-                    
-                    case 2: {   // Number
-                        double numero = [((NSNumber *)gp.object) doubleValue];
-                        sqlite3_bind_int(execStmt, contador, numero);
-                        break;
-                    }
-                    
-                    default: {
-                        break;
-                    }
-                }
-                contador++;
-            } 
-        }
-    
         
+        //carrega os parametros pelo tipo
+        if ([params count] > 0){
+            [self loadParamType: params andStmt: execStmt];
+        }
+        
+            
         if (sqlite3_step(execStmt) != SQLITE_DONE)
         {
             resultado = NO;
@@ -197,7 +175,8 @@ static BOOL isDBOpen;
         else {
             resultado = YES;
             NSLog(@"Comando sql executado com sucesso: %@ ", sql);
-        }         
+        }    
+                 
     }
     
     sqlite3_finalize(execStmt);
@@ -208,7 +187,7 @@ static BOOL isDBOpen;
 - (NSMutableArray *) query:(NSString *)sql paramQuery:(NSMutableArray *)params
 {
     
-    NSLog(@"Comando sql executado %@ ", sql);
+    //NSLog(@"Comando sql executado %@ ", sql);
     const char *query_stmt = [sql UTF8String];
       
     if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
