@@ -355,7 +355,7 @@ static int query (lua_State *L)
        
         int position = 3; 
         int ret = paramType (L, position);
-        
+        //NSLog(@"RETORNO %d ", ret);
         contador =0;
         
         NSString *querySQL = [[NSString alloc] initWithUTF8String:(const char *) sql];
@@ -447,11 +447,11 @@ static int next (lua_State *L)
         lua_newtable(L);      
         for(int j=0; j< [row count]; j++) {
             NSString *retorno = [row objectAtIndex:j];
-            NSLog(@"retorno NEXT %@",  retorno);
+            //NSLog(@"retorno NEXT %@",  retorno);
             //char *coluna = (char *)sqlite3_column_text(statement, j);
-	    const char * coluna = [retorno cStringUsingEncoding:[NSString defaultCStringEncoding]];
+            const char * coluna = [retorno cStringUsingEncoding:[NSString defaultCStringEncoding]];
             lua_pushnumber(L, j);
-	    lua_pushstring(L, coluna);
+            lua_pushstring(L, coluna);
             lua_settable(L, -3); 
         }
         
@@ -624,6 +624,8 @@ int paramType (lua_State *L, int position)
     int top = lua_gettop (L);	        
     
     if (top == 0) return 0;
+    
+    [ponteiro.args removeAllObjects];
     
     for (int i=position; i <= top; i++) {
         
