@@ -86,8 +86,6 @@ static BOOL isDBOpen;
           
 	}
     
-    NSLog(@"tabela ser criada %@", buffer);
-    
     return 	buffer;
                                  
 }                         
@@ -101,27 +99,25 @@ static BOOL isDBOpen;
     if ([filemgr fileExistsAtPath: databasePath ] == NO)
     {
         
-        NSLog(@"BD não existe, ler xml e criar o Banco %@", name);
         AAmoDBParser * parser = [[AAmoDBParser alloc] init];
         aamoDB = parser.readXMLDatabase;
-        NSLog(@"DB Name: %@ Version: %d", aamoDB.name, aamoDB.version);
+        
     	
     	if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
         {
-            NSLog(@"banco de dados criado com sucesso %@" , name);
+        
             char *errMsg;
             const char *sql_stmt = [[self createTables: aamoDB] UTF8String];
 
             if (sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                // NSLog(@"Falha na criação da tabela '%s'", errMsg);
                 NSAssert1(0, @"Falha na criação da tabela '%s'", errMsg);
                 return 1;    
             }
-            else {
-                NSLog(@"Tabela criada com sucesso");
-            }   
-             isDBOpen = YES;
+            //else {
+            //    NSLog(@"Tabela criada com sucesso");
+            //}   
+            isDBOpen = YES;
         }
         else {
             _db = nil;
@@ -133,7 +129,7 @@ static BOOL isDBOpen;
     else {
         if (sqlite3_open(dbpath, &_db) == SQLITE_OK)
         {
-            NSLog(@"banco de dados aberto com sucesso %@", name);
+            //NSLog(@"banco de dados aberto com sucesso %@", name);
             isDBOpen = YES;
         }
         else {
@@ -158,7 +154,7 @@ static BOOL isDBOpen;
     {
         sqlite3_prepare_v2(_db, chrComando, -1, &execStmt, NULL);
                 
-        NSLog(@"[params count] %d ", [params count]);
+        //NSLog(@"[params count] %d ", [params count]);
         
         //carrega os parametros pelo tipo
         if ([params count] > 0){
@@ -169,12 +165,10 @@ static BOOL isDBOpen;
         if (sqlite3_step(execStmt) != SQLITE_DONE)
         {
             resultado = NO;
-            NSLog(@"Erro no comando sql: %@ ", sql);
             NSAssert1(0, @"Error ao criar o statement '%s'", sqlite3_errmsg(_db));
         }
         else {
             resultado = YES;
-            NSLog(@"Comando sql executado com sucesso: %@ ", sql);
         }    
                  
     }
@@ -187,13 +181,10 @@ static BOOL isDBOpen;
 - (NSMutableArray *) query:(NSString *)sql paramQuery:(NSMutableArray *)params
 {
     
-    //NSLog(@"Comando sql executado %@ ", sql);
     const char *query_stmt = [sql UTF8String];
       
     if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
     {
-        NSLog(@"total parametros %d ", [params count]);
-	
         //carrega os parametros pelo tipo
         if ([params count] > 0){
             [self loadParamType: params andStmt: statement];
@@ -220,7 +211,6 @@ static BOOL isDBOpen;
     }
     else {
         NSString *msg = [NSString stringWithCString:sqlite3_errmsg(_db) encoding:[NSString defaultCStringEncoding]];
-        NSLog(@"Error na query %@ ", msg);
         return nil;
     }
     
@@ -239,7 +229,6 @@ static BOOL isDBOpen;
 - (void) closeDatabase: (NSString *) name
 {
             
-    NSLog(@"entrou no close database");
     if (_db != nil)
     {
        sqlite3_close(_db);
