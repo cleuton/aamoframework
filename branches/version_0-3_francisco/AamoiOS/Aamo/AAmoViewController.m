@@ -115,7 +115,7 @@ static int contador;
     if (err != 0) {
         const char *msg = lua_tostring(L, -1);
         NSString *textoMsg = [NSString stringWithCString:msg encoding:[NSString defaultCStringEncoding]];
-        NSLog(@"AAMO ERROR: %@",textoMsg);
+        //NSLog(@"AAMO ERROR: %@",textoMsg);
         
     }
 }
@@ -538,7 +538,7 @@ static int eof (lua_State *L)
 static int execSQL (lua_State *L)
 {
     int top = lua_gettop (L);
-    NSLog(@"top %d", top);
+    //NSLog(@"top %d", top);
     
     if (lua_gettop (L)>0){
         const char *sql = lua_tostring(L, 1);
