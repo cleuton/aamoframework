@@ -2,7 +2,7 @@
 
 = IMPORTANTE =
 
-A partir da versão 0.3 a documentação estará em um único manual, em PDF, e não mais dentro do Wiki. 
+*A partir da versão 1.0 a documentação estará em um único manual, em PDF, e não mais dentro do Wiki.*
 
 Este manual estará disponível na seção "Downloads" do projeto. 
 
