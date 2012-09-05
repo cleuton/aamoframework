@@ -1,12 +1,6 @@
--- open database
-aamo.openDatabase("contatos")
-
+-- local cursor = {}
 -- executa a query
-cursor = aamo.query("consulta","select * from contato where ID = ?", 3)
-
--- for i=1,#cursor do   
---	aamo.log(cursor[i])
--- end
+cursor = aamo.query("consulta","select * from contato")
 
 -- percorre os registros retornados
 while not aamo.eof("consulta") do
@@ -19,8 +13,8 @@ while not aamo.eof("consulta") do
 	
 end
 
+
 -- close the cursor 
-aamo.log("vai fechar o cursor consulta")
 aamo.closeCursor("consulta")
 aamo.log("fechou o cursor consulta")
 
