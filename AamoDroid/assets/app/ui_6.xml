@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <version>0.3</version>
+    <uiid>6</uiid>
+    <title>Tela 6</title>
+    <onLoadScript></onLoadScript>
+    <onEndScript>lua::aamo.log("END SCRIPT TELA 6")</onEndScript>
+    <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 6")</onLeaveScript>
+    <onBackScript>lua::aamo.log("BACK SCRIPT TELA 6")</onBackScript>
+    <element>
+    	<id>1</id>
+        <type>2</type>
+        <percentTop>0</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>100</percentWidth>
+        <percentHeight>40</percentHeight>
+        <text>Tela 6</text>
+    </element>
+    
+    <element>
+        <id>2</id>
+        <type>3</type>
+        <percentTop>50</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Voltar</text>
+        <onClickScript>lua::aamo.exitScreen()</onClickScript>
+    </element>
+    
+
+</ui>

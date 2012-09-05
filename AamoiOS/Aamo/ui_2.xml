@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <version>0.2</version>
+    <uiid>2</uiid>
+    <title/>
+    <onLoadScript>lua::aamo.log("ON LOAD TELA 2")</onLoadScript>
+    <onEndScript>lua::aamo.log("END SCRIPT TELA 2")</onEndScript>
+    <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 2")</onLeaveScript>
+    <onBackScript>lua::aamo.log("BACK SCRIPT TELA 2")</onBackScript>
+    <element>
+        <id>1</id>
+        <type>2</type>
+        <percentTop>10</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>20</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Esta é a segunda tela</text>
+    </element>
+
+    <element>
+        <id>2</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Voltar</text>
+        <onClickScript>sairDaTela</onClickScript>
+    </element>
+    
+    <element>
+        <id>3</id>
+        <type>3</type>
+        <percentTop>75</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Tela 3</text>
+        <onClickScript>lua::aamo.loadScreen(3)</onClickScript>
+    </element>
+    
+    <element>
+        <id>4</id>
+        <type>3</type>
+        <percentTop>75</percentTop>
+        <percentLeft>70</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Show Label</text>
+        <onClickScript>lua::aamo.showMessage(aamo.getLabelText(1))</onClickScript>
+    </element>
+    
+</ui>
