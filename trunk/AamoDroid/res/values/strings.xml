@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, AamoDroidActivity!</string>
+    <string name="app_name">AamoDroid</string>
+    <string name="loadlibs">
+        			luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getTextField\")\r\n
+        			luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setTextField\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showMessage\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_loadScreen\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_exitScreen\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getCurrentScreenId\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_log\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getLabelText\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setLabelText\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getCheckBox\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setCheckBox\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getError\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showScreen\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getLocalizedText\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setGlobalParameter\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_getGlobalParameter\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_addListBoxOption\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_clearListBox\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_showMenu\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_navigateTo\")\r\n
+					luajava.loadLib(\"org.thecodebakers.aamo.AamoLuaLibrary\", \"m_setPicture\")\r\n
+    </string>
+	<string name="lua_10">Parâmetro faltando.</string>
+	<string name="lua_11">Arquivo não encontrado.</string>
+	<string name="lua_12">Valor igual a nulo</string>
+	<string name="lua_100">Arquivo de localização não encontrado</string>
+	
+</resources>

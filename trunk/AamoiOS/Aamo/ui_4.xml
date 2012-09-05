@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <version>0.2</version>
+    <uiid>4</uiid>
+    <title>Tela 4</title>
+    <onLoadScript>prepararlista</onLoadScript>
+    <onEndScript>lua::aamo.log("END SCRIPT TELA 4")</onEndScript>
+    <onLeaveScript>lua::aamo.log("LEAVE SCRIPT TELA 4")</onLeaveScript>
+    <onBackScript>lua::aamo.log("BACK SCRIPT TELA 4")</onBackScript>
+    <element>
+        <id>1</id>
+        <type>5</type>
+        <percentTop>0</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>100</percentWidth>
+        <percentHeight>40</percentHeight>
+        <onElementSelected>lua::aamo.showMessage(aamo.getGlobalParameter("aamo::selectedText"))</onElementSelected>
+    </element>
+	<element>
+        <id>5</id>
+        <type>3</type>
+        <percentTop>42</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Limpar</text>
+        <onClickScript>lua::aamo.clearListBox(1)</onClickScript>
+    </element>
+    <element>
+        <id>2</id>
+        <type>3</type>
+        <percentTop>60</percentTop>
+        <percentLeft>40</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>10</percentHeight>
+        <text>Voltar</text>
+        <onClickScript>sairDaTela</onClickScript>
+    </element>
+    
+    <element>
+        <id>3</id>
+        <type>3</type>
+        <percentTop>80</percentTop>
+        <percentLeft>0</percentLeft>
+        <percentWidth>20</percentWidth>
+        <percentHeight>20</percentHeight>
+        <text>tela 2</text>
+        <onClickScript>lua::aamo.showScreen(2)</onClickScript>
+    </element>
+    
+    <element>
+        <id>4</id>
+        <type>3</type>
+        <percentTop>80</percentTop>
+        <percentLeft>30</percentLeft>
+        <percentWidth>30</percentWidth>
+        <percentHeight>20</percentHeight>
+        <text>MSG L10N</text>
+        <onClickScript>lua::aamo.showMessage(aamo.getLocalizedText("locmsg"))</onClickScript>
+    </element>
+    
+</ui>
