@@ -17,6 +17,12 @@
 @property BOOL execOnLeaveOnBack;
 @property (strong, nonatomic) NSMutableArray * globalParameters;
 
+@property (strong, nonatomic) NSMutableArray * mapaQuery;
+@property (strong, nonatomic) NSMutableDictionary * mapaConsultas;;
+@property BOOL isEof;
+@property (strong, nonatomic) NSMutableArray * args;
+
+
 - (const char *) getTextFieldContent: (double) number;
 - (const char *) getLabelContent: (double) number;
 - (void) setLabelContent: (double) number text: (NSString *) content;
@@ -28,7 +34,7 @@
 - (void) hideViews;
 - (void) showViews;
 - (void) exitScreenProc;
--(void) sendAlert:(NSString *) msg;
+- (void) sendAlert:(NSString *) msg;
 - (int) getCheckBox: (double) idc;
 - (void) setCheckBoxValue:(double) d value:(double) e;
 - (int) getCurrentScreenId;
