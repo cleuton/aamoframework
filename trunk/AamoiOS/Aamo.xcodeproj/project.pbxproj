@@ -66,6 +66,19 @@
 		A6BDA16B15CEF555009FF39A /* aamol10n_en_GB.properties in Resources */ = {isa = PBXBuildFile; fileRef = A6BDA16815CEF555009FF39A /* aamol10n_en_GB.properties */; };
 		A6BDA16C15CEF555009FF39A /* aamol10n_en.properties in Resources */ = {isa = PBXBuildFile; fileRef = A6BDA16915CEF555009FF39A /* aamol10n_en.properties */; };
 		A6BDA16D15CEF555009FF39A /* aamol10n.properties in Resources */ = {isa = PBXBuildFile; fileRef = A6BDA16A15CEF555009FF39A /* aamol10n.properties */; };
+		A66777B515A4EC770070233D /* sairDaTela.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B015A4EC770070233D /* sairDaTela.lua */; };
+		A66777B615A4EC770070233D /* tela2.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B115A4EC770070233D /* tela2.lua */; };
+		A66777B715A4EC770070233D /* toqueBotao.lua in Resources */ = {isa = PBXBuildFile; fileRef = A66777B215A4EC770070233D /* toqueBotao.lua */; };
+		A66777B815A4EC770070233D /* ui_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = A66777B315A4EC770070233D /* ui_2.xml */; };
+		F88B275015D1D14F00872B7D /* acessodb.lua in Resources */ = {isa = PBXBuildFile; fileRef = F88B274F15D1D14F00872B7D /* acessodb.lua */; };
+		F88B275215D1D16A00872B7D /* ui.xml in Resources */ = {isa = PBXBuildFile; fileRef = F88B275115D1D16A00872B7D /* ui.xml */; };
+		F88B275415D1D17A00872B7D /* bd.xml in Resources */ = {isa = PBXBuildFile; fileRef = F88B275315D1D17A00872B7D /* bd.xml */; };
+		F8934C6015D0A9340045469C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F8934C5F15D0A9340045469C /* libsqlite3.dylib */; };
+		F8934C7015D0B9CF0045469C /* AamoDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = F8934C6F15D0B9CF0045469C /* AamoDBAdapter.m */; };
+		F8939BB715D475B200F3A7C2 /* AAmoColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB015D475B200F3A7C2 /* AAmoColumn.m */; };
+		F8939BB815D475B200F3A7C2 /* AAmoDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB215D475B200F3A7C2 /* AAmoDatabase.m */; };
+		F8939BB915D475B200F3A7C2 /* AAmoDBParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB415D475B200F3A7C2 /* AAmoDBParser.m */; };
+		F8939BBA15D475B200F3A7C2 /* AAmoTable.m in Sources */ = {isa = PBXBuildFile; fileRef = F8939BB615D475B200F3A7C2 /* AAmoTable.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -167,6 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8934C6015D0A9340045469C /* libsqlite3.dylib in Frameworks */,
 				A61F9DF915878FD40024B18B /* UIKit.framework in Frameworks */,
 				A61F9DFB15878FD40024B18B /* Foundation.framework in Frameworks */,
 				A61F9DFD15878FD40024B18B /* CoreGraphics.framework in Frameworks */,
@@ -196,6 +210,7 @@
 		A61F9DF715878FD40024B18B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F8934C5F15D0A9340045469C /* libsqlite3.dylib */,
 				A61F9DF815878FD40024B18B /* UIKit.framework */,
 				A61F9DFA15878FD40024B18B /* Foundation.framework */,
 				A61F9DFC15878FD40024B18B /* CoreGraphics.framework */,
@@ -206,6 +221,14 @@
 		A61F9DFE15878FD40024B18B /* Aamo */ = {
 			isa = PBXGroup;
 			children = (
+				F8939BAF15D475B200F3A7C2 /* AAmoColumn.h */,
+				F8939BB015D475B200F3A7C2 /* AAmoColumn.m */,
+				F8939BB115D475B200F3A7C2 /* AAmoDatabase.h */,
+				F8939BB215D475B200F3A7C2 /* AAmoDatabase.m */,
+				F8939BB315D475B200F3A7C2 /* AAmoDBParser.h */,
+				F8939BB415D475B200F3A7C2 /* AAmoDBParser.m */,
+				F8939BB515D475B200F3A7C2 /* AAmoTable.h */,
+				F8939BB615D475B200F3A7C2 /* AAmoTable.m */,
 				A61F9EDA158900750024B18B /* lua */,
 				A61F9E1F1587C3900024B18B /* app */,
 				A61F9E0715878FD40024B18B /* AAmoAppDelegate.h */,
@@ -223,6 +246,8 @@
 				A63416A415B61B0A00845252 /* AAmoResourceBundle.m */,
 				A67AB11115BE05C7004CDAC9 /* AAmoGlobalParameter.h */,
 				A67AB11215BE05C7004CDAC9 /* AAmoGlobalParameter.m */,
+				F8934C6E15D0B9CF0045469C /* AamoDBAdapter.h */,
+				F8934C6F15D0B9CF0045469C /* AamoDBAdapter.m */,
 			);
 			path = Aamo;
 			sourceTree = "<group>";
