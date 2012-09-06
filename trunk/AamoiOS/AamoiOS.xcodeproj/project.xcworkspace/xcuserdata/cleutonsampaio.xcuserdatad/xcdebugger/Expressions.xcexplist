@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[AAmoViewController parser:didStartElement:namespaceURI:qualifiedName:attributes:]:AAmoViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AAmoViewController parser:didEndElement:namespaceURI:qualifiedName:]:AAmoViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AAmoViewController viewDidLoad]:AAmoViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AAmoViewController formatSubviews]:AAmoViewController.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
