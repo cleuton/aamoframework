@@ -1,0 +1,18 @@
+# Usuários de Mac OSX e Linux #
+
+Se você é um usuário de Mac OSX e quer compilar a versão iOS, sem problemas. O C e o Objective-C são naturalmente integrados. Não há necessidade de um framework como o NDK. Mas, mesmo sendo um usuário Mac OSX, se quiser compilar a versão Android, pode necessitar do NDK para compilar a parte de código nativo (se fizer alguma alteração nela).
+
+Resumindo, se você alterou a versão Android e não mexeu na parte de código nativo (apenas no Java), então não precisa rodar o ndk-build novamente.
+
+Usuários Mac OSX e Linux já possuem um ambiente POSIX completo, logo, podem compilar o Lua e o LuaJava utilizando o NDK.
+
+Os usuários Mac OSX podem compilar ambas as versões (Android e iOS). Usuários Linux podem compilar apenas a versão Android.
+
+Para usar o framework no estado atual, não é necessário rodar o ndk-build novamente. Os usuários Linux podem compilar a versão Android, na qual toda comunicação Lua -> Java é feita pela biblioteca  "LuaJava", logo, não é necessário alterar qualquer código nativo.
+
+
+# Usuários de Microsoft Windows #
+
+Usuários Windows podem compilar apenas a versão Android, na qual toda comunicação Lua -> Java é feita pela biblioteca "LuaJava", logo, não é necessário executar o ndk-build novamente.
+
+Mas, se você alterar qualquer coisa nos módulos de código nativo, terá que fazer um ndk-build novamente. Para que isto seja possível, você terá que instalar o CYGWIN.

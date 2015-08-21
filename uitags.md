@@ -1,0 +1,43 @@
+# Introduction #
+
+This document describes the UI XML description format.
+AAMO deals with "Screens". Each XML file describes a "Screen", which will be displayed on demand.
+
+# VERSION #
+
+AAMO 0.1 / **AAMO 0.2**
+
+
+# Details #
+
+  * **ui**: Screen definition open tag. Each file must have just one.
+
+## UI Subtags ##
+
+  * **version**: AAMO Version
+  * **uiid**: Screen identifier
+  * **title**: Screen title
+  * **onLoadScript**: Script to be invoked when the screen is loaded. Without  extension.
+  * **onEndScript**:   Script to be invoked when the screen is being unloaded.
+  * **element**: Begining of a screen element. Screen elements are the views or controls used to interact with the program.
+
+## element subtags ##
+
+  * **id**: Element's identifier.
+  * **type**: Element's type: 1-textbox, 2-label, 3-checkbox, and 4-button.
+  * **percentTop**: Top coordinate, based on physical screen's height percentage.
+  * **percentLeft**: Left coordinate, based on physical screen's width percentage.
+  * **percentWidth**: Element's width, based on physical screen's width percentage.
+  * **percentHeight**: Element's height, based on physical screen's width percentage.
+  * **text**: Element's text content.
+  * **checked**: Checkbox state: 0-unchecked, 1-checked.
+  * **onChangeScript**: Script to be invoked when the Checkbox element (type = 3) looses focus.
+  * **onClickScript**: Script to be invoked when the Button element (type = 4) looses focus.
+
+## Event script tags ##
+
+Every event script tag, like "onLoadScript", for example, can contain Lua source code.
+
+You can choose to inform just the name of the Lua file, or write Lua source code directly. To write Lua source code, prefix it with "lua::". For example:
+
+`<onClickScript>lua::aamo.exitScreen()</onClickScript>`

@@ -1,0 +1,37 @@
+# Introduction #
+
+Functions available to Lua scripts.
+
+# VERSION #
+
+AAMO 0.1 / **AAMO 0.2**
+
+# Details #
+
+All functions have a prefix "aamo".
+
+## VERSION 0.1 ##
+
+  * **getTextField(**id**)**: Return the current text content of the TextBox element identified by "id" parameter.
+  * **showMessage(**text**)**: Display the "text" content to the user.
+
+## VERSION 0.2 ##
+
+All VERSION 0.1 funcions are still valid.
+
+  * **aamo.exitScreen()**: Finish current screen, removing it from the "Screen Stack". If there is a previous screen, it will be displayed. Current script must end. After that, the "OnEndScript" will be invoked. If the current screen is alone in the screen stack, application will end.
+  * **aamo.getCheckBox(`<checkbox id>`)**: Get the current checkbox state as a number (Zero = unchecked, otherwise: checked).
+  * **aamo.getCurrentScreenId()**: Return the current screen identifier. The first screen is always 1.
+  * **aamo.getError()**: Return the last aamo error code (only of aamo functions).
+  * **aamo.getLabelText(`<label id>`)**: Return the current labelbox content.
+  * **aamo.loadScreen(`<screen id>`)**: Find the screen named "ui`_<id>`.xml", load it and push it on the top of screen stack. Current script must end. If there is an instance of the screen on the stack, it will be moved to the top. "OnLoadScript" will only be invoked if the screen was not found on the screen stack.
+  * **aamo.log(`<message>`)**: Write a log entry on the device's log.
+  * **aamo.setCheckBox(`<checkbox id>,<checked>`)**: Change the checkbox status (zero = unchecked).
+  * **aamo.setLabelText(`<label id>,<content>`)**: Change the label's content.
+  * **aamo.setTextField(`<id>,<content>`)**: Change the content of the textbox identified by "id".
+
+
+### AAMO ERROR CODES ###
+  * **Error 10**: Missing parameter (parâmetro faltando);
+  * **Error 11**: File not found (arquivo não encontrado).
+  * **Error 12**: Null value (valor igual a nulo).
